@@ -1,6 +1,7 @@
+import { LogoutOutlined } from '@ant-design/icons';
 import { Settings as LayoutSettings } from '@ant-design/pro-layout';
-// import logo from '../public/logo.svg';
 export default {
+  // logo: '',
   navTheme: 'dark',
   // 拂晓蓝
   primaryColor: '#1890ff',
@@ -15,7 +16,6 @@ export default {
   },
   title: 'Smart Board',
   pwa: false,
-  logo: 'https://preview.pro.ant.design/static/logo.f0355d39.svg',
   iconfontUrl: '',
   splitMenus: true,
   // collapsed: true,

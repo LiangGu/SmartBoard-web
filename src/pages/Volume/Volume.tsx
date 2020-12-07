@@ -2,21 +2,20 @@ import React, { useState, } from 'react';
 // import { render } from 'react-dom';
 import { Button, Modal} from 'antd';
 import { PageContainer} from '@ant-design/pro-layout';
+import Month from './components/Month';
+import Port from './components/Port';
 
 const Volume: React.FC<{}> = () => {
     const [modalV, setModalV] = useState<boolean>(false);
+    const [currentT, setCurrentT] = useState<string>('month');
 
     const showModal = () => {
         setModalV(true);
     };
 
-    const handleOk = () => {
-        setModalV(false);
-    };
-
-    const handleCancel = () => {
-        setModalV(false);
-    };
+    const onTabChange = (key:string) => {
+        setCurrentT(key);
+    }
 
   return (
   <PageContainer
@@ -37,12 +36,12 @@ const Volume: React.FC<{}> = () => {
             <Button type={"primary"} key="button" onClick={showModal}>过滤条件</Button>,
         ]
     }
+    onTabChange={onTabChange}
+    tabActiveKey={currentT}
   >
     <Modal
         title="过滤条件"
         visible={modalV}
-        onOk={handleOk}
-        onCancel={handleCancel}
         footer={false}
       >
         <p>运输类型</p>
@@ -51,7 +50,12 @@ const Volume: React.FC<{}> = () => {
 
         <p>货物类型</p>
     </Modal>
-    
+    {
+        currentT == 'month'?
+        <Month/>
+        :
+        <Port/>
+    }
   </PageContainer>
   )
 };

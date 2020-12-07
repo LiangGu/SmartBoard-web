@@ -10,6 +10,7 @@ import defaultSettings from '../config/defaultSettings';
 import menu from '../config/menu';
 import {extend} from '@/utils/utils';
 import { SmileOutlined, HeartOutlined, UserOutlined, TableOutlined} from '@ant-design/icons';
+import logo from '@/assets/logo.svg'
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
@@ -86,6 +87,7 @@ export const layout = ({
       }
     },
     menuHeaderRender: false,
+    logo: logo,
     ...initialState?.settings,
   };
 };

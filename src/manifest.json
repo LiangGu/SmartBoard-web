@@ -1,21 +1,21 @@
 {
-  "name": "Pack Transportation System",
-  "short_name": "PTS",
+  "name": "Smart Board",
+  "short_name": "Smart Board",
   "display": "standalone",
   "start_url": "./?utm_source=homescreen",
   "theme_color": "#002140",
   "background_color": "#001529",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "logo.svg",
       "sizes": "192x192"
     },
     {
-      "src": "icons/icon-128x128.png",
+      "src": "logo.svg",
       "sizes": "128x128"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "logo.svg",
       "sizes": "512x512"
     }
   ]

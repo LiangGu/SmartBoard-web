@@ -3,17 +3,17 @@ import { DefaultFooter } from '@ant-design/pro-layout';
 
 export default () => (
   <DefaultFooter
-    copyright="2020 上海言恺科技有限公司出品"
+    copyright="2020"
     links={[
       {
-        key: 'Pack Transportation System',
-        title: 'Pack Transportation System',
+        key: 'Smart看板系统',
+        title: 'Smart 看板系统',
         href: '',
         blankTarget: true,
       },
       {
-        key: '包装物流操作系统',
-        title: '包装物流操作系统',
+        key: 'Smart Board',
+        title: 'Smart Board',
         href: '',
         blankTarget: true,
       },
