@@ -17,7 +17,7 @@ export default {
   pwa: false,
   logo: 'https://preview.pro.ant.design/static/logo.f0355d39.svg',
   iconfontUrl: '',
-  splitMenus: false,
+  splitMenus: true,
   // collapsed: true,
 } as LayoutSettings & {
   pwa: boolean;
