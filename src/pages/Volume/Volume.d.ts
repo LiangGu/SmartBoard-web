@@ -23,3 +23,7 @@ export interface UpdateFormProps {
     values: Partial<TableListItem>;
 }
 
+export interface MonthChartData {
+    year: string;
+    value: number;
+}
