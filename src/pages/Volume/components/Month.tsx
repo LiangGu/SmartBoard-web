@@ -1,7 +1,7 @@
 import React, { useState, useEffect, } from 'react';
 import { Card, } from 'antd';
 import { Line } from '@ant-design/charts';
-import { getMonthChartData, } from '@/services/board';
+import { getMonthChartData, } from '@/services/volume';
 
 import { MonthChartData, } from '../Volume.d'
 

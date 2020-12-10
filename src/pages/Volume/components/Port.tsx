@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
-import { getPortTableData, } from '@/services/board';
+import { getPortTableData, } from '@/services/volume';
 
 import { PortTableData, } from '../Volume.d'
 

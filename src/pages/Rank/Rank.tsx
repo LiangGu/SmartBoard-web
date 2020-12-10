@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, } from 'antd';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
-import { getTopCTTableData, } from '@/services/board';
+import { getTopCTTableData, } from '@/services/rank';
 
 import { TopCTTableData, } from '../Rank/Rank.d'
 
