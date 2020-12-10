@@ -1,7 +1,7 @@
 const { uniq } = require('lodash');
 const RouterConfig = require('../../config/config').default.routes;
 
-const BASE_URL = `http://localhost:${process.env.PORT || 8000}`;
+const BASE_URL = `http://localhost:${process.env.PORT || 12345}`;
 
 function formatter(routes, parentPath = '') {
   const fixedParentPath = parentPath.replace(/\/{1,}/g, '/');
@@ -26,7 +26,7 @@ beforeEach(async () => {
   });
 });
 
-describe('Ant Design Pro E2E test', () => {
+describe('Smart Board Test', () => {
   const testPage = (path) => async () => {
     await page.goto(`${BASE_URL}${path}`);
     await page.waitForSelector('footer', {

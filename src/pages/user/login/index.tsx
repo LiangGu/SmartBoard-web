@@ -43,33 +43,35 @@ const Login: React.FC<{}> = () => {
   const [userLoginState, setUserLoginState] = useState<API.LoginStateType>({});
   const [submitting, setSubmitting] = useState(false);
   const { initialState, setInitialState } = useModel('@@initialState');
-  const [type, setType] = useState<string>('account');
+  
   const handleSubmit = async (values: LoginParamsType) => {
     setSubmitting(true);
     try {
       // 登录
-      const msg = await fakeAccountLogin({ ...values, type });
-      if (msg.status === 'ok' && initialState) {
+      values.SystemID = 9;
+      const res = await fakeAccountLogin({ ...values});
+      if (res.Result == true && initialState) {
         message.success('登录成功！');
-        const currentUser = await initialState?.fetchUserInfo();
+        const currentUser = res.Content;
+        // const currentUser = await initialState?.fetchUserInfo();
         let menuData:MenuDataItem[] = menu.menuData;
         setInitialState({
           ...initialState,
           currentUser,
-          ...Object.assign(menuData), //在登录时，先存上MenuData到State中，后期触发事件去更改State中的MenuData以刷新页面菜单内容。
+          ...Object.assign(menuData),
         });
         replaceGoto();
         return;
       }
       // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
+      setUserLoginState(res);
     } catch (error) {
       message.error('登录失败，请重试！');
     }
     setSubmitting(false);
   };
 
-  const { status, type: loginType } = userLoginState;
+  const { Result } = userLoginState;
 
   return (
     <div className={styles.container}>
@@ -85,14 +87,14 @@ const Login: React.FC<{}> = () => {
         </div>
 
         <div className={styles.main}>
-          <LoginFrom activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
+          <LoginFrom onSubmit={handleSubmit}>
             <div>
-              {status === 'error' && loginType === 'account' && !submitting && (
+              {Result == false && !submitting && (
                 <LoginMessage content="账户或密码错误" />
               )}
 
               <Username
-                name="username"
+                name="LoginName"
                 placeholder="用户名"
                 rules={[
                   {
@@ -102,7 +104,7 @@ const Login: React.FC<{}> = () => {
                 ]}
               />
               <Password
-                name="password"
+                name="Password"
                 placeholder="密码"
                 rules={[
                   {

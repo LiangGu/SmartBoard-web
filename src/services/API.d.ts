@@ -1,22 +1,44 @@
 declare namespace API {
   export interface CurrentUser {
-    avatar?: string;
-    name?: string;
-    title?: string;
-    group?: string;
-    signature?: string;
-    tags?: {
-      key: string;
-      label: string;
-    }[];
-    userid?: string;
-    access?: 'user' | 'guest' | 'admin';
-    unreadCount?: number;
+    AuthorityIDList?: string;
+    AuthorityList?: string;
+    BranchCode?: string;
+    BranchID?: number;
+    BusinessLineID?: number;
+    CityID?: number;
+    CityName?: string;
+    CountryID?: number;
+    CountryName?: string;
+    DefaultProjecNameFull?: string;
+    DefaultProjectID?: number | null;
+    DefaultProjectName?: string;
+    DefaultSJobCode?: string;
+    DefaultSJobID?: number | null;
+    DisplayName?: string;
+    DivisionID?: number;
+    FinereportURL?: string;
+    FuncCurrency?: string;
+    ID?: number;
+    IsOpenAccount?: boolean;
+    IsSalesMan?: boolean;
+    NumRule?: string;
+    PUAList?: [PUA];
+    ProjecBizType1ID?: number;
+    SystemViewAuth?: [number];
+    Token?: string;
+  }
+
+  export interface PUA {
+    ProjectID: number;
+    ProjectName: string;
+    UserID: number;
+    AuthorityID: number;
   }
 
   export interface LoginStateType {
-    status?: 'ok' | 'error';
-    type?: string;
+    Result?: boolean;
+    Content?: object;
+    Page?:{};
   }
 
   export interface NoticeIconData {

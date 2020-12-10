@@ -4,8 +4,7 @@ import { notification } from 'antd';
 import { history, RequestConfig, useModel} from 'umi';
 import RightContent from '@/components/RightContent';
 // import Footer from '@/components/Footer';
-import { ResponseError } from 'umi-request';
-import { queryCurrent } from './services/user';
+import { RequestOptionsInit, ResponseError } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
 import menu from '../config/menu';
 import {extend} from '@/utils/utils';
@@ -15,28 +14,14 @@ export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
   menuData?: MenuDataItem[];
-  fetchUserInfo: () => Promise<API.CurrentUser | undefined>;
 }> {
-  const fetchUserInfo = async () => {
-    try {
-      const currentUser = await queryCurrent();
-      return currentUser;
-    } catch (error) {
-      history.push('/user/login');
-    }
-    return undefined;
-  };
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/user/login') {
-    const currentUser = await fetchUserInfo();
     return {
-      fetchUserInfo,
-      currentUser,
       settings: defaultSettings,
     };
   }
   return {
-    fetchUserInfo,
     settings: defaultSettings,
   };
 }
@@ -72,7 +57,6 @@ export const layout = ({
   menuData = loopMenuItem(menuData);
   return {
     menuDataRender: () => {
-      console.log('app menuData => ', menuData);
       return Object.assign(menuData)
     },
     rightContentRender: () => <RightContent />,
@@ -135,11 +119,40 @@ const errorHandler = (error: ResponseError) => {
   throw error;
 };
 
+const requestInterceptors = (  url: string, options: RequestOptionsInit ) => {
+  const token:string = '';
+  const opt:RequestOptionsInit = options;
+  opt.headers = {
+    ...options.headers,
+    token,
+    // fromType: 'itrip-admin',
+  };
+  return {
+    url: `${url}`,
+    options: { ...options , interceptors: true},
+  };    
+}
+
+const responseInterceptors = (response: Response, options: RequestOptionsInit) => {
+  // const contentType = response.headers.get('Content-Type');
+  return response;
+}
+
 export const request: RequestConfig = {
-  // timeout: 1000,
+  timeout: 1000,
+  // credentials: 'include', //默认请求是否带上Cookie
+  errorConfig: {
+    adaptor: (resData) => {
+      return {
+        ...resData,
+        success: resData.Result,
+        errorMessage: resData.Content,
+      };
+    },
+  },
   // errorConfig: {},
-  // middlewares: [],
-  // requestInterceptors: [],
-  // responseInterceptors: [],
+  middlewares: [],
   errorHandler,
+  requestInterceptors: [requestInterceptors],
+  responseInterceptors: [responseInterceptors],
 };

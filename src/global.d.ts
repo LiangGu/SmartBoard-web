@@ -4,10 +4,6 @@ export interface TableListPagination {
   current: number;
 }
 
-export interface TableListData {
-  list: TableListItem[];
-  pagination: Partial<TableListPagination>;
-}
 
 export interface TableListParams {
   status?: string;

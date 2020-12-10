@@ -116,7 +116,6 @@ const NoticeIconView = () => {
   return (
     <NoticeIcon
       className={styles.action}
-      count={currentUser && currentUser.unreadCount}
       onItemClick={(item) => {
         changeReadState(item.id);
       }}

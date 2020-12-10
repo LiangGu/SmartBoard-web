@@ -20,7 +20,7 @@
     "lint:style": "stylelint --fix \"src/**/*.less\" --syntax less",
     "precommit": "lint-staged",
     "prettier": "prettier -c --write \"src/**/*\"",
-    "start": "umi dev",
+    "start": "set port=8008 && cross-env REACT_APP_ENV=dev ESLINT=none umi dev",
     "start:dev": "cross-env REACT_APP_ENV=dev MOCK=none umi dev",
     "start:no-mock": "cross-env MOCK=none umi dev",
     "start:no-ui": "cross-env UMI_UI=none umi dev",
@@ -45,7 +45,7 @@
     "not ie <= 10"
   ],
   "dependencies": {
-    "@ant-design/charts": "^0.9.4",
+    "@ant-design/charts": "^0.9.13",
     "@ant-design/icons": "^4.0.0",
     "@ant-design/pro-descriptions": "^1.0.19",
     "@ant-design/pro-form": "^1.0.2",

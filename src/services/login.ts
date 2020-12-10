@@ -1,15 +1,14 @@
 import { request } from 'umi';
+import { stringify } from 'qs';
 
 export interface LoginParamsType {
-  username: string;
-  password: string;
-  mobile: string;
-  captcha: string;
-  type: string;
+  LoginName: string;
+  Password: string;
+  SystemID: number;
 }
 
 export async function fakeAccountLogin(params: LoginParamsType) {
-  return request<API.LoginStateType>('/api/login/account', {
+  return request<API.LoginStateType>(`/api/User/Login?${stringify(params)}`, {
     method: 'POST',
     data: params,
   });
