@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card } from 'antd';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
+//调用API
 import { getPortTableData, } from '@/services/volume';
-
+//定义数据类型
 import { PortTableData, } from '../Volume.d'
 
 const Port: React.FC<{}> = () => {
@@ -38,7 +39,7 @@ const Port: React.FC<{}> = () => {
         <Card>
             <ProTable<PortTableData>
                 columns={columns}
-                request={(params, sorter, filter) => getPortTableData({ ...params, sorter, filter })}
+                request={(params:any, sorter:any, filter:any) => getPortTableData({ ...params, sorter, filter })}
                 rowKey="id"
                 pagination={{
                     showQuickJumper: true,

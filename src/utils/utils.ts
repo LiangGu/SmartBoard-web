@@ -28,3 +28,10 @@ export const extend = (dest: any[], source: any[]) : void => {
         }
     }
 }
+
+/**
+ * 动态获取今天是今年中的第几天
+ */
+export const getCurDay = () => {
+    return  Math.ceil((new Date() - new Date(new Date().getFullYear().toString())) / (24 * 60 * 60 * 1000));
+}

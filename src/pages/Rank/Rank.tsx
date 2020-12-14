@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, } from 'antd';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
+//调用API
 import { getTopCTTableData, } from '@/services/rank';
-
+//定义数据类型
 import { TopCTTableData, } from '../Rank/Rank.d'
 
 const Rank: React.FC<{}> = () => {
@@ -38,7 +39,7 @@ return <>
     <Card>
         <ProTable<TopCTTableData>
             columns={columns}
-            request={(params, sorter, filter) => getTopCTTableData({ ...params, sorter, filter })}
+            request={(params:any, sorter:any, filter:any) => getTopCTTableData({ ...params, sorter, filter })}
             rowKey="id"
             pagination={{
                 showQuickJumper: true,

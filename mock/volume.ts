@@ -7,23 +7,12 @@ import { Request, Response } from 'express';
  * @param u 
  */
 function getMonthChartData(req: Request, res: Response, u: string) {
-  let ChartData = [
-    { year: '1月', value: 3 },
-    { year: '2月', value: 4 },
-    { year: '3月', value: 3.5 },
-    { year: '4月', value: 5 },
-    { year: '5月', value: 4.9 },
-    { year: '6月', value: 6 },
-    { year: '7月', value: 7 },
-    { year: '8月', value: 9 },
-    { year: '9月', value: 13 },
-    { year: '10月', value: 6 },
-    { year: '11月', value: 7 },
-    { year: '12月', value: 9 },
-  ];
+  let ChartData = [4,5,7.8,15,11,14.3,5,18,18,17.3,20,10];
   const result = {
-    data: ChartData,
-    success: true,
+    Result: true,
+    Content:{
+      ChartData: ChartData,
+    }
   };
   return res.json(result);
 }
@@ -38,13 +27,13 @@ function getPortTableData(req: Request, res: Response, u: string) {
   let PortTableData = [];
   for (let i = 0; i < 100; i += 1) {
     PortTableData.push({
-      id: `${i}`,
-      portName: `港口 - ${i}`,
-      region: `区域 - ${i}`,
-      fcl: `${Math.floor(Math.random() * 1000)}`,
-      lcl: `${Math.floor(Math.random() * 1000)}`,
-      bulk: `${Math.floor(Math.random() * 1000)}`,
-      income: `${Math.floor(Math.random() * 1000)}`,
+        id: `${i}`,
+        portName: `港口 - ${i}`,
+        region: `区域 - ${i}`,
+        fcl: `${Math.floor(Math.random() * 1000)}`,
+        lcl: `${Math.floor(Math.random() * 1000)}`,
+        bulk: `${Math.floor(Math.random() * 1000)}`,
+        income: `${Math.floor(Math.random() * 1000)}`,
     });
   }
   const result = {
