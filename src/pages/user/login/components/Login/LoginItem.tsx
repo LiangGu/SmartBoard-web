@@ -31,6 +31,7 @@ export interface LoginItemProps extends Partial<FormItemProps> {
   customProps?: { [key: string]: unknown };
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   tabUtil?: LoginContextProps['tabUtil'];
+  className?: string;
 }
 
 const FormItem = Form.Item;

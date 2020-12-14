@@ -1,45 +1,31 @@
-import { LockTwoTone, MailTwoTone, MobileTwoTone, UserOutlined } from '@ant-design/icons';
 import React from 'react';
+import { MailTwoTone, MobileTwoTone, } from '@ant-design/icons';
+import { Input, } from 'antd';
 import styles from './index.less';
 
 export default {
   Username: {
+    component: Input,
     props: {
       size: 'large',
+      prefix: <img src={require('@/assets/loginPage/user.svg')} alt="" className={styles.prefixIcon} />,
+      type:'text',
       id: 'username',
-      prefix: (
-        <UserOutlined
-          style={{
-            color: '#1890ff',
-          }}
-          className={styles.prefixIcon}
-        />
-      ),
-      placeholder: 'admin',
+      autoComplete:"off"
     },
-    rules: [
-      {
-        required: true,
-        message: 'Please enter username!',
-      },
-    ],
   },
   Password: {
+    component: Input,
     props: {
       size: 'large',
-      prefix: <LockTwoTone className={styles.prefixIcon} />,
+      prefix: <img src={require('@/assets/loginPage/password.svg')} alt="" className={styles.prefixIcon} />,
       type: 'password',
       id: 'password',
-      placeholder: '888888',
+      autoComplete:"off"
     },
-    rules: [
-      {
-        required: true,
-        message: 'Please enter password!',
-      },
-    ],
   },
   Mobile: {
+    component: Input,
     props: {
       size: 'large',
       prefix: <MobileTwoTone className={styles.prefixIcon} />,
@@ -57,6 +43,7 @@ export default {
     ],
   },
   Captcha: {
+    component: Input,
     props: {
       size: 'large',
       prefix: <MailTwoTone className={styles.prefixIcon} />,

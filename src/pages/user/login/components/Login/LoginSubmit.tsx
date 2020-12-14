@@ -11,7 +11,7 @@ interface LoginSubmitProps extends ButtonProps {
 
 const LoginSubmit: React.FC<LoginSubmitProps> = ({ className, ...rest }) => {
   const clsString = classNames(styles.submit, className);
-  return <Button size="large" className={clsString} type="primary" htmlType="submit" {...rest} />;
+  return <Button size="large" className={clsString} loading type="primary" htmlType="submit" {...rest} />;
 };
 
 export default LoginSubmit;
