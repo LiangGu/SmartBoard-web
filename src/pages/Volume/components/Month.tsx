@@ -1,5 +1,4 @@
 import React, { useEffect, } from 'react';
-import { PageContainer} from '@ant-design/pro-layout';
 import { Card, } from 'antd';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts'
