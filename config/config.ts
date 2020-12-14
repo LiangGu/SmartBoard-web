@@ -9,7 +9,7 @@ const { REACT_APP_ENV } = process.env;
 export default defineConfig({
   hash: true,
   antd: {
-    dark: true, // 开启暗色主题
+    dark: true,    // 开启暗色主题
     compact: true, // 开启紧凑主题
   },
   dva: {
@@ -23,7 +23,6 @@ export default defineConfig({
   locale: {
     default: 'zh-CN',
     antd: true,
-    // default true, when it is true, will use `navigator.language` overwrite default
     baseNavigator: true,
   },
   dynamicImport: {
@@ -34,7 +33,6 @@ export default defineConfig({
   },
   routes: menu.menuData,
   theme: {
-    // ...darkTheme,
     'primary-color': defaultSettings['primaryColor'],
   },
   // @ts-ignore

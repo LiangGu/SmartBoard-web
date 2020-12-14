@@ -27,7 +27,6 @@ const ICProfit: React.FC<{}> = () => {
       let element = document.getElementById('main');
       let myChart = echarts.init(element as HTMLDivElement);
       let option = {
-          title: {text: '收支利润数据图',},
           tooltip: {},
           toolbox: {
               show: true,

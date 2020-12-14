@@ -26,7 +26,6 @@ const Month: React.FC<{}> = () => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
         let option = {
-            title: {text: '月份货量数据图',},
             tooltip: {},
             toolbox: {
                 show: true,

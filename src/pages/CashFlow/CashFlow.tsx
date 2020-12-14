@@ -37,7 +37,6 @@ const CashFlow: React.FC<{}> = () => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
         let option = {
-            title: {text: '现金流',},
             tooltip: {},
             toolbox: {
                 show: true,
@@ -53,7 +52,8 @@ const CashFlow: React.FC<{}> = () => {
                 boundaryGap: false,
                 data: [...CashFlowChartKey]
             },
-            yAxis: {name: '千'},
+            // yAxis: {name: '千'},
+            yAxis: {},
             dataZoom: [
                 {
                     type: 'slider',         // 滑动条
