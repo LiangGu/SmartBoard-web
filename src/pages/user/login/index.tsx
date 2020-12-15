@@ -6,6 +6,7 @@ import LoginFrom from './components/Login';
 import styles from './style.less';
 import menu from '@/../config/menu';
 import { MenuDataItem } from '@umijs/route-utils';
+import { getCode, msgError } from '@/utils/utils';
 // 引入图标
 import logo from '@/assets/logo.svg';
 import CN from '@/assets/loginPage/SMARTBOARDCN.svg';
@@ -61,7 +62,8 @@ const Login: React.FC<{}> = () => {
       replaceGoto();
       return;
     }else{
-      message.success(result.Content);
+      console.log(result)
+      message.warning(msgError(getCode(result.Content)));
     }
     setSubmitting(false);
   };

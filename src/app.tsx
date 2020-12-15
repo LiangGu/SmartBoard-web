@@ -161,7 +161,9 @@ export const request: RequestConfig = {
     adaptor: (resData:any) => {
       return {
         ...resData,
-        success: resData.Result,
+        // success: resData.Result,
+        // success 直接赋值 true 要不会抛出异常错误页面
+        success: true,
         errorMessage: resData.Content,
       };
     },
