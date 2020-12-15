@@ -46,31 +46,22 @@ const Login: React.FC<{}> = () => {
   
   const handleSubmit = async (values: LoginParamsType) => {
     setSubmitting(true);
-    try {
-      // 登录
-      values.SystemID = 9;
-      // const res = await fakeAccountLogin({ ...values});
-      let res = {
-        Result:true,
-        Content:{DisplayName:"Board OP"}
-      }
-      if (res.Result == true && initialState) {
-        message.success('登录成功！');
-        const currentUser = res.Content;
-        // const currentUser = await initialState?.fetchUserInfo();
-        let menuData:MenuDataItem[] = menu.menuData;
-        setInitialState({
-          ...initialState,
-          currentUser,
-          ...Object.assign(menuData),
-        });
-        replaceGoto();
-        return;
-      }
-      // 如果失败去设置用户错误信息
-      setUserLoginState(res);
-    } catch (error) {
-      message.error('登录失败，请重试！');
+    values = Object.assign({}, values,{SystemID:9});
+
+    const result = await fakeAccountLogin({...values});
+    if(result && result.Result){
+      message.success('登录成功！');
+      const currentUser = result.Content;
+      let menuData:MenuDataItem[] = menu.menuData;
+      setInitialState({
+        ...initialState,
+        currentUser,
+        ...Object.assign(menuData),
+      });
+      replaceGoto();
+      return;
+    }else{
+      message.success(result.Content);
     }
     setSubmitting(false);
   };

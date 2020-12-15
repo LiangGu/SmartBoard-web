@@ -1,9 +1,8 @@
 import React from 'react';
 import { BasicLayoutProps, Settings as LayoutSettings, MenuDataItem} from '@ant-design/pro-layout';
 import { notification } from 'antd';
-import { history, RequestConfig,} from 'umi';
+import { history, RequestConfig } from 'umi';
 import RightContent from '@/components/RightContent';
-// import Footer from '@/components/Footer';
 import { RequestOptionsInit, ResponseError } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
 import menu from '../config/menu';
@@ -159,7 +158,7 @@ export const request: RequestConfig = {
   timeout: 1000,
   // credentials: 'include', //默认请求是否带上Cookie
   errorConfig: {
-    adaptor: (resData) => {
+    adaptor: (resData:any) => {
       return {
         ...resData,
         success: resData.Result,
@@ -167,7 +166,6 @@ export const request: RequestConfig = {
       };
     },
   },
-  // errorConfig: {},
   middlewares: [],
   errorHandler,
   requestInterceptors: [requestInterceptors],
