@@ -25,19 +25,16 @@ const ChooseBranch: React.FC<{}> = () => {
     }
 
     /**
-     * 保存选择的公司
      * 修改 BranchID 并关闭 Drawer
      */
-    const onSaveChooseBranch = () => {
+    const onClose = () => {
         console.log(SelectBranchID,initialState)
-
-
-
         setInitialState({
-            // SelectBranchID,
+            ...initialState,
+            currentUser: Object.assign({},initialState?.currentUser,{BranchID:SelectBranchID})
 
         });
-        setDrawerVisible(false);
+        setDrawerVisible(false)
     }
 
     /**
@@ -60,21 +57,19 @@ const ChooseBranch: React.FC<{}> = () => {
 
             <Drawer
                 title="请选择公司"
-                placement={"left"}
+                placement={"right"}
                 closable={false}
-                maskClosable={false}
+                // maskClosable={false}
+                onClose={onClose}
                 visible={DrawerVisible}
-                key={"left"}
+                key={"right"}
                 width={200}
-                footer={
-                    <Button className={styles.saveBranchBtn} onClick={onSaveChooseBranch}>确定</Button>
-                }
             >
                 <Radio.Group onChange={onChange} defaultValue={SelectBranchID}>
                     <Row>
                         {
                             BranchList && BranchList.length > 0 ? BranchList.map(x =>{
-                                return <Col span={24} key={x.key} style={{marginBottom:10}}><Radio.Button key={x.key} value={x.key}>{x.value}</Radio.Button></Col>
+                                return <Col span={24} key={x.key} style={{marginBottom:10,}}><Radio.Button style={{width:"100%"}} key={x.key} value={x.key}>{x.value}</Radio.Button></Col>
                             }) : null
                         }
                     </Row>
