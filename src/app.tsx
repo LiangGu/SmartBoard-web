@@ -95,6 +95,10 @@ export const layout = ({
       if (!currentUser && location.pathname !== '/user/login') {
         history.push('/user/login');
       }
+      // 如果用户点击 '货量' 页面,自动定向到 '货量月份' 页面
+      if(location.pathname == '/volume'){
+        history.push('/volume/month');
+      }
     },
     
     menuHeaderRender: false,
@@ -120,7 +124,12 @@ const codeMessage = {
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
+  'U001':'密码错误',
   'U002':'用户没有登录权限',
+  'U003':'你的账号已被冻结',
+  'U004':'用户名不存在',
+  'U005':'您输入的原始密码有误',
+  'U006':'用户信息异常',
 };
 
 /**
@@ -192,8 +201,6 @@ export const request: RequestConfig = {
       console.log(resData);
       return {
         ...resData,
-        // success: resData.Result,
-        // success 直接赋值 true 要不会抛出异常错误页面
         success: resData.Result,
         errorMessage: resData.Content,
       };
