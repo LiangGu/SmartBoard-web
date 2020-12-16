@@ -12,12 +12,12 @@ export interface NoticeIconTabProps {
   style?: React.CSSProperties;
   title: string;
   tabKey: string;
-  onClick?: (item: LoginUserInfo.NoticeIconData) => void;
+  onClick?: (item: API.NoticeIconData) => void;
   onClear?: () => void;
   emptyText?: string;
   clearText?: string;
   viewMoreText?: string;
-  list: LoginUserInfo.NoticeIconData[];
+  list: API.NoticeIconData[];
   onViewMore?: (e: any) => void;
 }
 const NoticeList: React.FC<NoticeIconTabProps> = ({
@@ -45,7 +45,7 @@ const NoticeList: React.FC<NoticeIconTabProps> = ({
   }
   return (
     <div>
-      <List<LoginUserInfo.NoticeIconData>
+      <List<API.NoticeIconData>
         className={styles.list}
         dataSource={list}
         renderItem={(item, i) => {

@@ -21,7 +21,7 @@ import {
 import logo from '@/assets/logo.svg'
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
-  currentUser?: LoginUserInfo.CurrentUser;
+  currentUser?: API.CurrentUser;
   menuData?: MenuDataItem[];
   settingDrawer?: SettingDrawerProps;
 }> {
@@ -73,7 +73,7 @@ const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>(
 export const layout = ({
   initialState,
 }:{
-    initialState: { settings?: LayoutSettings; currentUser?: LoginUserInfo.CurrentUser; menuData?: MenuDataItem[];};
+    initialState: { settings?: LayoutSettings; currentUser?: API.CurrentUser; menuData?: MenuDataItem[];};
   }): BasicLayoutProps => {
   let menuData:MenuDataItem[] = menu.menuData;
   if(initialState && initialState.menuData){
@@ -128,6 +128,7 @@ const codeMessage = {
  */
 const errorHandler = (error: ResponseError) => {
   const { data } = error;
+  console.log(123);
   if (data && !data.Result) {
     const errorText = codeMessage[data.Content] || data.Content;
     notification.error({
@@ -188,11 +189,12 @@ export const request: RequestConfig = {
   // credentials: 'include', //默认请求是否带上Cookie
   errorConfig: {
     adaptor: (resData:any) => {
+      console.log(resData);
       return {
         ...resData,
         // success: resData.Result,
         // success 直接赋值 true 要不会抛出异常错误页面
-        success: true,
+        success: resData.Result,
         errorMessage: resData.Content,
       };
     },
