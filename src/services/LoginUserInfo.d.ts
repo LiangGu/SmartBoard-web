@@ -35,12 +35,6 @@ declare namespace LoginUserInfo {
     AuthorityID: number;
   }
 
-  export interface ResponseType {
-    Result?: boolean;
-    Content?: object;
-    Page?:{};
-  }
-
   export interface NoticeIconData {
     id: string;
     key: string;
