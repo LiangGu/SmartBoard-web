@@ -19,11 +19,24 @@ export default {
           component: './Home/Home',
         },
         {
-          path: '/volume',
+          path: '/volume/month',
           name: 'volume',
           icon: 'BarChartOutlined',
           // access: 'canAdmin',
-          component: './Volume/volume',
+          routes: [
+            {
+              path: '/volume/month',
+              name: 'month',
+              icon: 'BarChartOutlined',
+              component: './Volume/Month',
+            },
+            {
+              path: '/volume/port',
+              name: 'port',
+              icon: 'BarChartOutlined',
+              component: './Volume/Port',
+            },
+          ],
         },
         {
           path: '/icprofit',
