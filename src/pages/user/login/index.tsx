@@ -51,9 +51,10 @@ const Login: React.FC<{}> = () => {
       // 登录
       values.SystemID = 9;
       res = await login({ ...values});
+      console.log('res => ', res);
       if (res.Result == true && initialState) {
         message.success('登录成功！');
-        let currentUser: LoginUserInfo.CurrentUser | undefined = res.Content;
+        let currentUser: API.CurrentUser | undefined = res.Content;
         let menuData:MenuDataItem[] = menu.menuData;
         
         setInitialState({
@@ -67,7 +68,8 @@ const Login: React.FC<{}> = () => {
       }
       // 如果失败去设置用户错误信息
       setResponse(res);
-    } catch (error) {}
+    } catch (error) {
+    }
     setSubmitting(false);
   };
 
