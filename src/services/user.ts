@@ -1,9 +1,9 @@
 import { request } from 'umi';
 
 export async function query() {
-  return request<API.CurrentUser[]>('/api/users');
+  return request<LoginUserInfo.CurrentUser[]>('/api/users');
 }
 
 export async function queryNotices(): Promise<any> {
-  return request<{ data: API.NoticeIconData[] }>('/api/notices');
+  return request<{ data: LoginUserInfo.NoticeIconData[] }>('/api/notices');
 }

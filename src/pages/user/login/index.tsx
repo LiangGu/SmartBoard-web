@@ -41,7 +41,7 @@ const replaceGoto = () => {
 };
 
 const Login: React.FC<{}> = () => {
-  const [ userLoginState, setUserLoginState] = useState<API.LoginStateType>({});
+  const [ userLoginState, setUserLoginState] = useState<LoginUserInfo.LoginStateType>({});
   const [ submitting, setSubmitting] = useState(false);
   const { initialState, setInitialState } = useModel('@@initialState');
   
@@ -62,9 +62,9 @@ const Login: React.FC<{}> = () => {
       replaceGoto();
       return;
     }else{
-      console.log(result)
       message.warning(msgError(getCode(result.Content)));
     }
+    setUserLoginState(result.Result)
     setSubmitting(false);
   };
 

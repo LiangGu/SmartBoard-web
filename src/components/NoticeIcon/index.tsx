@@ -9,9 +9,9 @@ import NoticeIcon from './NoticeIcon';
 import styles from './index.less';
 
 const getNoticeData = (
-  notices: API.NoticeIconData[],
+  notices: LoginUserInfo.NoticeIconData[],
 ): {
-  [key: string]: API.NoticeIconData[];
+  [key: string]: LoginUserInfo.NoticeIconData[];
 } => {
   if (!notices || notices.length === 0 || !Array.isArray(notices)) {
     return {};
@@ -52,7 +52,7 @@ const getNoticeData = (
   return groupBy(newNotices, 'type');
 };
 
-const getUnreadData = (noticeData: { [key: string]: API.NoticeIconData[] }) => {
+const getUnreadData = (noticeData: { [key: string]: LoginUserInfo.NoticeIconData[] }) => {
   const unreadMsg: {
     [key: string]: number;
   } = {};
@@ -78,8 +78,7 @@ export interface GlobalHeaderRightProps {
 
 const NoticeIconView = () => {
   const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
-  const [notices, setNotices] = useState<API.NoticeIconData[]>([]);
+  const [notices, setNotices] = useState<LoginUserInfo.NoticeIconData[]>([]);
 
   useEffect(() => {
     queryNotices().then(({ data }) => setNotices(data));

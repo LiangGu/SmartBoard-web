@@ -55,7 +55,7 @@ export function GetCurrentLang(){
  * @param str
  * @returns {{}}
  */
-export function getCode(str:string){
+export function getCode(str:any){
     let num = null, textSubstr = "", msgParam: any = {};
     if(!!str){
         if(str.indexOf("|")>-1){

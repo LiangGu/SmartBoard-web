@@ -14,7 +14,7 @@ export default {
   title: 'Smart Board',
   pwa: false,
   iconfontUrl: '',
-  splitMenus: false,
+  splitMenus: true,
 } as LayoutSettings & {
   pwa: boolean;
   menuRender: true,
