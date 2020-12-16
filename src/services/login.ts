@@ -7,8 +7,8 @@ export interface LoginParamsType {
   SystemID: number;
 }
 
-export async function fakeAccountLogin(params: LoginParamsType) {
-  return request<API.LoginStateType>(`/api/User/Login?${stringify(params)}`, {
+export async function login(params: LoginParamsType) {
+  return request<API.ResponseType>(`/api/User/Login?${stringify(params)}`, {
     method: 'POST',
     data: params,
   });

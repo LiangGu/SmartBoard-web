@@ -1,7 +1,7 @@
 import { Alert, message } from 'antd';
 import React, { useState } from 'react';
 import { useModel, history, History } from 'umi';
-import { LoginParamsType, fakeAccountLogin } from '@/services/login';
+import { LoginParamsType, login } from '@/services/login';
 import LoginFrom from './components/Login';
 import styles from './style.less';
 import menu from '@/../config/menu';
@@ -40,33 +40,38 @@ const replaceGoto = () => {
 };
 
 const Login: React.FC<{}> = () => {
-  const [ userLoginState, setUserLoginState] = useState<API.LoginStateType>({});
+  const [ response, setResponse] = useState<API.ResponseType>({});
   const [ submitting, setSubmitting] = useState(false);
   const { initialState, setInitialState } = useModel('@@initialState');
   
   const handleSubmit = async (values: LoginParamsType) => {
     setSubmitting(true);
-    values = Object.assign({}, values,{SystemID:9});
-
-    const result = await fakeAccountLogin({...values});
-    if(result && result.Result){
-      message.success('登录成功！');
-      const currentUser = result.Content;
-      let menuData:MenuDataItem[] = menu.menuData;
-      setInitialState({
-        ...initialState,
-        currentUser,
-        ...Object.assign(menuData),
-      });
-      replaceGoto();
-      return;
-    }else{
-      message.success(result.Content);
-    }
+    let res:API.ResponseType;
+    try {
+      // 登录
+      values.SystemID = 9;
+      res = await login({ ...values});
+      if (res.Result == true && initialState) {
+        message.success('登录成功！');
+        let currentUser: API.CurrentUser | undefined = res.Content;
+        let menuData:MenuDataItem[] = menu.menuData;
+        
+        setInitialState({
+          ...initialState,
+          currentUser,
+          ...Object.assign(menuData),
+        });
+        sessionStorage.setItem('TOKEN', currentUser?.Token??'')
+        replaceGoto();
+        return;
+      }
+      // 如果失败去设置用户错误信息
+      setResponse(res);
+    } catch (error) {}
     setSubmitting(false);
   };
 
-  const { Result } = userLoginState;
+  const { Result } = response;
 
   return (
     <div className={styles.MainDiv}>

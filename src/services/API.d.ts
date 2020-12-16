@@ -35,7 +35,7 @@ declare namespace API {
     AuthorityID: number;
   }
 
-  export interface LoginStateType {
+  export interface ResponseType {
     Result?: boolean;
     Content?: object;
     Page?:{};

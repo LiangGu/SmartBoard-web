@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicLayoutProps, Settings as LayoutSettings, MenuDataItem} from '@ant-design/pro-layout';
+import { BasicLayoutProps, Settings as LayoutSettings, MenuDataItem, SettingDrawerProps} from '@ant-design/pro-layout';
 import { notification } from 'antd';
 import { history, RequestConfig } from 'umi';
 import RightContent from '@/components/RightContent';
@@ -23,16 +23,26 @@ export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
   menuData?: MenuDataItem[];
+  settingDrawer?: SettingDrawerProps;
 }> {
-  // 如果是登录页面，不执行
-  if (history.location.pathname !== '/user/login') {
-    return {
-      settings: defaultSettings,
-    };
+  try{
+    // 如果是登录页面，不执行
+    if (history.location.pathname !== '/user/login') {
+      return {
+        settings: defaultSettings,
+        settingDrawer: {
+          hideCopyButton: true,
+          hideHintAlert: true
+        }
+      };
+    }else{
+      
+    }
+  }catch(error){
+    history.push('/login');
   }
-  return {
-    settings: defaultSettings,
-  };
+  
+  return {  settings: defaultSettings };
 }
 
 const IconMap = {
@@ -86,6 +96,7 @@ export const layout = ({
         history.push('/user/login');
       }
     },
+    
     menuHeaderRender: false,
     logo: logo,
     ...initialState?.settings,
@@ -109,24 +120,23 @@ const codeMessage = {
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
+  'U002':'用户没有登录权限',
 };
 
 /**
  * 异常处理程序
  */
 const errorHandler = (error: ResponseError) => {
-  const { response } = error;
-  if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-
+  const { data } = error;
+  if (data && !data.Result) {
+    const errorText = codeMessage[data.Content] || data.Content;
     notification.error({
-      message: `请求错误 ${status}: ${url}`,
+      message: `请求错误 ${status}: ${data.Content}`,
       description: errorText,
     });
   }
 
-  if (!response) {
+  if (!data) {
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
       message: '网络异常',
@@ -135,14 +145,24 @@ const errorHandler = (error: ResponseError) => {
   throw error;
 };
 
-const requestInterceptors = (  url: string, options: RequestOptionsInit ) => {
-  const token:string = '';
-  const opt:RequestOptionsInit = options;
-  opt.headers = {
-    ...options.headers,
-    token,
-    // fromType: 'itrip-admin',
-  };
+const jwtInterceptors = (  url: string, options: RequestOptionsInit ) => {
+  // 判断是否有 token
+  const token:string|null = sessionStorage.getItem('TOKEN');
+  if (token) {
+    return {
+      url,
+      options: {
+        ...options,
+        interceptors: true,
+        headers: {
+          ...options.headers,
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    };
+  }else{
+    history.push('/user/login');
+  }
   return {
     url: `${url}`,
     options: { ...options , interceptors: true},
@@ -150,7 +170,16 @@ const requestInterceptors = (  url: string, options: RequestOptionsInit ) => {
 }
 
 const responseInterceptors = (response: Response, options: RequestOptionsInit) => {
-  // const contentType = response.headers.get('Content-Type');
+  const {ok, status} = response
+  if (!ok) {
+    // message.error(msg);
+    if (status === 500) {}
+    if (status === 401) {
+      localStorage.clear();
+      history.push('/user/login');
+    }
+    if (status === 403) {}
+  }
   return response;
 }
 
@@ -168,6 +197,9 @@ export const request: RequestConfig = {
   },
   middlewares: [],
   errorHandler,
-  requestInterceptors: [requestInterceptors],
+  requestInterceptors: [
+    jwtInterceptors,
+  ],
   responseInterceptors: [responseInterceptors],
+  
 };
