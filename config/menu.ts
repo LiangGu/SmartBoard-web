@@ -11,13 +11,13 @@ export default {
             },
           ],
         },
-        {
-          path: '/home',
-          name: 'home',
-          icon:  'HomeOutlined',
-          // access: 'canAdmin',
-          component: './Home/Home',
-        },
+        // {
+        //   path: '/home',
+        //   name: 'home',
+        //   icon:  'HomeOutlined',
+        //   // access: 'canAdmin',
+        //   component: './Home/Home',
+        // },
         {
           path: '/volume',
           name: 'volume',
@@ -64,7 +64,7 @@ export default {
         },
         {
           path: '/',
-          redirect: './home',
+          redirect: './volume',
         },
         {
           component: './404',
