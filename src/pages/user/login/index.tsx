@@ -53,7 +53,7 @@ const Login: React.FC<{}> = () => {
       res = await login({ ...values});
       if (res.Result == true && initialState) {
         message.success('登录成功！');
-        let currentUser: API.CurrentUser | undefined = res.Content;
+        let currentUser: LoginUserInfo.CurrentUser | undefined = res.Content;
         let menuData:MenuDataItem[] = menu.menuData;
         
         setInitialState({

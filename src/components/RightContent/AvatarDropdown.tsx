@@ -1,18 +1,22 @@
-import React, { useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { LogoutOutlined,} from '@ant-design/icons';
 import { Menu, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import { outLogin } from '@/services/login';
 import { stringify } from 'querystring';
-import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+//引入组件
+import HeaderDropdown from '../HeaderDropdown';
+import ChooseBranch from '../RightContent/ChooseBranch';
+//引入基础数据
+import { BranchList } from '@/utils/baseData';
 
 export interface GlobalHeaderRightProps {
   menu?: boolean;
 }
 
 /**
- * 退出登录，并且将当前的 url 保存
+ * 退出登录,并且将当前的 url 保存
  */
 const loginOut = async () => {
   await outLogin();
@@ -31,6 +35,18 @@ const loginOut = async () => {
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
+  const [ SelectBranchName, setSelectBranchName] = useState('');
+
+  /**
+   * 第2个参数传 [] 相当于 componentDidMount 钩子
+   */
+  useEffect(() =>{
+    let BranchName = "";
+    if(initialState && initialState.currentUser){
+      BranchName = BranchList.filter( x=> x.key == initialState?.currentUser?.BranchID )[0].value;
+    }
+    setSelectBranchName(BranchName)
+  },[]);
 
   const onMenuClick = useCallback(
     (event: {
@@ -81,11 +97,21 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     </Menu>
   );
   return (
-    <HeaderDropdown overlay={menuHeaderDropdown}>
-      <span className={`${styles.action} ${styles.account}`}>
-        <span className={`${styles.name} anticon`}>{currentUser.DisplayName}</span>
-      </span>
-    </HeaderDropdown>
+    <div className={styles.right}>
+        {/* 总部人员登录可以选择公司 */}
+        {
+          currentUser && currentUser.BranchID == 1?
+          <>
+            <ChooseBranch/>
+            <p>{SelectBranchName}</p>
+          </> : null
+        }
+        <HeaderDropdown overlay={menuHeaderDropdown}>
+          <span className={`${styles.action} ${styles.account}`}>
+            <span className={`${styles.name} anticon`}>{currentUser.DisplayName}</span>
+          </span>
+        </HeaderDropdown>
+    </div>
   );
 };
 

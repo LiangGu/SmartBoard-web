@@ -19,7 +19,7 @@ import { getCashFlowChartData,} from '@/services/cashflow';
 import {getCurDay} from '../../utils/utils'
 
 const CashFlow: React.FC<{}> = () => {
-    const [curData, setcurData] = useState<number>(()=>{
+    const [ curData, ] = useState<number>(()=>{
       return getCurDay()
     });
 
@@ -74,7 +74,7 @@ const CashFlow: React.FC<{}> = () => {
                             if (params.value < 0) {
                                 let color = ['#CC3300'];
                                 return params.itemStyle = color;
-                            } else if (params.value > 0) {
+                            } else {
                                 let color = ['#FFCC00'];
                                 return params.itemStyle = color;
                             }

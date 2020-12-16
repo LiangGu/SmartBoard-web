@@ -1,14 +1,11 @@
 @import '~antd/es/style/themes/default.less';
 
 @pro-header-hover-bg: rgba(0, 0, 0, 0.025);
+@blue-color: #0083FF;
 
 .menu {
-  :global(.anticon) {
-    margin-right: 8px;
-  }
-  :global(.ant-dropdown-menu-item) {
-    min-width: 160px;
-  }
+  :global(.anticon) {margin-right: 8px;}
+  :global(.ant-dropdown-menu-item) {min-width: 160px;}
 }
 
 .right {
@@ -24,21 +21,13 @@
     padding: 0 12px;
     cursor: pointer;
     transition: all 0.3s;
-    > span {
-      vertical-align: middle;
-    }
-    &:hover {
-      background: @pro-header-hover-bg;
-    }
-    &:global(.opened) {
-      background: @pro-header-hover-bg;
-    }
+    > span {vertical-align: middle;}
+    &:hover {background: @pro-header-hover-bg;}
+    &:global(.opened) {background: @pro-header-hover-bg;}
   }
   .search {
     padding: 0 12px;
-    &:hover {
-      background: transparent;
-    }
+    &:hover {background: transparent;}
   }
   .account {
     .avatar {
@@ -52,11 +41,17 @@
 
 .dark {
   .action {
-    &:hover {
-      background: #252a3d;
-    }
-    &:global(.opened) {
-      background: #252a3d;
-    }
+    &:hover {background: #252a3d;}
+    &:global(.opened) {background: #252a3d;}
   }
+}
+
+// ChooseBranch 组件样式
+.switchBranchBtn{
+  margin-right: 10px;
+  color: @blue-color;
+}
+.saveBranchBtn{
+  width: 100%;
+  color: @blue-color;
 }

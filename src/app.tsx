@@ -21,7 +21,7 @@ import {
 import logo from '@/assets/logo.svg'
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
-  currentUser?: API.CurrentUser;
+  currentUser?: LoginUserInfo.CurrentUser;
   menuData?: MenuDataItem[];
   settingDrawer?: SettingDrawerProps;
 }> {
@@ -73,7 +73,7 @@ const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>(
 export const layout = ({
   initialState,
 }:{
-    initialState: { settings?: LayoutSettings; currentUser?: API.CurrentUser; menuData?: MenuDataItem[];};
+    initialState: { settings?: LayoutSettings; currentUser?: LoginUserInfo.CurrentUser; menuData?: MenuDataItem[];};
   }): BasicLayoutProps => {
   let menuData:MenuDataItem[] = menu.menuData;
   if(initialState && initialState.menuData){
@@ -91,7 +91,7 @@ export const layout = ({
     onPageChange: () => {
       const { currentUser } = initialState;
       const { location } = history;
-      // 如果没有登录，重定向到 login
+      // 如果没有登录,重定向到 login
       if (!currentUser && location.pathname !== '/user/login') {
         history.push('/user/login');
       }
@@ -138,7 +138,7 @@ const errorHandler = (error: ResponseError) => {
 
   if (!data) {
     notification.error({
-      description: '您的网络发生异常，无法连接服务器',
+      description: '您的网络发生异常,无法连接服务器',
       message: '网络异常',
     });
   }
@@ -190,7 +190,9 @@ export const request: RequestConfig = {
     adaptor: (resData:any) => {
       return {
         ...resData,
-        success: resData.Result,
+        // success: resData.Result,
+        // success 直接赋值 true 要不会抛出异常错误页面
+        success: true,
         errorMessage: resData.Content,
       };
     },
