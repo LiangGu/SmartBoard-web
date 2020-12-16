@@ -22,6 +22,7 @@ import logo from '@/assets/logo.svg'
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
+  currentBranch?: API.SelectBranchInfo;
   menuData?: MenuDataItem[];
   settingDrawer?: SettingDrawerProps;
 }> {
@@ -198,7 +199,6 @@ export const request: RequestConfig = {
   // credentials: 'include', //默认请求是否带上Cookie
   errorConfig: {
     adaptor: (resData:any) => {
-      console.log(resData);
       return {
         ...resData,
         success: resData.Result,
@@ -208,9 +208,6 @@ export const request: RequestConfig = {
   },
   middlewares: [],
   errorHandler,
-  requestInterceptors: [
-    jwtInterceptors,
-  ],
+  requestInterceptors: [jwtInterceptors,],
   responseInterceptors: [responseInterceptors],
-  
 };

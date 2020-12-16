@@ -6,6 +6,7 @@ import LoginFrom from './components/Login';
 import styles from './style.less';
 import menu from '@/../config/menu';
 import { MenuDataItem } from '@umijs/route-utils';
+import { BranchList } from '@/utils/baseData'
 // 引入图标
 import logo from '@/assets/logo.svg';
 import CN from '@/assets/loginPage/SMARTBOARDCN.svg';
@@ -54,12 +55,16 @@ const Login: React.FC<{}> = () => {
       console.log('res => ', res);
       if (res.Result == true && initialState) {
         message.success('登录成功！');
+        //当前登录用户信息
         let currentUser: API.CurrentUser | undefined = res.Content;
+        //当前总部人员选择的公司信息
+        const selectBranchName:string | undefined = BranchList.find( x => x.key == res.Content.BranchID)?.value;
+        let currentBranch: any = Object.assign({},{BranchID:res.Content.BranchID,BranchName:selectBranchName})
         let menuData:MenuDataItem[] = menu.menuData;
-        
         setInitialState({
           ...initialState,
           currentUser,
+          currentBranch,
           ...Object.assign(menuData),
         });
         sessionStorage.setItem('TOKEN', currentUser?.Token??'')

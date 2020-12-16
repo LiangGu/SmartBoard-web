@@ -12,7 +12,6 @@ import 'echarts/lib/component/tooltip'
 import { getMonthChartData, } from '@/services/volume';
 
 const Month: React.FC<{}> = () => {
-
     //获取数据
     let fetchData = async()=>{
         const result = await getMonthChartData();
@@ -48,6 +47,7 @@ const Month: React.FC<{}> = () => {
              ]
         };
         myChart.setOption(option);
+        window.addEventListener('resize' , () => {myChart.resize()});
     };
 
     /**

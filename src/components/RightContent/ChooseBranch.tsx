@@ -8,7 +8,7 @@ import { BranchList } from '@/utils/baseData';
 const ChooseBranch: React.FC<{}> = () => {
     const { initialState, setInitialState } = useModel('@@initialState');
     const [ DrawerVisible, setDrawerVisible] = useState(false);
-    const [ SelectBranchID, setSelectBranchID] = useState(initialState?.currentUser?.BranchID);
+    const [ SelectBranchID, setSelectBranchID] = useState(initialState?.currentBranch?.BranchID);
 
     /**
      * 第2个参数传 [] 相当于 componentDidMount 钩子
@@ -28,12 +28,6 @@ const ChooseBranch: React.FC<{}> = () => {
      * 修改 BranchID 并关闭 Drawer
      */
     const onClose = () => {
-        console.log(SelectBranchID,initialState)
-        setInitialState({
-            ...initialState,
-            currentUser: Object.assign({},initialState?.currentUser,{BranchID:SelectBranchID})
-
-        });
         setDrawerVisible(false)
     }
 
@@ -41,7 +35,14 @@ const ChooseBranch: React.FC<{}> = () => {
      * 点击选择公司
      */
     const onChange = (e:any) => {
-        setSelectBranchID(e.target.value)
+        const selectBranchName:string | undefined = BranchList.find( x => x.key == e.target.value)?.value;
+        setInitialState({
+            ...initialState,
+            //保存总部人员选择的公司ID
+            currentBranch: Object.assign({},initialState?.currentBranch,{BranchID:e.target.value,BranchName:selectBranchName},)
+        });
+        setDrawerVisible(false)
+
     }
 
     return (

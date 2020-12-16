@@ -85,6 +85,7 @@ const CashFlow: React.FC<{}> = () => {
             }],
         };
         myChart.setOption(option);
+        window.addEventListener('resize' , () => {myChart.resize()});
     };
 
     /**

@@ -77,7 +77,6 @@ export interface GlobalHeaderRightProps {
 }
 
 const NoticeIconView = () => {
-  const { initialState } = useModel('@@initialState');
   const [notices, setNotices] = useState<API.NoticeIconData[]>([]);
 
   useEffect(() => {

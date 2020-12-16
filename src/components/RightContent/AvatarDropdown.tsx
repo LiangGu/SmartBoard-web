@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { LogoutOutlined,} from '@ant-design/icons';
 import { Menu, Spin } from 'antd';
 import { history, useModel } from 'umi';
@@ -8,8 +8,7 @@ import styles from './index.less';
 //引入组件
 import HeaderDropdown from '../HeaderDropdown';
 import ChooseBranch from '../RightContent/ChooseBranch';
-//引入基础数据
-import { BranchList } from '@/utils/baseData';
+
 
 export interface GlobalHeaderRightProps {
   menu?: boolean;
@@ -35,18 +34,6 @@ const loginOut = async () => {
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
-  const [ SelectBranchName, setSelectBranchName] = useState('');
-
-  /**
-   * 第2个参数传 [] 相当于 componentDidMount 钩子
-   */
-  useEffect(() =>{
-    let BranchName = "";
-    if(initialState && initialState.currentUser){
-      BranchName = BranchList.filter( x=> x.key == initialState?.currentUser?.BranchID )[0].value;
-    }
-    setSelectBranchName(BranchName)
-  },[]);
 
   const onMenuClick = useCallback(
     (event: {
@@ -57,7 +44,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     }) => {
       const { key } = event;
       if (key === 'logout' && initialState) {
-        setInitialState({ ...initialState, currentUser: undefined });
+        setInitialState({ ...initialState, currentUser: undefined , currentBranch: undefined ,});
         loginOut();
         return;
       }
@@ -82,7 +69,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     return loading;
   }
 
-  const { currentUser } = initialState;
+  const { currentUser , currentBranch} = initialState;
 
   if (!currentUser || !currentUser.DisplayName) {
     return loading;
@@ -103,7 +90,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
           currentUser && currentUser.BranchID == 1?
           <>
             <ChooseBranch/>
-            <p>{SelectBranchName}</p>
+            <p>{currentBranch?.BranchName}</p>
           </> : null
         }
         <HeaderDropdown overlay={menuHeaderDropdown}>
