@@ -6,7 +6,8 @@ import { TableListParams } from '../global.d';
  * By:Iverson.Tian
  * Date:2020-12-08
  */
-export async function getMonthChartData() {
+export async function getMonthChartData(params?:any) {
+  console.log(params)
   return request('/api/getMonthChartData', {
     method: 'GET',
   });

@@ -20,7 +20,8 @@ import {getCurDay} from '../../utils/utils'
 
 const CashFlow: React.FC<{}> = () => {
     const [ curData, ] = useState<number>(()=>{
-      return getCurDay()
+      // return getCurDay()
+      return 156
     });
 
     //获取数据
@@ -52,8 +53,7 @@ const CashFlow: React.FC<{}> = () => {
                 boundaryGap: false,
                 data: [...CashFlowChartKey]
             },
-            // yAxis: {name: '千'},
-            yAxis: {},
+            yAxis: {name: '千'},
             dataZoom: [
                 {
                     type: 'slider',         // 滑动条

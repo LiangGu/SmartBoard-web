@@ -7,7 +7,18 @@ import { Request, Response } from 'express';
  * @param u 
  */
 function getDebtChartData(req: Request, res: Response, u: string) {
-    let DebtChartData = [3481,3098,4521,1522,16234,195];
+    let DebtChartData = [
+      31760650.98,
+      11526319.04,
+      2995573.09,
+      14937082.5,
+      17268845.48,
+      36670673.41,
+      154428263.6,
+      127715058.3,
+      0,
+      0,
+    ];
     const result = {
       Result: true,
       Content:{

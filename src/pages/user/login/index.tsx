@@ -52,7 +52,6 @@ const Login: React.FC<{}> = () => {
       // 登录
       values.SystemID = 9;
       res = await login({ ...values});
-      console.log('res => ', res);
       if (res.Result == true && initialState) {
         message.success('登录成功！');
         //当前登录用户信息

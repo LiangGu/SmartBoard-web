@@ -41,9 +41,9 @@ return <>
             columns={columns}
             request={(params:any, sorter:any, filter:any) => getTopCTTableData({ ...params, sorter, filter })}
             rowKey="id"
-            pagination={{
-                showQuickJumper: true,
-            }}
+            // pagination={{
+            //     showQuickJumper: true,
+            // }}
             toolBarRender={false}
             search={false}
         />

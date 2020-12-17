@@ -30,12 +30,12 @@ export default {
               icon: 'BarChartOutlined',
               component: './Volume/components/Month',
             },
-            {
-              path: '/volume/port',
-              name: 'port',
-              icon: 'BarChartOutlined',
-              component: './Volume/components/Port',
-            },
+            // {
+            //   path: '/volume/port',
+            //   name: 'port',
+            //   icon: 'BarChartOutlined',
+            //   component: './Volume/components/Port',
+            // },
           ],
         },
         {

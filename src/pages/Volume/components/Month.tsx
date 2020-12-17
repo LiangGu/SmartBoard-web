@@ -1,4 +1,5 @@
-import React, { useEffect, } from 'react';
+import React, { useState, useEffect, } from 'react';
+import { useModel } from 'umi';
 import { Card, } from 'antd';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts'
@@ -12,10 +13,16 @@ import 'echarts/lib/component/tooltip'
 import { getMonthChartData, } from '@/services/volume';
 
 const Month: React.FC<{}> = () => {
+    const { initialState, } = useModel('@@initialState');
+
     //获取数据
-    let fetchData = async()=>{
-        const result = await getMonthChartData();
+    let fetchData = async(SearchInfo:any)=>{
+        const result = await getMonthChartData(SearchInfo);
+        if(!result || !initialState?.currentBranch?.BranchID){
+            return;
+        }
         if(result && result.Result){
+            console.log('1',result)
             //将值传给初始化图表的函数
             initChart(result.Content.ChartData);
         }
@@ -25,22 +32,25 @@ const Month: React.FC<{}> = () => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
         let option = {
-            tooltip: {},
+            tooltip: {
+                trigger: 'axis',
+                axisPointer : {type : 'shadow'},            
+            },
             toolbox: {
                 show: true,
                 showTitle: false,
                 feature: {magicType: {type: ['line', 'bar']},saveAsImage: {}}
             },
             legend: {
-                data:['货量']
+                data:['RT']
             },
             xAxis: {
                 data: ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"]
             },
-            yAxis: {},
+            yAxis: {name: 'RT'},
             series: [
                 {
-                    name: '货量',
+                    name: 'RT',
                     type: 'bar',
                     data: [...ChartData]
                 },
@@ -54,8 +64,15 @@ const Month: React.FC<{}> = () => {
      * 第2个参数传 [] 相当于 componentDidMount 钩子
      */
     useEffect(() =>{
-        fetchData();
+        fetchData(initialState?.currentBranch?.BranchID);
     },[]);
+
+    /**
+     * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
+     */
+    useEffect(() =>{
+        fetchData(initialState?.currentBranch?.BranchID);
+    },[initialState]);
 
     return <>
         <Card>

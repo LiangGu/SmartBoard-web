@@ -7,7 +7,20 @@ import { Request, Response } from 'express';
  * @param u 
  */
 function getMonthChartData(req: Request, res: Response, u: string) {
-  let ChartData = [4,5,7.8,15,11,14.3,5,18,18,17.3,20,10];
+  let ChartData = [
+    58639.266,
+    50794.625,
+    397787.6883,
+    271367.4039,
+    256104.7644,
+    520772.5497,
+    237113.1118,
+    328793.9875,
+    102643.0584,
+    248747.5173,
+    185132.9263,
+    236616.8782,
+  ];
   const result = {
     Result: true,
     Content:{

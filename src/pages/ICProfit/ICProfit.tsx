@@ -27,7 +27,10 @@ const ICProfit: React.FC<{}> = () => {
       let element = document.getElementById('main');
       let myChart = echarts.init(element as HTMLDivElement);
       let option = {
-          tooltip: {},
+          tooltip: {
+            trigger: 'axis',
+            axisPointer : {type : 'shadow'},  
+          },
           toolbox: {
               show: true,
               showTitle: false,
@@ -39,21 +42,24 @@ const ICProfit: React.FC<{}> = () => {
           xAxis: {
               data: ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"]
           },
-          yAxis: {},
+          yAxis: {name: '千'},
           series: [
               {
                   name: '收入',
                   type: 'bar',
+                  color: '#339900',
                   data: [...BarDataAR]
               },
               {
                   name: '支出',
                   type: 'bar',
+                  color: '#FF0003',
                   data: [...BarDataAP]
               },
               {
                   name: '利润',
                   type: 'line',
+                  color: '#6700FF',
                   data: [...ProfitData]
               },
             ]
