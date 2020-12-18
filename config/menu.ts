@@ -11,32 +11,19 @@ export default {
             },
           ],
         },
-        // {
-        //   path: '/home',
-        //   name: 'home',
-        //   icon:  'HomeOutlined',
-        //   // access: 'canAdmin',
-        //   component: './Home/Home',
-        // },
+        {
+          path: '/home',
+          name: 'home',
+          icon:  'HomeOutlined',
+          // access: 'canAdmin',
+          component: './Home/Home',
+        },
         {
           path: '/volume',
           name: 'volume',
           icon: 'BarChartOutlined',
           // access: 'canAdmin',
-          routes: [
-            {
-              path: '/volume/month',
-              name: 'month',
-              icon: 'BarChartOutlined',
-              component: './Volume/components/Month',
-            },
-            // {
-            //   path: '/volume/port',
-            //   name: 'port',
-            //   icon: 'BarChartOutlined',
-            //   component: './Volume/components/Port',
-            // },
-          ],
+          component: './Volume/Volume',
         },
         {
           path: '/icprofit',

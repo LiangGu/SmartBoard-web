@@ -11,6 +11,8 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/tooltip'
 //调用API
 import { getICProfitChartData,} from '@/services/icprofit';
+//引入自定义组件
+import SearchButton from '@/components/Search/SearchButton';
 
 const ICProfit: React.FC<{}> = () => {
 
@@ -26,7 +28,7 @@ const ICProfit: React.FC<{}> = () => {
     let initChart = (BarDataAR:[],BarDataAP:[],ProfitData:[]) => {
       let element = document.getElementById('main');
       let myChart = echarts.init(element as HTMLDivElement);
-      let option = {
+      let option:any = {
           tooltip: {
             trigger: 'axis',
             axisPointer : {type : 'shadow'},  
@@ -80,6 +82,7 @@ const ICProfit: React.FC<{}> = () => {
       <Card>
         <div id="main" style={{width: '100%',height:400}}></div>
       </Card>
+      <SearchButton/>
     </PageContainer>
   )
 };

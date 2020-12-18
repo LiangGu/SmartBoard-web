@@ -15,8 +15,10 @@ import 'echarts/lib/component/toolbox';
 import 'echarts/lib/component/dataZoom';
 //调用API
 import { getCashFlowChartData,} from '@/services/cashflow';
-//
+//引入自定义方法
 import {getCurDay} from '../../utils/utils'
+//引入自定义组件
+import SearchButton from '@/components/Search/SearchButton';
 
 const CashFlow: React.FC<{}> = () => {
     const [ curData, ] = useState<number>(()=>{
@@ -37,7 +39,7 @@ const CashFlow: React.FC<{}> = () => {
     let initChart = (CashFlowChartData:[],CashFlowChartKey:[]) => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
-        let option = {
+        let option:any = {
             tooltip: {},
             toolbox: {
                 show: true,
@@ -100,6 +102,7 @@ const CashFlow: React.FC<{}> = () => {
       <Card>
         <div id="main" style={{width: '100%',height:400}}></div>
       </Card>
+      <SearchButton/>
     </PageContainer>
   )
 };

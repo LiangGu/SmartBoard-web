@@ -27,7 +27,7 @@ const Debt: React.FC<{}> = () => {
     let initChart = (DebtChartData:[]) => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
-        let option = {
+        let option:any = {
             tooltip: {},
             toolbox: {
                 show: true,

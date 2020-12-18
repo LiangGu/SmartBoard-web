@@ -39,3 +39,16 @@ export const getCurDay = () => {
     const dateGap:number = Math.ceil((Number(curDate) - Number(initDate))/divisor);
     return dateGap
 }
+
+/**
+ * 动态获取系统上线到今年的年份List
+ */
+export const getYearList = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const YearList = [];
+    for (let i=2018;i<=year;i++){
+        YearList.push({key:i,value:i,});
+    }
+    return YearList
+}

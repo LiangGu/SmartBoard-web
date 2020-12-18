@@ -10,7 +10,7 @@ const Home: React.FC<{}> = () => {
    * 第2个参数传 [] 相当于 componentDidMount 钩子
    */
   useEffect(() =>{
-      console.log(initialState,initialState?.currentBranch?.BranchID)
+      // console.log(initialState,initialState?.currentBranch?.BranchID)
   },[]);
 
   return (

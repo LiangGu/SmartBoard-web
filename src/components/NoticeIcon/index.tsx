@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Tag, message } from 'antd';
 import { groupBy } from 'lodash';
 import moment from 'moment';
-import { useModel } from 'umi';
 import { queryNotices } from '@/services/user';
 
 import NoticeIcon from './NoticeIcon';

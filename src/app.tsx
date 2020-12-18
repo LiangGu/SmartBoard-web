@@ -96,10 +96,6 @@ export const layout = ({
       if (!currentUser && location.pathname !== '/user/login') {
         history.push('/user/login');
       }
-      // 如果用户点击 '货量' 页面,自动定向到 '货量月份' 页面
-      if(location.pathname == '/volume'){
-        history.push('/volume/month');
-      }
     },
     
     menuHeaderRender: false,

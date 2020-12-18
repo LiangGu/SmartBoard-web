@@ -14,7 +14,7 @@ const ChooseBranch: React.FC<{}> = () => {
      * 第2个参数传 [] 相当于 componentDidMount 钩子
      */
     useEffect(() =>{
-        console.log(BranchList,initialState)
+        // console.log(BranchList,initialState)
     },[]);
 
     /**
