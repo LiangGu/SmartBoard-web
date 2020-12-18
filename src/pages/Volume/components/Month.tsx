@@ -1,4 +1,4 @@
-import React, { useState, useEffect, } from 'react';
+import React, { useEffect, } from 'react';
 import { useModel } from 'umi';
 import { Card, } from 'antd';
 //引入 ECharts 主模块
@@ -13,6 +13,8 @@ import 'echarts/lib/component/tooltip'
 import { getMonthChartData, } from '@/services/volume';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
+//重点代码<React hooks之useContext父子组件传值>
+import ContextProps from '@/createContext';
 
 const Month: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
@@ -79,7 +81,10 @@ const Month: React.FC<{}> = () => {
         <Card>
             <div id="main" style={{width: '100%',height:400}}></div>
         </Card>
-        <SearchButton/>
+        {/*重点代码*/}
+        <ContextProps.Provider value={1}>
+            <SearchButton/>
+        </ContextProps.Provider>
     </>
 }
 

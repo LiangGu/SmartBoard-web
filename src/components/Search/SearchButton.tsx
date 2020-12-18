@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect, useContext, } from 'react';
 import { Button, Drawer, Checkbox, Row, Col, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from './index.less';
@@ -7,11 +7,21 @@ import { getYearList, } from '@/utils/utils';
 //引入基础数据
 import { MonthList, BizType1List, BizType2List, OceanTransportTypeList, } from '@/utils/baseData';
 
-const SearchButton: React.FC<{}> = () => {
-    const [ YearList, setYearList ] = useState(()=>{
+import ContextProps from '@/createContext';
+
+const SearchButton: React.FC<{}> = ({}) => {
+    const PropsInfo = useContext(ContextProps);     //得到父组件过来的值
+    const [ YearList, ] = useState(()=>{
         return getYearList();
     });
     const [ DrawerVisible, setDrawerVisible] = useState(false);
+
+    /**
+     * 第2个参数传 [] 相当于 componentDidMount 钩子
+     */
+    useEffect(() =>{
+        console.log(PropsInfo == 1? "Month" : PropsInfo == 2? "CashFlow" : "ICProfit")
+    },[]);
 
     /**
      * 关闭 Drawer

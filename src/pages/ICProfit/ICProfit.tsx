@@ -1,4 +1,5 @@
 import React, { useEffect, } from 'react';
+import { useModel } from 'umi';
 import { PageContainer} from '@ant-design/pro-layout';
 import { Card, } from 'antd';
 //  引入 ECharts 主模块
@@ -13,12 +14,18 @@ import 'echarts/lib/component/tooltip'
 import { getICProfitChartData,} from '@/services/icprofit';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
+//重点代码<React hooks之useContext父子组件传值>
+import ContextProps from '@/createContext';
 
 const ICProfit: React.FC<{}> = () => {
+  const { initialState, } = useModel('@@initialState');
 
     //获取数据
     let fetchData = async()=>{
         const result = await getICProfitChartData();
+        if(!result || !initialState?.currentBranch?.BranchID){
+          return;
+        }
         if(result && result.Result){
           //将值传给初始化图表的函数
           initChart(result.Content.BarDataAR,result.Content.BarDataAP,result.Content.ProfitData);
@@ -82,7 +89,10 @@ const ICProfit: React.FC<{}> = () => {
       <Card>
         <div id="main" style={{width: '100%',height:400}}></div>
       </Card>
-      <SearchButton/>
+        {/*重点代码*/}
+        <ContextProps.Provider value={3}>
+            <SearchButton/>
+        </ContextProps.Provider>
     </PageContainer>
   )
 };

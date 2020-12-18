@@ -74,7 +74,7 @@ const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>(
 export const layout = ({
   initialState,
 }:{
-    initialState: { settings?: LayoutSettings; currentUser?: API.CurrentUser; menuData?: MenuDataItem[];};
+    initialState: { settings?: LayoutSettings; currentUser?: API.CurrentUser; currentBranch?: API.SelectBranchInfo; menuData?: MenuDataItem[];};
   }): BasicLayoutProps => {
   let menuData:MenuDataItem[] = menu.menuData;
   if(initialState && initialState.menuData){
@@ -101,6 +101,7 @@ export const layout = ({
     menuHeaderRender: false,
     logo: logo,
     ...initialState?.settings,
+    ...initialState?.currentBranch,
   };
 };
 
@@ -134,7 +135,6 @@ const codeMessage = {
  */
 const errorHandler = (error: ResponseError) => {
   const { data } = error;
-  console.log(123);
   if (data && !data.Result) {
     const errorText = codeMessage[data.Content] || data.Content;
     notification.error({

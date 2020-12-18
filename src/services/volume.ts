@@ -7,7 +7,7 @@ import { TableListParams } from '../global.d';
  * Date:2020-12-08
  */
 export async function getMonthChartData(params?:any) {
-  console.log(params)
+  console.log("现在选择的公司ID是 => ",params)
   return request('/api/getMonthChartData', {
     method: 'GET',
   });

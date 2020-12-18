@@ -1,4 +1,5 @@
 import React, { useEffect, } from 'react';
+import { useModel } from 'umi';
 import { PageContainer} from '@ant-design/pro-layout';
 import { Card, } from 'antd';
 //引入 ECharts 主模块
@@ -13,10 +14,14 @@ import 'echarts/lib/component/tooltip'
 import { getDebtChartData, } from '@/services/debt';
 
 const Debt: React.FC<{}> = () => {
+    const { initialState, } = useModel('@@initialState');
 
     //获取数据
     let fetchData = async()=>{
         const result = await getDebtChartData();
+        if(!result || !initialState?.currentBranch?.BranchID){
+            return;
+        }
         if(result && result.Result){
             //将值传给初始化图表的函数
             initChart(result.Content.DebtChartData);
