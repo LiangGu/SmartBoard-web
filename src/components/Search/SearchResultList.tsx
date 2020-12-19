@@ -15,7 +15,7 @@ const SearchResultList: React.FC<{}> = () => {
      * 第2个参数传 [] 相当于 componentDidMount 钩子
      */
     useEffect(() =>{
-        
+
     },[initialState]);
 
     /**
@@ -124,7 +124,7 @@ const SearchResultList: React.FC<{}> = () => {
                             <Radio.Group buttonStyle="solid" size="small" onChange={onYearRadioChange} defaultValue={initialState?.searchInfo?.Year}>
                                 {
                                     YearList && YearList.length > 0 ? YearList.map(x =>{
-                                        return <Radio.Button key={x.Key} value={x.Key}>{x.Value}</Radio.Button>
+                                        return <Radio.Button key={x.Key} value={x.Key} style={{marginLeft:5}}>{x.Value}</Radio.Button>
                                     }) : null
                                 }
                             </Radio.Group>

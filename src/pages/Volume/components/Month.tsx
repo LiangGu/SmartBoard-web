@@ -1,6 +1,6 @@
-import React, { useEffect, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
-import { Card, } from 'antd';
+import { Card, Spin, } from 'antd';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts'
 // 引入需要用到的图表
@@ -19,23 +19,33 @@ import ContextProps from '@/createContext';
 
 const Month: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
+    const [ loading, setloading] = useState(false);
 
     //获取数据
     let fetchData = async(SearchInfo:any)=>{
+        setloading(true)
         const result = await getMonthChartData(SearchInfo);
         if(!result || initialState?.currentBranch?.BranchID == undefined){
             return;
         }
         if(result){
+            let VolumeList:Array<Number> = [];
+            let TotalARList:Array<Number> = [];
+            if(result && result.length > 0){
+                result.map((x: { Volume: Number; TotalAR: Number; }) => {
+                    VolumeList.push(x.Volume);
+                    TotalARList.push(x.TotalAR);
+                })
+            }
             //将值传给初始化图表的函数
-            initChart(Array.from(result, x => x.Volume),Array.from(result, y => y.TotalAR));
+            initChart(VolumeList,TotalARList);
+            setloading(false)
         }
     }
     //初始化图表
     let initChart = (VolumeData:any,IncomeDate:any,) => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
-        myChart.showLoading('default',{text:'页面正在拼命加载中...',maskColor:'#a9f0ff',textColor: '#000',});
         let option:any = {
             tooltip: {
                 trigger: 'axis',
@@ -93,7 +103,6 @@ const Month: React.FC<{}> = () => {
              ]
         };
         myChart.setOption(option);
-        myChart.hideLoading();
         window.addEventListener('resize' , () => {myChart.resize()});
     };
 
@@ -135,9 +144,12 @@ const Month: React.FC<{}> = () => {
 
     return <>
         <SearchResultList/>
-        <Card>
-            <div id="main" style={{width: '100%',height:400}}></div>
-        </Card>
+        <Spin tip="页面正在加载中..." spinning={loading}>
+            <Card>
+                <div id="main" style={{width: '100%',height:400}}></div>
+            </Card>
+        </Spin>
+
         {/*重点代码*/}
         <ContextProps.Provider value={1}>
             <SearchButton/>
