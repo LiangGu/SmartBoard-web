@@ -44,9 +44,52 @@ const Month: React.FC<{}> = () => {
     }
     //初始化图表
     let initChart = (VolumeData:any,IncomeDate:any,) => {
-        let element = document.getElementById('main');
-        let myChart = echarts.init(element as HTMLDivElement);
-        let option:any = {
+        let element_volume = document.getElementById('volumeChart');
+        let element_income = document.getElementById('incomeChart');
+        let volumeChart = echarts.init(element_volume as HTMLDivElement);
+        let incomeChart = echarts.init(element_income as HTMLDivElement);
+        let option_volume:any = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer : {type : 'shadow'},
+            },
+            toolbox: {
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            legend: {
+                data: ['RT', 'CNY']
+            },
+            xAxis: {
+                type: 'category',
+                data: ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"],
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'CNY',
+                    axisLabel: {
+                        formatter: '{value} CNY'
+                    },
+                }
+            ],
+            series: [
+                {
+                    name: 'CNY',
+                    type: 'bar',
+                    color: '#FF0003',
+                    data: [...IncomeDate]
+                },
+             ]
+        };
+        let option_income:any = {
             tooltip: {
                 trigger: 'axis',
                 axisPointer : {type : 'shadow'},
@@ -73,19 +116,10 @@ const Month: React.FC<{}> = () => {
                 {
                     type: 'value',
                     name: 'RT',
-                    min: 0,
                     axisLabel: {
                         formatter: '{value} RT'
-                    }
+                    },
                 },
-                {
-                    type: 'value',
-                    name: 'CNY',
-                    min: 0,
-                    axisLabel: {
-                        formatter: '{value} CNY'
-                    }
-                }
             ],
             series: [
                 {
@@ -94,16 +128,12 @@ const Month: React.FC<{}> = () => {
                     color: '#339900',
                     data: [...VolumeData]
                 },
-                {
-                    name: 'CNY',
-                    type: 'bar',
-                    color: '#FF0003',
-                    data: [...IncomeDate]
-                },
              ]
         };
-        myChart.setOption(option);
-        window.addEventListener('resize' , () => {myChart.resize()});
+        volumeChart.setOption(option_volume);
+        incomeChart.setOption(option_income);
+        window.addEventListener('resize' , () => {volumeChart.resize()});
+        window.addEventListener('resize' , () => {incomeChart.resize()});
     };
 
     /**
@@ -146,7 +176,8 @@ const Month: React.FC<{}> = () => {
         <SearchResultList/>
         <Spin tip="页面正在加载中..." spinning={loading}>
             <Card>
-                <div id="main" style={{width: '100%',height:400}}></div>
+                <div id="volumeChart" style={{width: '100%',height:400}}></div>
+                <div id="incomeChart" style={{width: '100%',height:400}}></div>
             </Card>
         </Spin>
 
