@@ -18,32 +18,36 @@ import SearchButton from '@/components/Search/SearchButton';
 import ContextProps from '@/createContext';
 
 const ICProfit: React.FC<{}> = () => {
-  const { initialState, } = useModel('@@initialState');
+    const { initialState, } = useModel('@@initialState');
 
     //获取数据
     let fetchData = async()=>{
         const result = await getICProfitChartData();
-        if(!result || !initialState?.currentBranch?.BranchID){
+        if(!result || initialState?.currentBranch?.BranchID == undefined){
           return;
-        }
+      }
         if(result && result.Result){
           //将值传给初始化图表的函数
           initChart(result.Content.BarDataAR,result.Content.BarDataAP,result.Content.ProfitData);
         }
     }
+
     //初始化图表
     let initChart = (BarDataAR:[],BarDataAP:[],ProfitData:[]) => {
-      let element = document.getElementById('main');
-      let myChart = echarts.init(element as HTMLDivElement);
-      let option:any = {
+        let element = document.getElementById('main');
+        let myChart = echarts.init(element as HTMLDivElement);
+        let option:any = {
           tooltip: {
             trigger: 'axis',
             axisPointer : {type : 'shadow'},  
           },
           toolbox: {
-              show: true,
-              showTitle: false,
-              feature: {magicType: {type: ['line', 'bar']},saveAsImage: {}}
+              feature: {
+                  dataView: {show: true, readOnly: false},
+                  magicType: {show: true, type: ['line', 'bar']},
+                  restore: {show: true},
+                  saveAsImage: {show: true}
+              }
           },
           legend: {
               data:['收入', '支出', '利润']
@@ -68,33 +72,33 @@ const ICProfit: React.FC<{}> = () => {
               {
                   name: '利润',
                   type: 'line',
-                  color: '#6700FF',
+                  color: '#FFFC00',
                   data: [...ProfitData]
               },
             ]
-      };
-      myChart.setOption(option);
-      window.addEventListener('resize' , () => {myChart.resize()});
-  };
+        };
+        myChart.setOption(option);
+        window.addEventListener('resize' , () => {myChart.resize()});
+    };
 
-  /**
-   * 第2个参数传 [] 相当于 componentDidMount 钩子
-   */
-  useEffect(() =>{
-    fetchData();
-  },[]);
+    /**
+     * 第2个参数传 [] 相当于 componentDidMount 钩子
+     */
+    useEffect(() =>{
+      fetchData();
+    },[]);
 
-  return (
-    <PageContainer>
-      <Card>
-        <div id="main" style={{width: '100%',height:400}}></div>
-      </Card>
-        {/*重点代码*/}
-        <ContextProps.Provider value={3}>
-            <SearchButton/>
-        </ContextProps.Provider>
-    </PageContainer>
-  )
+    return (
+      <PageContainer>
+        <Card>
+          <div id="main" style={{width: '100%',height:400}}></div>
+        </Card>
+          {/*重点代码*/}
+          <ContextProps.Provider value={3}>
+              <SearchButton/>
+          </ContextProps.Provider>
+      </PageContainer>
+    )
 };
 
 export default ICProfit;

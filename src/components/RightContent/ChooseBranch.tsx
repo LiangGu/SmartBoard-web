@@ -8,13 +8,12 @@ import { BranchList } from '@/utils/baseData';
 const ChooseBranch: React.FC<{}> = () => {
     const { initialState, setInitialState } = useModel('@@initialState');
     const [ DrawerVisible, setDrawerVisible] = useState(false);
-    const [ SelectBranchID, setSelectBranchID] = useState(initialState?.currentBranch?.BranchID);
+    const [ SelectBranchID, ] = useState(initialState?.currentBranch?.BranchID);
 
     /**
      * 第2个参数传 [] 相当于 componentDidMount 钩子
      */
     useEffect(() =>{
-        // console.log(BranchList,initialState)
     },[]);
 
     /**
@@ -35,14 +34,13 @@ const ChooseBranch: React.FC<{}> = () => {
      * 点击选择公司
      */
     const onChange = (e:any) => {
-        const selectBranchName:string | undefined = BranchList.find( x => x.key == e.target.value)?.value;
+        const selectBranchName:string | undefined = BranchList.find( x => x.Key == e.target.value)?.Value;
         setInitialState({
             ...initialState,
             //保存总部人员选择的公司ID
             currentBranch: Object.assign({},initialState?.currentBranch,{BranchID:e.target.value,BranchName:selectBranchName},)
         });
         setDrawerVisible(false)
-
     }
 
     return (
@@ -66,15 +64,14 @@ const ChooseBranch: React.FC<{}> = () => {
                 key={"right"}
                 width={200}
             >
-                <Radio.Group onChange={onChange} defaultValue={SelectBranchID}>
+                <Radio.Group buttonStyle="solid" onChange={onChange} defaultValue={SelectBranchID}>
                     <Row>
                         {
                             BranchList && BranchList.length > 0 ? BranchList.map(x =>{
-                                return <Col span={24} key={x.key} style={{marginBottom:10,}}><Radio.Button style={{width:"100%"}} key={x.key} value={x.key}>{x.value}</Radio.Button></Col>
+                                return <Col span={24} key={x.Key} style={{marginBottom:10,}}><Radio.Button style={{width:"100%"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                             }) : null
                         }
                     </Row>
-
                 </Radio.Group>
 
             </Drawer>

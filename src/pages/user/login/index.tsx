@@ -57,13 +57,16 @@ const Login: React.FC<{}> = () => {
         //当前登录用户信息
         let currentUser: API.CurrentUser | undefined = res.Content;
         //当前总部人员选择的公司信息
-        const selectBranchName:string | undefined = BranchList.find( x => x.key == res.Content.BranchID)?.value;
-        let currentBranch: any = Object.assign({},{BranchID:res.Content.BranchID,BranchName:selectBranchName})
+        const selectBranchName:string | undefined = BranchList.find( x => x.Key == res.Content.BranchID)?.Value;
+        //总部BranchID传0＋公司名显示:香港外运(总部)
+        let currentBranch: any = Object.assign({},{BranchID:res.Content.BranchID　== 1 ? 0 : res.Content.BranchID,BranchName:res.Content.BranchID　== 1 ? "香港外运(总部)" : selectBranchName});
+        let searchInfo:object = Object.assign({},{Year: new Date().getFullYear(),});
         let menuData:MenuDataItem[] = menu.menuData;
         setInitialState({
           ...initialState,
           currentUser,
           currentBranch,
+          searchInfo,
           ...Object.assign(menuData),
         });
         sessionStorage.setItem('TOKEN', currentUser?.Token??'')

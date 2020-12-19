@@ -6,6 +6,7 @@
 export default {
   dev: {
     '/api/': {
+      // target: 'http://192.168.1.106:52663/',
       target: 'http://localhost:52663/',
       changeOrigin: true,
       pathRewrite: { '^': '' },

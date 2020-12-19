@@ -37,7 +37,7 @@ export const getCurDay = () => {
     const initDate:Date = new Date(new Date().getFullYear().toString());
     const curDate:Date = new Date();
     const dateGap:number = Math.ceil((Number(curDate) - Number(initDate))/divisor);
-    return dateGap
+    return dateGap;
 }
 
 /**
@@ -48,7 +48,10 @@ export const getYearList = () => {
     const year = date.getFullYear();
     const YearList = [];
     for (let i=2018;i<=year;i++){
-        YearList.push({key:i,value:i,});
+        YearList.push({
+            Key: i,
+            Value: `${i}年`,
+        });
     }
-    return YearList
+    return YearList;
 }

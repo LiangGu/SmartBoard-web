@@ -1,4 +1,5 @@
 import { request } from 'umi';
+import { stringify } from 'qs';
 import { TableListParams } from '../global.d';
 
 /**
@@ -7,9 +8,12 @@ import { TableListParams } from '../global.d';
  * Date:2020-12-08
  */
 export async function getMonthChartData(params?:any) {
-  console.log("现在选择的公司ID是 => ",params)
-  return request('/api/getMonthChartData', {
-    method: 'GET',
+  // return request('/api/getMonthChartData', {
+  //   method: 'GET',
+  // });
+  return request(`/api/Board/GetVolumeByMonty`, {
+    method: 'POST',
+    data:params
   });
 }
 
@@ -22,4 +26,8 @@ export async function getPortTableData(params?: TableListParams) {
   return request('/api/getPortTableData', {
     method: 'GET',
   });
+  // return request<API.ResponseType>(`/api/Board/GetVolumeByPort?${stringify(params)}`, {
+  //   method: 'POST',
+  //   dto: params,
+  // });
 }

@@ -19,7 +19,7 @@ const Debt: React.FC<{}> = () => {
     //获取数据
     let fetchData = async()=>{
         const result = await getDebtChartData();
-        if(!result || !initialState?.currentBranch?.BranchID){
+        if(!result || initialState?.currentBranch?.BranchID == undefined){
             return;
         }
         if(result && result.Result){
@@ -35,9 +35,12 @@ const Debt: React.FC<{}> = () => {
         let option:any = {
             tooltip: {},
             toolbox: {
-                show: true,
-                showTitle: false,
-                feature: {magicType: {type: ['line', 'bar']},saveAsImage: {}}
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
             },
             legend: {
                 data:['应收账款']

@@ -2,79 +2,108 @@
  * MonthList
  */
 export const MonthList = [
-    {key:1,value:"1"},
-    {key:2,value:"2"},
-    {key:3,value:"3"},
-    {key:4,value:"4"},
-    {key:5,value:"5"},
-    {key:6,value:"6"},
-    {key:7,value:"7"},
-    {key:8,value:"8"},
-    {key:9,value:"9"},
-    {key:10,value:"10"},
-    {key:11,value:"11"},
-    {key:12,value:"12"},
+    {Key:1,Value:"1月"},
+    {Key:2,Value:"2月"},
+    {Key:3,Value:"3月"},
+    {Key:4,Value:"4月"},
+    {Key:5,Value:"5月"},
+    {Key:6,Value:"6月"},
+    {Key:7,Value:"7月"},
+    {Key:8,Value:"8月"},
+    {Key:9,Value:"9月"},
+    {Key:10,Value:"10月"},
+    {Key:11,Value:"11月"},
+    {Key:12,Value:"12月"},
 ]
 
 /**
  * BizType1List
  */
 export const BizType1List = [
-    {key:1,value:"水运"},
-    {key:2,value:"空运"},
-    {key:3,value:"陆运"},
-    {key:4,value:"铁路"},
-    {key:5,value:"多式联运"},
-    {key:6,value:"仓储"},
-    {key:10,value:"散货船"},
-    {key:11,value:"总代"},
-    {key:12,value:"空海跨境"},
-    {key:13,value:"增值服务"},
-    {key:14,value:"货运站"},
+    {Key:1,Value:"水运"},
+    {Key:2,Value:"空运"},
+    {Key:3,Value:"陆运"},
+    {Key:4,Value:"铁路"},
+    {Key:5,Value:"多式联运"},
+    {Key:6,Value:"仓储"},
+    {Key:10,Value:"散货船"},
+    {Key:11,Value:"总代"},
+    {Key:12,Value:"空海跨境"},
+    {Key:13,Value:"增值服务"},
+    {Key:14,Value:"货运站"},
 ]
 
 /**
  * BizType2List
  */
 export const BizType2List = [
-    {key:1,value:"出口"},
-    {key:2,value:"进口"},
-    {key:3,value:"内贸"},
-    {key:4,value:"第三国"},
-    {key:5,value:"转口"},
-    {key:6,value:"过境"},
+    {Key:1,Value:"出口"},
+    {Key:2,Value:"进口"},
+    {Key:3,Value:"内贸"},
+    {Key:4,Value:"第三国"},
+    {Key:5,Value:"转口"},
+    {Key:6,Value:"过境"},
 ]
 
 /**
  * OceanTransportTypeList
  */
 export const OceanTransportTypeList = [
-    {key:1,value:"整箱"},
-    {key:2,value:"拼箱"},
-    {key:3,value:"散货"},
-    {key:6,value:"整车"},
-    {key:7,value:"零担"},
+    {Key:1,Value:"整箱"},
+    {Key:2,Value:"拼箱"},
+    {Key:3,Value:"散货"},
+    {Key:6,Value:"整车"},
+    {Key:7,Value:"零担"},
 ]
 
 /**
  * BranchList
  */
 export const BranchList = [
-    {key:1,value:"香港外运(总部)"},
+    {Key:0,Value:"香港外运(总部)"},             //香港总部传 0 
 
-    {key:2,value:"香港船务"},
-    {key:5,value:"上海伟运货代"},
-    {key:6,value:"泰国外运"},
-    {key:7,value:"马来西亚外运"},
-    {key:8,value:"印尼外运"},
-    {key:9,value:"柬埔寨外运"},
-    {key:10,value:"缅甸外运"},
-    {key:11,value:"中越外运"},
-    {key:13,value:"上海伟运工程"},
-    {key:17,value:"香港供应链事业部"},
-    {key:19,value:"上海空运事业部"},
-    {key:20,value:"上海电商事业部"},
-    {key:21,value:"香港电商事业部"},
-    {key:22,value:"越南外运"},
-    {key:23,value:"香港空运事业部"},
+    {Key:2,Value:"香港船务"},
+    {Key:5,Value:"上海伟运货代"},
+    {Key:6,Value:"泰国外运"},
+    {Key:7,Value:"马来西亚外运"},
+    {Key:8,Value:"印尼外运"},
+    {Key:9,Value:"柬埔寨外运"},
+    {Key:10,Value:"缅甸外运"},
+    {Key:11,Value:"中越外运"},
+    {Key:13,Value:"上海伟运工程"},
+    {Key:17,Value:"香港供应链事业部"},
+    {Key:19,Value:"上海空运事业部"},
+    {Key:20,Value:"上海电商事业部"},
+    {Key:21,Value:"香港电商事业部"},
+    {Key:22,Value:"越南外运"},
+    {Key:23,Value:"香港空运事业部"},
 ]
+
+/**
+ * 将用户选择的搜索条件转化成 Tag 的形式
+ * @param list 
+ * @param T 
+ */
+export const transfromToTag = (T:Number,list:Array<Number>,baseList:Array<API.Tag>) => {
+    let TagList:Array<API.Tag> = [];
+    if(list && list.length > 0){
+        if(T == 1){
+            list.map( x => {
+                baseList.map( y => {
+                    if(parseInt(y.Value) == x){
+                        TagList.push(y);
+                    }
+                });
+            });
+        }else{
+            list.map( x => {
+                baseList.map( y => {
+                    if(y.Key == x){
+                        TagList.push(y);
+                    }
+                });
+            });
+        }
+    }
+    return TagList;
+}

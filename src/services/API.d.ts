@@ -55,9 +55,35 @@ declare namespace API {
     Page?:{};
   }
 
+  // 总部登录选择的公司
   export interface SelectBranchInfo {
     BranchID?: number;
     BranchName?: string;
+  }
+
+  // 页面的搜索条件
+  export interface SearchInfo {
+    Year?: Number,
+    YearList?: Array<Number>,
+    MonthList?: Array<Number>,
+    BizType1List?: Array<Number>,
+    BizType2List?: Array<Number>,
+    OceanTransportTypeList?: Array<Number>,
+  }
+
+  // 页面的搜索条件 Tag 形式
+  export interface SearchResultList {
+    Year?: Number,
+    YearList?: [Tag],
+    MonthList?: [Tag],
+    BizType1List?: [Tag],
+    BizType2List?: [Tag],
+    OceanTransportTypeList?: [Tag],
+  }
+
+  export interface Tag {
+    Key: number;
+    Value: string;
   }
 
 }

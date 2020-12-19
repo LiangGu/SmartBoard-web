@@ -44,7 +44,14 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     }) => {
       const { key } = event;
       if (key === 'logout' && initialState) {
-        setInitialState({ ...initialState, currentUser: undefined , currentBranch: undefined ,});
+        // 清空 InitialState
+        setInitialState({
+          ...initialState,
+          currentUser: undefined,
+          currentBranch: undefined,
+          searchInfo: undefined,
+          searchResultList: undefined,
+        });
         loginOut();
         return;
       }

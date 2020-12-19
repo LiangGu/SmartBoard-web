@@ -27,9 +27,9 @@ const CashFlow: React.FC<{}> = () => {
   //获取数据
   let fetchData = async()=>{
       const result = await getCashFlowChartData();
-      if(!result || !initialState?.currentBranch?.BranchID){
+      if(!result || initialState?.currentBranch?.BranchID == undefined){
         return;
-      }
+    }
       if(result && result.Result){
         //将值传给初始化图表的函数
         initChart(result.Content.CashFlowChartData,result.Content.CashFlowChartKey);
@@ -41,51 +41,54 @@ const CashFlow: React.FC<{}> = () => {
       let element = document.getElementById('main');
       let myChart = echarts.init(element as HTMLDivElement);
       let option:any = {
-          tooltip: {},
-          toolbox: {
-              show: true,
-              showTitle: false,
-              feature: {magicType: {type: ['line', 'bar']},saveAsImage: {}}
-          },
-          xAxis: {
-              min: 1,
-              max: CashFlowChartKey.length,
-              axisLabel: {interval: 0,},
-              show: false,
-              name: `${CashFlowChartKey.length}`,
-              boundaryGap: false,
-              data: [...CashFlowChartKey]
-          },
-          yAxis: {name: '千'},
-          dataZoom: [
-              {
-                  type: 'slider',         // 滑动条
-                  xAxisIndex: 0,          // Y轴
-                  start: 0,               // 左边在 0% 的位置
-                  end: 100,               // 右边在 100% 的位置
-              },
-          ],
-          series: [{
-              name: '现金流',
-              color: '#ff0005',
-              type: 'line',
-              barWidth: 20,
-              itemStyle: {
-                  normal: {
-                      //*根据后台数据动态为每条数据添加不同的颜色
-                      color: function (params:any) {
-                          if (params.value < 0) {
-                              let color = ['#CC3300'];
-                              return params.itemStyle = color;
-                          } else {
-                              let color = ['#FFCC00'];
-                              return params.itemStyle = color;
-                          }
-                      },
-                  },
-              },
-              data: [...CashFlowChartData],
-          }],
+        tooltip: {},
+        toolbox: {
+            feature: {
+                dataView: {show: true, readOnly: false},
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        xAxis: {
+            min: 1,
+            max: CashFlowChartKey.length,
+            axisLabel: {interval: 0,},
+            show: false,
+            name: `${CashFlowChartKey.length}`,
+            boundaryGap: false,
+            data: [...CashFlowChartKey]
+        },
+        yAxis: {name: '千'},
+        dataZoom: [
+            {
+                type: 'slider',         // 滑动条
+                xAxisIndex: 0,          // Y轴
+                start: 0,               // 左边在 0% 的位置
+                end: 100,               // 右边在 100% 的位置
+            },
+        ],
+        series: [{
+            name: '现金流',
+            color: '#ff0005',
+            type: 'line',
+            barWidth: 20,
+            itemStyle: {
+                normal: {
+                    //*根据后台数据动态为每条数据添加不同的颜色
+                    color: function (params:any) {
+                        if (params.value < 0) {
+                            let color = ['#CC3300'];
+                            return params.itemStyle = color;
+                        } else {
+                            let color = ['#FFCC00'];
+                            return params.itemStyle = color;
+                        }
+                    },
+                },
+            },
+            data: [...CashFlowChartData],
+        }],
       };
       myChart.setOption(option);
       window.addEventListener('resize' , () => {myChart.resize()});
@@ -95,6 +98,7 @@ const CashFlow: React.FC<{}> = () => {
    * 第2个参数传 [] 相当于 componentDidMount 钩子
    */
   useEffect(() =>{
+
     fetchData();
   },[]);
 

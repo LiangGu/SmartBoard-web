@@ -23,6 +23,8 @@ export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
   currentBranch?: API.SelectBranchInfo;
+  searchInfo?: API.SearchInfo;
+  searchResultList?: API.SearchResultList;
   menuData?: MenuDataItem[];
   settingDrawer?: SettingDrawerProps;
 }> {
@@ -74,7 +76,14 @@ const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>(
 export const layout = ({
   initialState,
 }:{
-    initialState: { settings?: LayoutSettings; currentUser?: API.CurrentUser; currentBranch?: API.SelectBranchInfo; menuData?: MenuDataItem[];};
+    initialState: { 
+      settings?: LayoutSettings;
+      currentUser?: API.CurrentUser;
+      currentBranch?: API.SelectBranchInfo;
+      searchInfo?: API.SearchInfo;
+      searchResultList?: API.SearchResultList;
+      menuData?: MenuDataItem[];
+    };
   }): BasicLayoutProps => {
   let menuData:MenuDataItem[] = menu.menuData;
   if(initialState && initialState.menuData){
@@ -101,7 +110,11 @@ export const layout = ({
     menuHeaderRender: false,
     logo: logo,
     ...initialState?.settings,
+    ...initialState?.currentUser,
     ...initialState?.currentBranch,
+    ...initialState?.searchInfo,
+    ...initialState?.searchResultList,
+    ...initialState?.menuData,
   };
 };
 
@@ -191,7 +204,7 @@ const responseInterceptors = (response: Response, options: RequestOptionsInit) =
 }
 
 export const request: RequestConfig = {
-  timeout: 1000,
+  // timeout: 100000000,
   // credentials: 'include', //默认请求是否带上Cookie
   errorConfig: {
     adaptor: (resData:any) => {
