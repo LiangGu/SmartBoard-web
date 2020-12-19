@@ -19,10 +19,21 @@ export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
     }
 }
 
+export function getUserName() {
+    return sessionStorage.getItem("userName");
+}
 export function getUserID() {
     return sessionStorage.getItem("userID");
 }
-
+export function getBranchID() {
+    return sessionStorage.getItem("branchID");
+}
+export function getBranchCode() {
+    return sessionStorage.getItem("branchCode");
+}
 export function getToken() {
     return sessionStorage.getItem("token");
+}
+export function getFuncCurr() {
+    return sessionStorage.getItem("FuncCurrency");
 }

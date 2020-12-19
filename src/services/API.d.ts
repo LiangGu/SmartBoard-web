@@ -1,31 +1,31 @@
 declare namespace API {
   export interface CurrentUser {
-    AuthorityIDList?: string;
-    AuthorityList?: string;
-    BranchCode?: string;
-    BranchID?: number;
-    BusinessLineID?: number;
-    CityID?: number;
-    CityName?: string;
-    CountryID?: number;
-    CountryName?: string;
-    DefaultProjecNameFull?: string;
-    DefaultProjectID?: number | null;
-    DefaultProjectName?: string;
-    DefaultSJobCode?: string;
-    DefaultSJobID?: number | null;
-    DisplayName?: string;
-    DivisionID?: number;
-    FinereportURL?: string;
-    FuncCurrency?: string;
-    ID?: number;
-    IsOpenAccount?: boolean;
-    IsSalesMan?: boolean;
-    NumRule?: string;
-    PUAList?: [PUA];
-    ProjecBizType1ID?: number;
-    SystemViewAuth?: [number];
-    Token?: string;
+    AuthorityIDList: string;
+    AuthorityList: string;
+    BranchCode: string;
+    BranchID: number;
+    BusinessLineID: number;
+    CityID: number;
+    CityName: string;
+    CountryID: number;
+    CountryName: string;
+    DefaultProjecNameFull: string;
+    DefaultProjectID: number | null;
+    DefaultProjectName: string;
+    DefaultSJobCode: string;
+    DefaultSJobID: number | null;
+    DisplayName: string;
+    DivisionID: number;
+    FinereportURL: string;
+    FuncCurrency: string;
+    ID: number;
+    IsOpenAccount: boolean;
+    IsSalesMan: boolean;
+    NumRule: string;
+    PUAList: [PUA];
+    ProjecBizType1ID: number;
+    SystemViewAuth: [number];
+    Token: string;
   }
 
   export interface PUA {

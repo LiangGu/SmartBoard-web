@@ -1,3 +1,4 @@
+import Global from '@/global.d'
 import { Alert, message } from 'antd';
 import React, { useState } from 'react';
 import { useModel, history, History } from 'umi';
@@ -6,7 +7,8 @@ import LoginFrom from './components/Login';
 import styles from './style.less';
 import menu from '@/../config/menu';
 import { MenuDataItem } from '@umijs/route-utils';
-import { BranchList } from '@/utils/baseData'
+import { BranchList } from '@/utils/baseData';
+import { setSystemMes } from '@/utils/auths';
 // 引入图标
 import logo from '@/assets/logo.svg';
 import CN from '@/assets/loginPage/SMARTBOARDCN.svg';
@@ -55,7 +57,7 @@ const Login: React.FC<{}> = () => {
       if (res.Result == true && initialState) {
         message.success('登录成功！');
         //当前登录用户信息
-        let currentUser: API.CurrentUser | undefined = res.Content;
+        let currentUser: API.CurrentUser = res.Content;
         //当前总部人员选择的公司信息
         const selectBranchName:string | undefined = BranchList.find( x => x.Key == res.Content.BranchID)?.Value;
         //总部BranchID传0＋公司名显示:香港外运(总部)
@@ -69,7 +71,15 @@ const Login: React.FC<{}> = () => {
           searchInfo,
           ...Object.assign(menuData),
         });
-        sessionStorage.setItem('TOKEN', currentUser?.Token??'')
+        let sysSaveData: Global.SessionSysSave = {
+          userName: currentUser.DisplayName,
+          userID: currentUser.ID.toString(),
+          branchID: currentUser.BranchID.toString(),
+          branchCode: currentUser.BranchCode,
+          token: currentUser.Token,
+          funcCurrency: currentUser.FuncCurrency,
+        }
+        setSystemMes(sysSaveData);
         replaceGoto();
         return;
       }

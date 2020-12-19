@@ -198,7 +198,7 @@ const headersInterceptors = (  url: string, options: RequestOptionsInit ) => {
     opts.headers = {
       Accept: acpt,
       'Content-Type': contT,
-      UserID:getUserID()??'',
+      UserID: getUserID()??'',
       ...opts.headers,
     };
     // opts.requestType = "json";
