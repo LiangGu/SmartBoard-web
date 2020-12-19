@@ -25,3 +25,12 @@ export interface TableListParams {
   filter?: { [key: string]: any[] };
   sorter?: { [key: string]: any };
 }
+
+export interface SessionSysSave {
+  userName: string;
+  userID: string;
+  branchID: string;
+  branchCode: string;
+  token: string;
+  funcCurrency: string;
+}

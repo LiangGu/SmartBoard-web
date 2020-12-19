@@ -7,6 +7,7 @@ import { RequestOptionsInit, ResponseError } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
 import menu from '../config/menu';
 import {extend} from '@/utils/utils';
+import {getUserID, getToken} from '@/utils/auths';
 import {
   SmileOutlined,
   HeartOutlined,
@@ -167,7 +168,7 @@ const errorHandler = (error: ResponseError) => {
 
 const jwtInterceptors = (  url: string, options: RequestOptionsInit ) => {
   // 判断是否有 token
-  const token:string|null = sessionStorage.getItem('TOKEN');
+  const token:string|null = getToken();
   if (token) {
     return {
       url,
@@ -176,7 +177,7 @@ const jwtInterceptors = (  url: string, options: RequestOptionsInit ) => {
         interceptors: true,
         headers: {
           ...options.headers,
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       },
     };
@@ -186,6 +187,26 @@ const jwtInterceptors = (  url: string, options: RequestOptionsInit ) => {
   return {
     url: `${url}`,
     options: { ...options , interceptors: true},
+  };    
+}
+
+const headersInterceptors = (  url: string, options: RequestOptionsInit ) => {
+  let opts:RequestOptionsInit = {...options};
+  let acpt:string = 'application/json';
+  let contT:string = 'application/json; charset=utf-8';
+  if (opts.method === 'POST' || opts.method === 'PUT') {
+    opts.headers = {
+      Accept: acpt,
+      'Content-Type': contT,
+      UserID: getUserID()??'',
+      ...opts.headers,
+    };
+    // opts.requestType = "json";
+  }
+  
+  return {
+    url: `${url}`,
+    options: { ...opts , interceptors: true},
   };    
 }
 
@@ -205,7 +226,7 @@ const responseInterceptors = (response: Response, options: RequestOptionsInit) =
 
 export const request: RequestConfig = {
   // timeout: 100000000,
-  // credentials: 'include', //默认请求是否带上Cookie
+  credentials: 'include', //默认请求是否带上Cookie
   errorConfig: {
     adaptor: (resData:any) => {
       return {
@@ -217,6 +238,6 @@ export const request: RequestConfig = {
   },
   middlewares: [],
   errorHandler,
-  requestInterceptors: [jwtInterceptors,],
+  requestInterceptors: [jwtInterceptors,headersInterceptors],
   responseInterceptors: [responseInterceptors],
 };
