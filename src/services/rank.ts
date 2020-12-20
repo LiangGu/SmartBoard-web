@@ -1,13 +1,13 @@
 import { request } from 'umi';
-import { TableListParams } from '../global.d';
 
 /**
- * 获取客户分析表格数据
+ * 获取客户分析图表数据
  * By:Iverson.Tian
- * Date:2020-12-09
+ * Date:2020-12-14
  */
-export async function getTopCTTableData(params?: TableListParams) {
-  return request('/api/getTopCTTableData', {
-    method: 'GET',
+export async function getRankChartData(params?: any) {
+  return request<API.ResponseType>(`/api/Board/GetCustomerTop`, {
+    method: 'POST',
+    data: params,
   });
 }

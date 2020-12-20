@@ -29,6 +29,44 @@ export const extend = (dest: any[], source: any[]): void => {
 }
 
 /**
+ * 动态获取数组中最大的数
+ */
+export const getMaximumValue = (list: Array<Number>) => {
+    let maximumValue = list[0];
+    for (let i = 0; i < list.length; i++) {
+        if (maximumValue < list[i]) {
+            maximumValue = list[i];
+        }
+    }
+    return maximumValue;
+}
+
+/**
+ * 动态相加数组中的值
+ * 如 [1,2,3,5]
+ * 返回 11
+ */
+export const getTotalValue = (list: Array<Number>) => {
+    return eval(list.join('+'));
+}
+
+/**
+ * 对象数组排序
+ */
+export const sortObjectArr = (prop: any) => {
+    return function (obj1: any, obj2: any) {
+        var val1 = obj1[prop];
+        var val2 = obj2[prop]; if (val1 < val2) {
+            return -1;
+        } else if (val1 > val2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
+
+/**
  * 动态获取今天是今年中的第几天
  */
 export const getCurDay = () => {

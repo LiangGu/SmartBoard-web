@@ -1,7 +1,7 @@
-import React, { useEffect, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, } from 'antd';
+import { Card, Spin, } from 'antd';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts'
 // 引入需要用到的图表
@@ -12,28 +12,56 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/tooltip'
 //调用API
 import { getDebtChartData, } from '@/services/debt';
+//调用公式方法
+import { getTotalValue, } from '@/utils/utils';
 
 const Debt: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
+    const [loading, setloading] = useState(false);
 
     //获取数据
-    let fetchData = async () => {
-        const result = await getDebtChartData();
+    let fetchData = async (SearchInfo: any) => {
+        setloading(true);
+        const result = await getDebtChartData(SearchInfo);
         if (!result || initialState?.currentBranch?.BranchID == undefined) {
             return;
         }
-        if (result && result.Result) {
+        if (result) {
+            let ReMoney30List: any = [];
+            let ReMoney45List: any = [];
+            let ReMoney60List: any = [];
+            let ReMoney90List: any = [];
+            let ReMoney180List: any = [];
+            let ReMoney181List: any = [];
+            if (result && result.length > 0) {
+                ReMoney30List = getTotalValue(Array.from(result, x => (x.ReMoney30 / 1000))).toFixed(2);
+                ReMoney45List = getTotalValue(Array.from(result, x => (x.ReMoney45 / 1000))).toFixed(2);
+                ReMoney60List = getTotalValue(Array.from(result, x => (x.ReMoney60 / 1000))).toFixed(2);
+                ReMoney90List = getTotalValue(Array.from(result, x => (x.ReMoney90 / 1000))).toFixed(2);
+                ReMoney180List = getTotalValue(Array.from(result, x => (x.ReMoney180 / 1000))).toFixed(2);
+                ReMoney181List = getTotalValue(Array.from(result, x => (x.ReMoney181 / 1000))).toFixed(2);
+            }
+            let DebtList: any = [ReMoney30List, ReMoney45List, ReMoney60List, ReMoney90List, ReMoney180List, ReMoney181List];
             //将值传给初始化图表的函数
-            initChart(result.Content.DebtChartData);
+            initChart(DebtList);
+            setloading(false);
         }
     }
 
     //初始化图表
-    let initChart = (DebtChartData: []) => {
+    let initChart = (DebtList: []) => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
         let option: any = {
-            tooltip: {},
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#283b56'
+                    }
+                }
+            },
             toolbox: {
                 feature: {
                     dataView: { show: true, readOnly: false },
@@ -46,14 +74,14 @@ const Debt: React.FC<{}> = () => {
                 data: ['应收账款']
             },
             xAxis: {
-                data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-120天", "121-180天", "181-360天", "1-2年", "2-3年", "3年以上"]
+                data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-180天", "大于180天"]
             },
-            yAxis: { name: 'CNY' },
+            yAxis: { name: 'CNY(千)' },
             series: [
                 {
                     name: '应收账款',
                     type: 'bar',
-                    data: [...DebtChartData]
+                    data: [...DebtList]
                 },
             ]
         };
@@ -65,14 +93,33 @@ const Debt: React.FC<{}> = () => {
      * 第2个参数传 [] 相当于 componentDidMount 钩子
      */
     useEffect(() => {
-        fetchData();
+        let SearchInfo: object = {
+            BranchID: initialState?.currentBranch?.BranchID,
+        };
+        if (initialState?.currentBranch) {
+            fetchData(SearchInfo);
+        }
     }, []);
+
+    /**
+     * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
+     */
+    useEffect(() => {
+        let SearchInfo: object = {
+            BranchID: initialState?.currentBranch?.BranchID,
+        };
+        if (initialState?.currentBranch) {
+            fetchData(SearchInfo);
+        }
+    }, [initialState]);
 
     return (
         <PageContainer>
-            <Card>
-                <div id="main" style={{ width: '100%', height: 400 }}></div>
-            </Card>
+            <Spin tip="页面正在加载中..." spinning={loading}>
+                <Card>
+                    <div id="main" style={{ width: '100%', height: 600 }}></div>
+                </Card>
+            </Spin>
         </PageContainer>
     )
 };

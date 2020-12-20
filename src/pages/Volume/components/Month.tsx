@@ -11,6 +11,8 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/tooltip'
 //调用API
 import { getMonthChartData, } from '@/services/volume';
+//调用公式方法
+import { getMaximumValue, } from '@/utils/utils';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 import SearchResultList from '@/components/Search/SearchResultList';
@@ -32,9 +34,9 @@ const Month: React.FC<{}> = () => {
             let VolumeList: any = [];
             let TotalARList: any = [];
             if (result && result.length > 0) {
-                result.map((x: { Volume: Number; TotalAR: Number; }) => {
+                result.map((x: { Volume: Number; TotalAR: any; }) => {
                     VolumeList.push(x.Volume);
-                    TotalARList.push(x.TotalAR);
+                    TotalARList.push(parseFloat((x.TotalAR / 1000).toFixed(2)));
                 });
             }
             //将值传给初始化图表的函数
@@ -49,7 +51,12 @@ const Month: React.FC<{}> = () => {
         let option: any = {
             tooltip: {
                 trigger: 'axis',
-                axisPointer: { type: 'shadow' },
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#283b56'
+                    }
+                }
             },
             toolbox: {
                 feature: {
@@ -62,38 +69,37 @@ const Month: React.FC<{}> = () => {
             legend: {
                 data: ['RT', 'CNY']
             },
-            xAxis: {
-                type: 'category',
-                data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                },
+            ],
             yAxis: [
                 {
                     type: 'value',
+                    scale: true,
                     name: 'RT',
-                    axisLabel: {
-                        formatter: '{value} RT'
-                    },
+                    min: 0,
+                    max: getMaximumValue(VolumeData),
                 },
                 {
                     type: 'value',
-                    name: 'CNY',
-                    axisLabel: {
-                        formatter: '{value} CNY'
-                    },
+                    scale: true,
+                    name: 'CNY(千)',
+                    min: 0,
+                    max: getMaximumValue(IncomeDate),
                 }
             ],
             series: [
                 {
                     name: 'RT',
                     type: 'bar',
-                    color: '#2F4554',
+                    color: '#61A0A8',
                     data: [...VolumeData]
                 },
                 {
-                    name: 'CNY',
+                    name: 'CNY(千)',
                     type: 'bar',
                     color: '#C23531',
                     data: [...IncomeDate]
@@ -141,10 +147,13 @@ const Month: React.FC<{}> = () => {
     }, [initialState]);
 
     return <>
-        <SearchResultList />
+        <ContextProps.Provider value={1}>
+            <SearchResultList />
+        </ContextProps.Provider>
+
         <Spin tip="页面正在加载中..." spinning={loading}>
             <Card>
-                <div id="main" style={{ width: '100%', height: 400 }}></div>
+                <div id="main" style={{ width: '100%', height: 600 }}></div>
             </Card>
         </Spin>
 

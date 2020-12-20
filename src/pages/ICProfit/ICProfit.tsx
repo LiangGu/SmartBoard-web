@@ -34,10 +34,10 @@ const ICProfit: React.FC<{}> = () => {
       let TotalAPList: any = [];
       let ProfitList: any = [];
       if (result && result.length > 0) {
-        result.map((x: { TotalAR: Number; TotalAP: Number; Profit: Number }) => {
-          TotalARList.push(x.TotalAR);
-          TotalAPList.push(x.TotalAP);
-          ProfitList.push(x.Profit);
+        result.map((x: { TotalAR: any; TotalAP: any; Profit: any }) => {
+          TotalARList.push((x.TotalAR / 1000).toFixed(2));
+          TotalAPList.push((x.TotalAP / 1000).toFixed(2));
+          ProfitList.push((x.Profit / 1000).toFixed(2));
         });
       }
       //将值传给初始化图表的函数
@@ -53,7 +53,12 @@ const ICProfit: React.FC<{}> = () => {
     let option: any = {
       tooltip: {
         trigger: 'axis',
-        axisPointer: { type: 'shadow' },
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#283b56'
+          }
+        }
       },
       toolbox: {
         feature: {
@@ -69,7 +74,7 @@ const ICProfit: React.FC<{}> = () => {
       xAxis: {
         data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
       },
-      yAxis: { name: '千' },
+      yAxis: { name: 'CNY(千)' },
       series: [
         {
           name: '收入',
@@ -86,7 +91,7 @@ const ICProfit: React.FC<{}> = () => {
         {
           name: '利润',
           type: 'line',
-          color: '#2F4554',
+          color: '#FF7C00',
           data: [...ProfitList]
         },
       ]
@@ -133,15 +138,18 @@ const ICProfit: React.FC<{}> = () => {
 
   return (
     <PageContainer>
-      <SearchResultList />
+      <ContextProps.Provider value={5}>
+        <SearchResultList />
+      </ContextProps.Provider>
+
       <Spin tip="页面正在加载中..." spinning={loading}>
         <Card>
-          <div id="main" style={{ width: '100%', height: 400 }}></div>
+          <div id="main" style={{ width: '100%', height: 600 }}></div>
         </Card>
       </Spin>
 
       {/*重点代码*/}
-      <ContextProps.Provider value={3}>
+      <ContextProps.Provider value={5}>
         <SearchButton />
       </ContextProps.Provider>
     </PageContainer>

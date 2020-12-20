@@ -51,7 +51,7 @@ const ChooseBranch: React.FC<{}> = () => {
                 type="dashed"
                 onClick={onMenuClick}
             >
-                切换公司
+                {initialState?.currentBranch?.BranchName}
             </Button>
 
             <Drawer

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, } from 'antd';
+import { Card, Spin, } from 'antd';
 
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
@@ -18,30 +18,50 @@ import 'echarts/lib/component/dataZoom';
 import { getCashFlowChartData, } from '@/services/cashflow';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
+import SearchResultList from '@/components/Search/SearchResultList';
 //重点代码<React hooks之useContext父子组件传值>
 import ContextProps from '@/createContext';
 
 const CashFlow: React.FC<{}> = () => {
   const { initialState, } = useModel('@@initialState');
+  const [loading, setloading] = useState(false);
 
   //获取数据
-  let fetchData = async () => {
-    const result = await getCashFlowChartData();
+  let fetchData = async (SearchInfo: any) => {
+    setloading(true);
+    const result = await getCashFlowChartData(SearchInfo);
     if (!result || initialState?.currentBranch?.BranchID == undefined) {
       return;
     }
-    if (result && result.Result) {
+    if (result) {
+      let SumDateList: any = [];
+      let SumTodayList: any = [];
+      if (result && result.length > 0) {
+        result.map((x: { SumDate: string; SumToday: Number; }) => {
+          SumDateList.push(x.SumDate);
+          SumTodayList.push(x.SumToday);
+        });
+      }
       //将值传给初始化图表的函数
-      initChart(result.Content.CashFlowChartData, result.Content.CashFlowChartKey);
+      initChart(SumDateList, SumTodayList);
+      setloading(false);
     }
   }
 
   //初始化图表
-  let initChart = (CashFlowChartData: [], CashFlowChartKey: []) => {
+  let initChart = (SumDateList: [], SumTodayList: []) => {
     let element = document.getElementById('main');
     let myChart = echarts.init(element as HTMLDivElement);
     let option: any = {
-      tooltip: {},
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#283b56'
+          }
+        }
+      },
       toolbox: {
         feature: {
           dataView: { show: true, readOnly: false },
@@ -52,12 +72,12 @@ const CashFlow: React.FC<{}> = () => {
       },
       xAxis: {
         min: 1,
-        max: CashFlowChartKey.length,
+        max: SumDateList.length,
         axisLabel: { interval: 0, },
         show: false,
-        name: `${CashFlowChartKey.length}`,
+        name: `${SumDateList.length}`,
         boundaryGap: false,
-        data: [...CashFlowChartKey]
+        data: [...SumDateList]
       },
       yAxis: { name: '千' },
       dataZoom: [
@@ -87,7 +107,7 @@ const CashFlow: React.FC<{}> = () => {
             },
           },
         },
-        data: [...CashFlowChartData],
+        data: [...SumTodayList],
       }],
     };
     myChart.setOption(option);
@@ -98,17 +118,42 @@ const CashFlow: React.FC<{}> = () => {
    * 第2个参数传 [] 相当于 componentDidMount 钩子
    */
   useEffect(() => {
-
-    fetchData();
+    let SearchInfo: object = {
+      BranchID: initialState?.currentBranch?.BranchID,
+      Year: initialState?.searchInfo?.Year,
+    };
+    if (initialState?.currentBranch) {
+      fetchData(SearchInfo);
+    }
   }, []);
+
+  /**
+   * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
+   */
+  useEffect(() => {
+    let SearchInfo: object = {
+      BranchID: initialState?.currentBranch?.BranchID,
+      Year: initialState?.searchInfo?.Year,
+    };
+    if (initialState?.currentBranch) {
+      fetchData(SearchInfo);
+    }
+  }, [initialState]);
 
   return (
     <PageContainer>
-      <Card>
-        <div id="main" style={{ width: '100%', height: 400 }}></div>
-      </Card>
+      <ContextProps.Provider value={4}>
+        <SearchResultList />
+      </ContextProps.Provider>
+
+      <Spin tip="页面正在加载中..." spinning={loading}>
+        <Card>
+          <div id="main" style={{ width: '100%', height: 600 }}></div>
+        </Card>
+      </Spin>
+
       {/*重点代码*/}
-      <ContextProps.Provider value={2}>
+      <ContextProps.Provider value={4}>
         <SearchButton />
       </ContextProps.Provider>
     </PageContainer>

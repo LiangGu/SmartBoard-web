@@ -97,7 +97,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
           currentUser && currentUser.BranchID == 1?
           <>
             <ChooseBranch/>
-            <p>{currentBranch?.BranchName}</p>
+            {/* <p>{currentBranch?.BranchName}</p> */}
           </> : null
         }
         <HeaderDropdown overlay={menuHeaderDropdown}>

@@ -37,12 +37,12 @@ export default {
           icon: 'LineChartOutlined',
           component: './CashFlow/CashFlow',
         },
-        {
-          path: '/debt',
-          name: 'debt',
-          icon: 'TransactionOutlined',
-          component: './Debt/Debt',
-        },
+        // {
+        //   path: '/debt',
+        //   name: 'debt',
+        //   icon: 'TransactionOutlined',
+        //   component: './Debt/Debt',
+        // },
         {
           path: '/rank',
           name: 'rank',
