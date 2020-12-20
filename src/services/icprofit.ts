@@ -6,9 +6,14 @@ import { TableListParams } from '../global.d';
  * By:Iverson.Tian
  * Date:2020-12-10
  */
-export async function getICProfitChartData() {
-  return request('/api/getICProfitChartData', {
-    method: 'GET',
+export async function getICProfitChartData(params?: any) {
+  console.log("现在的接口参数是:", params)
+  // return request('/api/getICProfitChartData', {
+  //   method: 'GET',
+  // });
+  return request<API.ResponseType>(`/api/Board/GetMonthFee`, {
+    method: 'POST',
+    data: params,
   });
 }
 

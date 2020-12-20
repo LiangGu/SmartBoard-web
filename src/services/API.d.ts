@@ -50,9 +50,10 @@ declare namespace API {
   }
 
   export interface ResponseType {
+    [x: string]: any;
     Result?: boolean;
     Content?: any;
-    Page?:{};
+    Page?: {};
   }
 
   // 总部登录选择的公司

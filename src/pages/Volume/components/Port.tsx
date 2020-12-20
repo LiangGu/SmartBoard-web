@@ -39,7 +39,7 @@ const Port: React.FC<{}> = () => {
         <Card>
             <ProTable<PortTableData>
                 columns={columns}
-                request={(params:any, sorter:any, filter:any) => getPortTableData({ ...params, sorter, filter })}
+                request={(params: any, sorter: any, filter: any) => getPortTableData({ ...params, sorter, filter })}
                 rowKey="id"
                 pagination={{
                     showQuickJumper: true,

@@ -1,6 +1,6 @@
 import React, { useEffect, } from 'react';
 import { useModel } from 'umi';
-import { PageContainer} from '@ant-design/pro-layout';
+import { PageContainer } from '@ant-design/pro-layout';
 import { Card, } from 'antd';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts'
@@ -17,38 +17,38 @@ const Debt: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
 
     //获取数据
-    let fetchData = async()=>{
+    let fetchData = async () => {
         const result = await getDebtChartData();
-        if(!result || initialState?.currentBranch?.BranchID == undefined){
+        if (!result || initialState?.currentBranch?.BranchID == undefined) {
             return;
         }
-        if(result && result.Result){
+        if (result && result.Result) {
             //将值传给初始化图表的函数
             initChart(result.Content.DebtChartData);
         }
     }
 
     //初始化图表
-    let initChart = (DebtChartData:[]) => {
+    let initChart = (DebtChartData: []) => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
-        let option:any = {
+        let option: any = {
             tooltip: {},
             toolbox: {
                 feature: {
-                    dataView: {show: true, readOnly: false},
-                    magicType: {show: true, type: ['line', 'bar']},
-                    restore: {show: true},
-                    saveAsImage: {show: true}
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
                 }
             },
             legend: {
-                data:['应收账款']
+                data: ['应收账款']
             },
             xAxis: {
                 data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-120天", "121-180天", "181-360天", "1-2年", "2-3年", "3年以上"]
             },
-            yAxis: {name: 'CNY'},
+            yAxis: { name: 'CNY' },
             series: [
                 {
                     name: '应收账款',
@@ -58,23 +58,23 @@ const Debt: React.FC<{}> = () => {
             ]
         };
         myChart.setOption(option);
-        window.addEventListener('resize' , () => {myChart.resize()});
+        window.addEventListener('resize', () => { myChart.resize() });
     };
 
     /**
      * 第2个参数传 [] 相当于 componentDidMount 钩子
      */
-    useEffect(() =>{
+    useEffect(() => {
         fetchData();
-    },[]);
+    }, []);
 
-  return (
-    <PageContainer>
-        <Card>
-          <div id="main" style={{width: '100%',height:400}}></div>
-        </Card>
-    </PageContainer>
-  )
+    return (
+        <PageContainer>
+            <Card>
+                <div id="main" style={{ width: '100%', height: 400 }}></div>
+            </Card>
+        </PageContainer>
+    )
 };
 
 export default Debt;

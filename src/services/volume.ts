@@ -7,13 +7,13 @@ import { TableListParams } from '../global.d';
  * By:Iverson.Tian
  * Date:2020-12-08
  */
-export async function getMonthChartData(params?:any) {
+export async function getMonthChartData(params?: any) {
   // return request('/api/getMonthChartData', {
   //   method: 'GET',
   // });
   return request(`/api/Board/GetVolumeByMonty`, {
     method: 'POST',
-    data:params
+    data: params
   });
 }
 
@@ -23,11 +23,12 @@ export async function getMonthChartData(params?:any) {
  * Date:2020-12-09
  */
 export async function getPortTableData(params?: TableListParams) {
-  return request('/api/getPortTableData', {
-    method: 'GET',
-  });
-  // return request<API.ResponseType>(`/api/Board/GetVolumeByPort?${stringify(params)}`, {
-  //   method: 'POST',
-  //   dto: params,
+  console.log("现在的接口参数是:", params)
+  // return request('/api/getPortTableData', {
+  //   method: 'GET',
   // });
+  return request<API.ResponseType>(`/api/Board/GetVolumeByPort`, {
+    method: 'POST',
+    data: params,
+  });
 }

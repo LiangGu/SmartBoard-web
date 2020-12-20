@@ -7,7 +7,7 @@ import { TableListParams } from '../global.d';
  * Date:2020-12-09
  */
 export async function getTopCTTableData(params?: TableListParams) {
-    return request('/api/getTopCTTableData', {
-      method: 'GET',
-    });
-  }
+  return request('/api/getTopCTTableData', {
+    method: 'GET',
+  });
+}

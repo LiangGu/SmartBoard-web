@@ -19,46 +19,44 @@ import ContextProps from '@/createContext';
 
 const Month: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
-    const [ loading, setloading] = useState(false);
+    const [loading, setloading] = useState(false);
 
     //获取数据
-    let fetchData = async(SearchInfo:any)=>{
-        setloading(true)
+    let fetchData = async (SearchInfo: any) => {
+        setloading(true);
         const result = await getMonthChartData(SearchInfo);
-        if(!result || initialState?.currentBranch?.BranchID == undefined){
+        if (!result || initialState?.currentBranch?.BranchID == undefined) {
             return;
         }
-        if(result){
-            let VolumeList:Array<Number> = [];
-            let TotalARList:Array<Number> = [];
-            if(result && result.length > 0){
+        if (result) {
+            let VolumeList: any = [];
+            let TotalARList: any = [];
+            if (result && result.length > 0) {
                 result.map((x: { Volume: Number; TotalAR: Number; }) => {
                     VolumeList.push(x.Volume);
                     TotalARList.push(x.TotalAR);
-                })
+                });
             }
             //将值传给初始化图表的函数
-            initChart(VolumeList,TotalARList);
-            setloading(false)
+            initChart(VolumeList, TotalARList);
+            setloading(false);
         }
     }
     //初始化图表
-    let initChart = (VolumeData:any,IncomeDate:any,) => {
-        let element_volume = document.getElementById('volumeChart');
-        let element_income = document.getElementById('incomeChart');
-        let volumeChart = echarts.init(element_volume as HTMLDivElement);
-        let incomeChart = echarts.init(element_income as HTMLDivElement);
-        let option_volume:any = {
+    let initChart = (VolumeData: any, IncomeDate: any,) => {
+        let element = document.getElementById('main');
+        let myChart = echarts.init(element as HTMLDivElement);
+        let option: any = {
             tooltip: {
                 trigger: 'axis',
-                axisPointer : {type : 'shadow'},
+                axisPointer: { type: 'shadow' },
             },
             toolbox: {
                 feature: {
-                    dataView: {show: true, readOnly: false},
-                    magicType: {show: true, type: ['line', 'bar']},
-                    restore: {show: true},
-                    saveAsImage: {show: true}
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
                 }
             },
             legend: {
@@ -66,48 +64,7 @@ const Month: React.FC<{}> = () => {
             },
             xAxis: {
                 type: 'category',
-                data: ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"],
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            yAxis: [
-                {
-                    type: 'value',
-                    name: 'CNY',
-                    axisLabel: {
-                        formatter: '{value} CNY'
-                    },
-                }
-            ],
-            series: [
-                {
-                    name: 'CNY',
-                    type: 'bar',
-                    color: '#FF0003',
-                    data: [...IncomeDate]
-                },
-             ]
-        };
-        let option_income:any = {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer : {type : 'shadow'},
-            },
-            toolbox: {
-                feature: {
-                    dataView: {show: true, readOnly: false},
-                    magicType: {show: true, type: ['line', 'bar']},
-                    restore: {show: true},
-                    saveAsImage: {show: true}
-                }
-            },
-            legend: {
-                data: ['RT', 'CNY']
-            },
-            xAxis: {
-                type: 'category',
-                data: ["一月", "二月", "三月", "四月", "五月", "六月","七月", "八月", "九月", "十月", "十一月", "十二月"],
+                data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
                 axisPointer: {
                     type: 'shadow'
                 }
@@ -120,70 +77,80 @@ const Month: React.FC<{}> = () => {
                         formatter: '{value} RT'
                     },
                 },
+                {
+                    type: 'value',
+                    name: 'CNY',
+                    axisLabel: {
+                        formatter: '{value} CNY'
+                    },
+                }
             ],
             series: [
                 {
                     name: 'RT',
                     type: 'bar',
-                    color: '#339900',
+                    color: '#2F4554',
                     data: [...VolumeData]
                 },
-             ]
+                {
+                    name: 'CNY',
+                    type: 'bar',
+                    color: '#C23531',
+                    data: [...IncomeDate]
+                },
+            ]
         };
-        volumeChart.setOption(option_volume);
-        incomeChart.setOption(option_income);
-        window.addEventListener('resize' , () => {volumeChart.resize()});
-        window.addEventListener('resize' , () => {incomeChart.resize()});
+        myChart.setOption(option);
+        window.addEventListener('resize', () => { myChart.resize() });
     };
 
     /**
      * 第2个参数传 [] 相当于 componentDidMount 钩子
      */
-    useEffect(() =>{
-        let SearchInfo:object = {
+    useEffect(() => {
+        let SearchInfo: object = {
             BranchID: initialState?.currentBranch?.BranchID,
             // YearList: initialState?.searchInfo?.YearList,
             Year: initialState?.searchInfo?.Year,
-            MonthList: initialState?.searchInfo?.MonthList || [],
-            TransTypes: initialState?.searchInfo?.BizType1List || [],
-            TradeTypes: initialState?.searchInfo?.BizType2List || [],
-            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [],
+            MonthList: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
+            TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
+            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
         };
-        if(initialState?.currentBranch || initialState?.searchInfo){
+        if (initialState?.currentBranch || initialState?.searchInfo) {
             fetchData(SearchInfo);
         }
-    },[]);
+    }, []);
 
     /**
      * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
      */
-    useEffect(() =>{
-        let SearchInfo:object = {
+    useEffect(() => {
+        let SearchInfo: object = {
             BranchID: initialState?.currentBranch?.BranchID,
             // YearList: initialState?.searchInfo?.YearList,
             Year: initialState?.searchInfo?.Year,
-            MonthList: initialState?.searchInfo?.MonthList || [],
-            TransTypes: initialState?.searchInfo?.BizType1List || [],
-            TradeTypes: initialState?.searchInfo?.BizType2List || [],
-            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [],
+            MonthList: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
+            TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
+            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
         };
-        if(initialState?.currentBranch || initialState?.searchInfo){
+        if (initialState?.currentBranch || initialState?.searchInfo) {
             fetchData(SearchInfo);
         }
-    },[initialState]);
+    }, [initialState]);
 
     return <>
-        <SearchResultList/>
+        <SearchResultList />
         <Spin tip="页面正在加载中..." spinning={loading}>
             <Card>
-                <div id="volumeChart" style={{width: '100%',height:400}}></div>
-                <div id="incomeChart" style={{width: '100%',height:400}}></div>
+                <div id="main" style={{ width: '100%', height: 400 }}></div>
             </Card>
         </Spin>
 
         {/*重点代码*/}
         <ContextProps.Provider value={1}>
-            <SearchButton/>
+            <SearchButton />
         </ContextProps.Provider>
     </>
 }

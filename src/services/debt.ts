@@ -6,7 +6,7 @@ import { request } from 'umi';
  * Date:2020-12-14
  */
 export async function getDebtChartData() {
-    return request('/api/getDebtChartData', {
-      method: 'GET',
-    });
-  }
+  return request('/api/getDebtChartData', {
+    method: 'GET',
+  });
+}
