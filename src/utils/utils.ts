@@ -38,7 +38,12 @@ export const getMaximumValue = (list: Array<Number>) => {
             maximumValue = list[i];
         }
     }
-    return maximumValue;
+    // 向上取整
+    let max = Math.ceil(parseFloat(maximumValue.toString()));
+    if(max %5 !=0 ){
+        max = max+(5-max%5);
+    }
+    return Math.ceil(max*1.1);
 }
 
 /**

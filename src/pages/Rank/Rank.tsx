@@ -138,9 +138,9 @@ const Rank: React.FC<{}> = () => {
     }, [initialState]);
 
     return <>
-        <ContextProps.Provider value={3}>
+        {/* <ContextProps.Provider value={3}>
             <SearchResultList />
-        </ContextProps.Provider>
+        </ContextProps.Provider> */}
 
         <Spin tip="页面正在加载中..." spinning={loading}>
             <Card>

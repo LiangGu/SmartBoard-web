@@ -31,18 +31,18 @@ export default {
           icon: 'MoneyCollectOutlined',
           component: './ICProfit/ICProfit',
         },
-        {
-          path: '/cashflow',
-          name: 'cashflow',
-          icon: 'LineChartOutlined',
-          component: './CashFlow/CashFlow',
-        },
         // {
-        //   path: '/debt',
-        //   name: 'debt',
-        //   icon: 'TransactionOutlined',
-        //   component: './Debt/Debt',
+        //   path: '/cashflow',
+        //   name: 'cashflow',
+        //   icon: 'LineChartOutlined',
+        //   component: './CashFlow/CashFlow',
         // },
+        {
+          path: '/debt',
+          name: 'debt',
+          icon: 'TransactionOutlined',
+          component: './Debt/Debt',
+        },
         {
           path: '/rank',
           name: 'rank',

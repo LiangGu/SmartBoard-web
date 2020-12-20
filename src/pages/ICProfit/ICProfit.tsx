@@ -138,9 +138,9 @@ const ICProfit: React.FC<{}> = () => {
 
   return (
     <PageContainer>
-      <ContextProps.Provider value={5}>
+      {/* <ContextProps.Provider value={5}>
         <SearchResultList />
-      </ContextProps.Provider>
+      </ContextProps.Provider> */}
 
       <Spin tip="页面正在加载中..." spinning={loading}>
         <Card>

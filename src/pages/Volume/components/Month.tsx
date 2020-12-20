@@ -82,6 +82,8 @@ const Month: React.FC<{}> = () => {
                     name: 'RT',
                     min: 0,
                     max: getMaximumValue(VolumeData),
+                    splitNumber: 5,
+                    interval: Math.ceil(getMaximumValue(VolumeData) / 5)
                 },
                 {
                     type: 'value',
@@ -89,6 +91,8 @@ const Month: React.FC<{}> = () => {
                     name: 'CNY(千)',
                     min: 0,
                     max: getMaximumValue(IncomeDate),
+                    splitNumber: 5,
+                    interval: Math.ceil(getMaximumValue(IncomeDate) / 5)
                 }
             ],
             series: [
@@ -100,8 +104,9 @@ const Month: React.FC<{}> = () => {
                 },
                 {
                     name: 'CNY(千)',
-                    type: 'bar',
+                    type: 'line',
                     color: '#C23531',
+                    yAxisIndex: 1,
                     data: [...IncomeDate]
                 },
             ]
@@ -147,9 +152,9 @@ const Month: React.FC<{}> = () => {
     }, [initialState]);
 
     return <>
-        <ContextProps.Provider value={1}>
+        {/* <ContextProps.Provider value={1}>
             <SearchResultList />
-        </ContextProps.Provider>
+        </ContextProps.Provider> */}
 
         <Spin tip="页面正在加载中..." spinning={loading}>
             <Card>
