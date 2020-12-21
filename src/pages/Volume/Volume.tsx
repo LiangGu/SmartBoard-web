@@ -15,7 +15,7 @@ const Volume: React.FC<{}> = () => {
 
   return (
     <PageContainer>
-      <Tabs defaultActiveKey={currentT} onChange={onTabChange}>
+      <Tabs defaultActiveKey={currentT} onChange={onTabChange} tabBarGutter={20}>
         <TabPane tab="月份" key="1">
           <Month />
         </TabPane>

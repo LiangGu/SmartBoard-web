@@ -26,7 +26,7 @@ beforeEach(async () => {
   });
 });
 
-describe('Smart Board Test', () => {
+describe('SMART BOARD', () => {
   const testPage = (path) => async () => {
     await page.goto(`${BASE_URL}${path}`);
     await page.waitForSelector('footer', {

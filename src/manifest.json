@@ -1,6 +1,6 @@
 {
-  "name": "Smart Board",
-  "short_name": "Smart Board",
+  "name": "SMART BOARD",
+  "short_name": "SMART BOARD",
   "display": "standalone",
   "start_url": "./?utm_source=homescreen",
   "theme_color": "#002140",

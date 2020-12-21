@@ -12,7 +12,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'Smart Board',
+  title: 'SMART BOARD',
   pwa: false,
   iconfontUrl: '',
 } as LayoutSettings & {

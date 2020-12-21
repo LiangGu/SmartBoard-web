@@ -66,7 +66,7 @@ const CashFlow: React.FC<{}> = () => {
         axisPointer: {
           type: 'cross',
           label: {
-            backgroundColor: '#283b56'
+            backgroundColor: '#C23531'
           }
         }
       },
@@ -98,7 +98,7 @@ const CashFlow: React.FC<{}> = () => {
       ],
       series: [{
         name: '现金流',
-        color: '#FF0005',
+        color: '#C23531',
         type: 'line',
         barWidth: 20,
         itemStyle: {
@@ -106,10 +106,10 @@ const CashFlow: React.FC<{}> = () => {
             //*根据后台数据动态为每条数据添加不同的颜色
             color: function (params: any) {
               if (params.value < 0) {
-                let color = ['#FF0005'];
+                let color = ['#C23531'];
                 return params.itemStyle = color;
               } else {
-                let color = ['#13E000'];
+                let color = ['#61A0A8'];
                 return params.itemStyle = color;
               }
             },

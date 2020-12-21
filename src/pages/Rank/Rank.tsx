@@ -69,7 +69,7 @@ const Rank: React.FC<{}> = () => {
                 axisPointer: {
                     type: 'cross',
                     label: {
-                        backgroundColor: '#283b56'
+                        backgroundColor: '#C23531'
                     }
                 }
             },
