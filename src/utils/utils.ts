@@ -37,14 +37,19 @@ export const getMaxValue = (list: Array<any>) => {
     let maxint = 0;
     let maxval = 0;
     if (list && list.length > 0) {
-        list.forEach((el) => {
-            el.forEach((el1: any) => {
-                if (!(el1 === undefined || el1 === '')) {
-                    if (max < el1) {
-                        max = el1;
-                    }
+        list.forEach((element) => {
+            // element.forEach((x: any) => {
+            //     if (!(x === undefined || x === '')) {
+            //         if (max < x) {
+            //             max = x;
+            //         }
+            //     }
+            // })
+            if(!(element === undefined || element === '')){
+                if(max < element){
+                    max = element;
                 }
-            })
+            }
         })
         maxint = Math.ceil(max / 9.5);      //不让最高的值超过最上面的刻度
         maxval = maxint * 10;               //让显示的刻度是整数
@@ -61,17 +66,19 @@ export const getMinValue = (list: Array<any>) => {
     let minint = 0;
     let minval = 0;
     if (list && list.length > 0) {
-        console.log(list)
-        list.forEach((el) => {
-            console.log(el)
-            el.forEach((el1: any) => {
-                console.log(el1)
-                if (!(el1 === undefined || el1 === '')) {
-                    if (min > el1) {
-                        min = el1;
-                    }
+        list.forEach((element) => {
+            // element.forEach((x: any) => {
+            //     if (!(x === undefined || x === '')) {
+            //         if (min > x) {
+            //             min = x;
+            //         }
+            //     }
+            // })
+            if(!(element === undefined || element === '')){
+                if(min > element){
+                    min = element;
                 }
-            })
+            }
         })
         minint = Math.floor(min / 10);
         minval = minint * 10;               //让显示的刻度是整数

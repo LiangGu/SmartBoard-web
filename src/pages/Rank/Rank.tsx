@@ -94,7 +94,7 @@ const Rank: React.FC<{}> = () => {
             yAxis: {
                 type: 'category',
                 scale: true,
-                name: 'CNY(千)',
+                name: '单位: CNY(千)',
                 data: [...RankTopCTNameList],
                 //Y轴超长标签换行
                 axisLabel: {

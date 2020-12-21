@@ -87,7 +87,7 @@ const Debt: React.FC<{}> = () => {
             xAxis: {
                 data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-180天", "大于180天"]
             },
-            yAxis: { name: 'CNY(千)' },
+            yAxis: { name: '单位: CNY(千)' },
             series: [
                 {
                     name: '应收账款',

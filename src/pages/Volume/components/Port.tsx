@@ -86,7 +86,7 @@ const Port: React.FC<{}> = () => {
             yAxis: {
                 type: 'category',
                 scale: true,
-                name: 'CNY(千)',
+                name: '单位: CNY(千)',
                 data: [...PortTopPortNameList],
             },
             series: [

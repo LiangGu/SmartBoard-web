@@ -87,7 +87,7 @@ const CashFlow: React.FC<{}> = () => {
         boundaryGap: false,
         data: [...SumDateList]
       },
-      yAxis: { name: 'CNY(千)' },
+      yAxis: { name: '单位: CNY(千)' },
       dataZoom: [
         {
           type: 'slider',         // 滑动条

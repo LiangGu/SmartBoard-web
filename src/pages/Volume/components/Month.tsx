@@ -82,21 +82,20 @@ const Month: React.FC<{}> = () => {
                 {
                     type: 'value',
                     scale: true,
-                    name: 'RT',
-                    min: getMinValue([VolumeData, IncomeDate]),
-                    max: getMaxValue([VolumeData, IncomeDate]),
+                    name: '单位: RT',
+                    min: getMinValue(VolumeData),
+                    max: getMaxValue(VolumeData),
                     splitNumber: 5,
-                    interval: (getMaxValue([VolumeData, IncomeDate]) - getMinValue([VolumeData, IncomeDate])) / 5
+                    interval: (getMaxValue(VolumeData) - getMinValue(VolumeData)) / 5
                 },
                 {
                     type: 'value',
                     scale: true,
-                    name: 'CNY(千)',
-                    min: getMinValue([VolumeData, IncomeDate]),
-                    max: getMaxValue([VolumeData, IncomeDate]),
+                    name: '单位: CNY(千)',
+                    min: getMinValue(IncomeDate),
+                    max: getMaxValue(IncomeDate),
                     splitNumber: 5,
-                    interval: (getMaxValue([VolumeData, IncomeDate]) - getMinValue([VolumeData, IncomeDate])) / 5
-
+                    interval: (getMaxValue(IncomeDate) - getMinValue(IncomeDate)) / 5
                 }
             ],
             series: [
