@@ -31,12 +31,12 @@ export default {
           icon: 'MoneyCollectOutlined',
           component: './ICProfit/ICProfit',
         },
-        // {
-        //   path: '/cashflow',
-        //   name: 'cashflow',
-        //   icon: 'LineChartOutlined',
-        //   component: './CashFlow/CashFlow',
-        // },
+        {
+          path: '/cashflow',
+          name: 'cashflow',
+          icon: 'LineChartOutlined',
+          component: './CashFlow/CashFlow',
+        },
         {
           path: '/debt',
           name: 'debt',

@@ -37,9 +37,9 @@ const CashFlow: React.FC<{}> = () => {
       let SumDateList: any = [];
       let SumTodayList: any = [];
       if (result && result.length > 0) {
-        result.map((x: { SumDate: string; SumToday: Number; }) => {
+        result.map((x: { SumDate: string; SumToday: any; }) => {
           SumDateList.push(x.SumDate);
-          SumTodayList.push(x.SumToday);
+          SumTodayList.push((x.SumToday / 1000).toFixed(2));
         });
       }
       //将值传给初始化图表的函数
@@ -79,7 +79,7 @@ const CashFlow: React.FC<{}> = () => {
         boundaryGap: false,
         data: [...SumDateList]
       },
-      yAxis: { name: '千' },
+      yAxis: { name: 'CNY(千)' },
       dataZoom: [
         {
           type: 'slider',         // 滑动条

@@ -7,9 +7,5 @@ import { stringify } from 'qs';
  * Date:2020-12-14
  */
 export async function getCashFlowChartData(params?: any) {
-  console.log("现在的接口参数是:", params)
-  return request('/api/getCashFlowChartData', {
-    method: 'GET',
-  });
-  // return request<API.ResponseType>(`/api/Board/GetCash?${stringify(params)}`);
+  return request<API.ResponseType>(`/api/Board/GetCash?${stringify(params)}`);
 }
