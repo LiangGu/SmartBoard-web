@@ -59,6 +59,9 @@ const CashFlow: React.FC<{}> = () => {
     let element = document.getElementById('main');
     let myChart = echarts.init(element as HTMLDivElement);
     let option: any = {
+      title: {
+        text: '现金流',
+      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {

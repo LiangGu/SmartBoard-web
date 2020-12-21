@@ -53,6 +53,9 @@ const Debt: React.FC<{}> = () => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
         let option: any = {
+            title: {
+                text: '应收账款',
+            },
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {

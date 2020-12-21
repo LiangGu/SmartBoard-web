@@ -105,9 +105,76 @@ const SearchResultList: React.FC<{}> = () => {
             {
                 initialState && initialState.searchResultList ?
                     <Card className={styles.searchResultCard} title={"搜索条件"}>
-                        {/* 现金流只有年份的搜索条件 */}
 
                         {
+                            // 月份货量和收支利润没有月份的搜索条件
+                            PropsState && PropsState == 1 || PropsState && PropsState == 5 ?
+                                <>
+                                    <Row>
+                                        <Radio.Group buttonStyle="solid" size="small" onChange={onYearRadioChange} defaultValue={initialState?.searchInfo?.Year}>
+                                            {
+                                                YearList && YearList.length > 0 ? YearList.map(x => {
+                                                    return <Radio.Button key={x.Key} value={x.Key} style={{ marginLeft: 5 }}>{x.Value}</Radio.Button>
+                                                }) : null
+                                            }
+                                        </Radio.Group>
+                                    </Row>
+
+                                    <Row>
+                                        {
+                                            initialState && initialState.searchResultList ? initialState.searchResultList.BizType1List?.map((x, index) => {
+                                                return (
+                                                    <Tag
+                                                        style={{ margin: 5 }}
+                                                        color="red"
+                                                        key={x.Key}
+                                                        closable={index > -1}
+                                                        onClose={() => handleDeleteTag(x.Key, 3)}
+                                                    >
+                                                        {x.Value}
+                                                    </Tag>
+                                                )
+                                            }) : null
+                                        }
+                                    </Row>
+
+                                    <Row>
+                                        {
+                                            initialState && initialState.searchResultList ? initialState.searchResultList.BizType2List?.map((x, index) => {
+                                                return (
+                                                    <Tag
+                                                        style={{ margin: 5 }}
+                                                        color="red"
+                                                        key={x.Key}
+                                                        closable={index > -1}
+                                                        onClose={() => handleDeleteTag(x.Key, 4)}
+                                                    >
+                                                        {x.Value}
+                                                    </Tag>
+                                                )
+                                            }) : null
+                                        }
+                                    </Row>
+
+                                    <Row>
+                                        {
+                                            initialState && initialState.searchResultList ? initialState.searchResultList.OceanTransportTypeList?.map((x, index) => {
+                                                return (
+                                                    <Tag
+                                                        style={{ margin: 5 }}
+                                                        color="red"
+                                                        key={x.Key}
+                                                        closable={index > -1}
+                                                        onClose={() => handleDeleteTag(x.Key, 5)}
+                                                    >
+                                                        {x.Value}
+                                                    </Tag>
+                                                )
+                                            }) : null
+                                        }
+                                    </Row>
+                                </> :
+                            // 现金流只有年份的搜索条件
                             PropsState && PropsState == 4 ?
                                 <>
                                     <Row>

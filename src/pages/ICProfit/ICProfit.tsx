@@ -51,6 +51,9 @@ const ICProfit: React.FC<{}> = () => {
     let element = document.getElementById('main');
     let myChart = echarts.init(element as HTMLDivElement);
     let option: any = {
+      title: {
+        text: '收支利润',
+      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -108,7 +111,7 @@ const ICProfit: React.FC<{}> = () => {
       BranchID: initialState?.currentBranch?.BranchID,
       // YearList: initialState?.searchInfo?.YearList,
       Year: initialState?.searchInfo?.Year,
-      Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      // Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
       TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
       CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
@@ -126,7 +129,7 @@ const ICProfit: React.FC<{}> = () => {
       BranchID: initialState?.currentBranch?.BranchID,
       // YearList: initialState?.searchInfo?.YearList,
       Year: initialState?.searchInfo?.Year,
-      Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      // Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
       TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
       CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],

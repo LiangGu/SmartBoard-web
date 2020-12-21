@@ -198,8 +198,81 @@ const SearchButton: React.FC<{}> = ({ }) => {
                     </Button>
                 }
             >
-                {/* 现金流只有年份的搜索条件 */}
+
                 {
+                    // 月份货量和收支利润没有月份的搜索条件
+                    PropsState && PropsState == 1 || PropsState && PropsState == 5 ?
+                        <>
+                            <div className={styles.searchArea}>
+                                <Row className={styles.searchAreaLable}>
+                                    <Col span={12} className={styles.searchAreaTitle}>年份</Col>
+                                </Row>
+                                <Radio.Group buttonStyle="solid" size="small" onChange={onYearRadioChange} defaultValue={year}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            YearList && YearList.length > 0 ? YearList.map(x => {
+                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" }} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Radio.Group>
+                            </div>
+
+                            <div className={styles.searchArea}>
+                                <Row className={styles.searchAreaLable}>
+                                    <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
+                                    <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll3}>
+                                        全选
+                                    </Checkbox>
+                                </Row>
+                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(3, list)}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            BizType1List && BizType1List.length > 0 ? BizType1List.map(x => {
+                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Checkbox.Group>
+                            </div>
+
+                            <div className={styles.searchArea}>
+                                <Row className={styles.searchAreaLable}>
+                                    <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
+                                    <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(4, e)} checked={checkAll4}>
+                                        全选
+                                    </Checkbox>
+                                </Row>
+                                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(4, list)}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
+                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Checkbox.Group>
+                            </div>
+
+                            <div className={styles.searchArea}>
+                                <Row className={styles.searchAreaLable}>
+                                    <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
+                                    <Checkbox indeterminate={indeterminate5} onChange={(e) => onCheckAllChange(5, e)} checked={checkAll5}>
+                                        全选
+                                    </Checkbox>
+                                </Row>
+                                <Checkbox.Group value={checkedList5} onChange={(list) => onChange(5, list)}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map(x => {
+                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Checkbox.Group>
+                            </div>
+                        </> :
+                    // 现金流只有年份的搜索条件
                     PropsState && PropsState == 4 ?
                         <>
                             <div className={styles.searchArea}>
@@ -224,7 +297,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Col span={12}>
                                         <Checkbox indeterminate={indeterminate1} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll1}>
                                             全选
-                            </Checkbox>
+                                        </Checkbox>
                                     </Col>
                                 </Row>
                                 <Checkbox.Group value={checkedList1} onChange={(list) => onChange(1, list)}>
@@ -258,7 +331,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Col span={12} className={styles.searchAreaTitle}>月份</Col>
                                     <Checkbox indeterminate={indeterminate2} onChange={(e) => onCheckAllChange(2, e)} checked={checkAll2}>
                                         全选
-                        </Checkbox>
+                                    </Checkbox>
                                 </Row>
                                 <Checkbox.Group value={checkedList2} onChange={(list) => onChange(2, list)}>
                                     <Row className={styles.searchAreaContent}>
@@ -276,7 +349,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
                                     <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll3}>
                                         全选
-                        </Checkbox>
+                                    </Checkbox>
                                 </Row>
                                 <Checkbox.Group value={checkedList3} onChange={(list) => onChange(3, list)}>
                                     <Row className={styles.searchAreaContent}>
@@ -294,7 +367,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
                                     <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(4, e)} checked={checkAll4}>
                                         全选
-                        </Checkbox>
+                                    </Checkbox>
                                 </Row>
                                 <Checkbox.Group value={checkedList4} onChange={(list) => onChange(4, list)}>
                                     <Row className={styles.searchAreaContent}>
@@ -312,7 +385,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
                                     <Checkbox indeterminate={indeterminate5} onChange={(e) => onCheckAllChange(5, e)} checked={checkAll5}>
                                         全选
-                        </Checkbox>
+                                    </Checkbox>
                                 </Row>
                                 <Checkbox.Group value={checkedList5} onChange={(list) => onChange(5, list)}>
                                     <Row className={styles.searchAreaContent}>
@@ -326,8 +399,6 @@ const SearchButton: React.FC<{}> = ({ }) => {
                             </div>
                         </>
                 }
-
-
             </Drawer>
         </>
     )
