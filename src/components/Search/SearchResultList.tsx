@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, } from 'react';
+import React, { useState, useContext, } from 'react';
 import { useModel } from 'umi';
 import { Card, Row, Tag, Radio, } from 'antd';
 import styles from './index.less';
@@ -13,13 +13,6 @@ const SearchResultList: React.FC<{}> = () => {
     const [YearList,] = useState(() => {
         return getYearList();
     });
-
-    /**
-     * 第2个参数传 [] 相当于 componentDidMount 钩子
-     */
-    useEffect(() => {
-
-    }, []);
 
     /**
      * 删除 Tag 

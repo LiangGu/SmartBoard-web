@@ -73,6 +73,14 @@ const Rank: React.FC<{}> = () => {
                     }
                 }
             },
+            toolbox: {
+                feature: {
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
             grid: {
                 left: '3%',
                 right: '4%',
@@ -88,6 +96,21 @@ const Rank: React.FC<{}> = () => {
                 scale: true,
                 name: 'CNY(千)',
                 data: [...RankTopCTNameList],
+                //Y轴超长标签换行
+                axisLabel: {
+                    show: true,
+                    interval: 0,
+                    //设置字数限制
+                    formatter: function (value: any) {
+                        if (value.length > 40) {
+                            return value.substring(0, 40) + '\n' + value.substring(40, value.length);
+                        }else if (value.length > 20) {
+                            return value.substring(0, 20) + '\n' + value.substring(20, value.length);
+                        } else {
+                            return value;
+                        }
+                    }
+                },
             },
             series: [
                 {
@@ -100,24 +123,6 @@ const Rank: React.FC<{}> = () => {
         myChart.setOption(option);
         window.addEventListener('resize', () => { myChart.resize() });
     };
-
-    /**
-     * 第2个参数传 [] 相当于 componentDidMount 钩子
-     */
-    useEffect(() => {
-        let SearchInfo: object = {
-            BranchID: initialState?.currentBranch?.BranchID,
-            // YearList: initialState?.searchInfo?.YearList,
-            Year: initialState?.searchInfo?.Year,
-            Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
-            TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
-        };
-        if (initialState?.currentBranch) {
-            fetchData(SearchInfo);
-        }
-    }, []);
 
     /**
      * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子

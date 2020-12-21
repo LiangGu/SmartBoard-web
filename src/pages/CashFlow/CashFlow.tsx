@@ -2,7 +2,6 @@ import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Spin, } from 'antd';
-
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
@@ -122,19 +121,6 @@ const CashFlow: React.FC<{}> = () => {
     myChart.setOption(option);
     window.addEventListener('resize', () => { myChart.resize() });
   };
-
-  /**
-   * 第2个参数传 [] 相当于 componentDidMount 钩子
-   */
-  useEffect(() => {
-    let SearchInfo: object = {
-      BranchID: initialState?.currentBranch?.BranchID,
-      Year: initialState?.searchInfo?.Year,
-    };
-    if (initialState?.currentBranch) {
-      fetchData(SearchInfo);
-    }
-  }, []);
 
   /**
    * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子

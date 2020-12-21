@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from 'react';
+import React,{ useState, } from 'react';
 import { useModel } from 'umi';
 import { Drawer, Button, Radio, Row, Col, } from 'antd';
 import styles from './index.less';
@@ -9,12 +9,6 @@ const ChooseBranch: React.FC<{}> = () => {
     const { initialState, setInitialState } = useModel('@@initialState');
     const [ DrawerVisible, setDrawerVisible] = useState(false);
     const [ SelectBranchID, ] = useState(initialState?.currentBranch?.BranchID);
-
-    /**
-     * 第2个参数传 [] 相当于 componentDidMount 钩子
-     */
-    useEffect(() =>{
-    },[]);
 
     /**
      * 点击切换公司

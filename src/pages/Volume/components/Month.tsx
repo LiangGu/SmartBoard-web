@@ -120,24 +120,6 @@ const Month: React.FC<{}> = () => {
     };
 
     /**
-     * 第2个参数传 [] 相当于 componentDidMount 钩子
-     */
-    useEffect(() => {
-        let SearchInfo: object = {
-            BranchID: initialState?.currentBranch?.BranchID,
-            // YearList: initialState?.searchInfo?.YearList,
-            Year: initialState?.searchInfo?.Year,
-            // Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
-            TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
-        };
-        if (initialState?.currentBranch || initialState?.searchInfo) {
-            fetchData(SearchInfo);
-        }
-    }, []);
-
-    /**
      * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
      */
     useEffect(() => {

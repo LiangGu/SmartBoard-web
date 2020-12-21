@@ -1,17 +1,8 @@
-import React,{ useEffect } from 'react';
-import { useModel,} from 'umi';
+import React from 'react';
 import { PageContainer} from '@ant-design/pro-layout';
 import { Card, Row, Col } from 'antd';
 
 const Home: React.FC<{}> = () => {
-  const { initialState, } = useModel('@@initialState');
-
-  /**
-   * 第2个参数传 [] 相当于 componentDidMount 钩子
-   */
-  useEffect(() =>{
-
-  },[]);
 
   return (
     <PageContainer>

@@ -93,18 +93,6 @@ const Debt: React.FC<{}> = () => {
     };
 
     /**
-     * 第2个参数传 [] 相当于 componentDidMount 钩子
-     */
-    useEffect(() => {
-        let SearchInfo: object = {
-            BranchID: initialState?.currentBranch?.BranchID,
-        };
-        if (initialState?.currentBranch) {
-            fetchData(SearchInfo);
-        }
-    }, []);
-
-    /**
      * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
      */
     useEffect(() => {

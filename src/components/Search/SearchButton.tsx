@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, } from 'react';
+import React, { useState, useContext, } from 'react';
 import { useModel } from 'umi';
 import { Button, Drawer, Checkbox, Row, Col, Radio, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
@@ -51,14 +51,6 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     const [indeterminate5, setIndeterminate5] = useState(false);
     const [checkAll5, setCheckAll5] = useState(true);
-
-
-    /**
-     * 第2个参数传 [] 相当于 componentDidMount 钩子
-     */
-    useEffect(() => {
-
-    }, []);
 
     /**
      * 单选
