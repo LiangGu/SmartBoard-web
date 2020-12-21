@@ -29,21 +29,54 @@ export const extend = (dest: any[], source: any[]): void => {
 }
 
 /**
- * 动态获取数组中最大的数
+ * 柱状图动态获取最大值
+ * @param list 
  */
-export const getMaximumValue = (list: Array<Number>) => {
-    let maximumValue = list[0];
-    for (let i = 0; i < list.length; i++) {
-        if (maximumValue < list[i]) {
-            maximumValue = list[i];
-        }
+export const getMaxValue = (list: Array<any>) => {
+    let max = 0;
+    let maxint = 0;
+    let maxval = 0;
+    if (list && list.length > 0) {
+        list.forEach((el) => {
+            el.forEach((el1: any) => {
+                if (!(el1 === undefined || el1 === '')) {
+                    if (max < el1) {
+                        max = el1;
+                    }
+                }
+            })
+        })
+        maxint = Math.ceil(max / 9.5);      //不让最高的值超过最上面的刻度
+        maxval = maxint * 10;               //让显示的刻度是整数
     }
-    // 向上取整
-    let max = Math.ceil(parseFloat(maximumValue.toString()));
-    if(max %5 !=0 ){
-        max = max+(5-max%5);
+    return maxval;
+}
+
+/**
+ * 柱状图动态获取最小值
+ * @param list 
+ */
+export const getMinValue = (list: Array<any>) => {
+    let min = 0;
+    let minint = 0;
+    let minval = 0;
+    if (list && list.length > 0) {
+        console.log(list)
+        list.forEach((el) => {
+            console.log(el)
+            el.forEach((el1: any) => {
+                console.log(el1)
+                if (!(el1 === undefined || el1 === '')) {
+                    if (min > el1) {
+                        min = el1;
+                    }
+                }
+            })
+        })
+        minint = Math.floor(min / 10);
+        minval = minint * 10;               //让显示的刻度是整数
     }
-    return Math.ceil(max*1.1);
+    return minval;
 }
 
 /**

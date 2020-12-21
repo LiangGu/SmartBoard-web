@@ -12,7 +12,7 @@ import 'echarts/lib/component/tooltip'
 //调用API
 import { getMonthChartData, } from '@/services/volume';
 //调用公式方法
-import { getMaximumValue, } from '@/utils/utils';
+import { getMaxValue, getMinValue, } from '@/utils/utils';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 import SearchResultList from '@/components/Search/SearchResultList';
@@ -80,19 +80,20 @@ const Month: React.FC<{}> = () => {
                     type: 'value',
                     scale: true,
                     name: 'RT',
-                    min: 0,
-                    max: getMaximumValue(VolumeData),
+                    min: getMinValue([VolumeData, IncomeDate]),
+                    max: getMaxValue([VolumeData, IncomeDate]),
                     splitNumber: 5,
-                    interval: Math.ceil(getMaximumValue(VolumeData) / 5)
+                    interval: (getMaxValue([VolumeData, IncomeDate]) - getMinValue([VolumeData, IncomeDate])) / 5
                 },
                 {
                     type: 'value',
                     scale: true,
                     name: 'CNY(千)',
-                    min: 0,
-                    max: getMaximumValue(IncomeDate),
+                    min: getMinValue([VolumeData, IncomeDate]),
+                    max: getMaxValue([VolumeData, IncomeDate]),
                     splitNumber: 5,
-                    interval: Math.ceil(getMaximumValue(IncomeDate) / 5)
+                    interval: (getMaxValue([VolumeData, IncomeDate]) - getMinValue([VolumeData, IncomeDate])) / 5
+
                 }
             ],
             series: [
@@ -123,7 +124,7 @@ const Month: React.FC<{}> = () => {
             BranchID: initialState?.currentBranch?.BranchID,
             // YearList: initialState?.searchInfo?.YearList,
             Year: initialState?.searchInfo?.Year,
-            MonthList: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
@@ -141,7 +142,7 @@ const Month: React.FC<{}> = () => {
             BranchID: initialState?.currentBranch?.BranchID,
             // YearList: initialState?.searchInfo?.YearList,
             Year: initialState?.searchInfo?.Year,
-            MonthList: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],

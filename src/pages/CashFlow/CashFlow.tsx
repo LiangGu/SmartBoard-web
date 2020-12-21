@@ -96,7 +96,7 @@ const CashFlow: React.FC<{}> = () => {
       ],
       series: [{
         name: '现金流',
-        color: '#ff0005',
+        color: '#FF0005',
         type: 'line',
         barWidth: 20,
         itemStyle: {
@@ -104,10 +104,10 @@ const CashFlow: React.FC<{}> = () => {
             //*根据后台数据动态为每条数据添加不同的颜色
             color: function (params: any) {
               if (params.value < 0) {
-                let color = ['#CC3300'];
+                let color = ['#FF0005'];
                 return params.itemStyle = color;
               } else {
-                let color = ['#FFCC00'];
+                let color = ['#13E000'];
                 return params.itemStyle = color;
               }
             },
