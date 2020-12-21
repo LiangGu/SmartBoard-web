@@ -6,7 +6,7 @@ import { request } from 'umi';
  * Date:2020-12-10
  */
 export async function getICProfitChartData(params?: any) {
-  return request<API.ResponseType>(`/api/Board/GetMonthFee`, {
+  return request(`/api/Board/GetMonthFee`, {
     method: 'POST',
     data: params,
   });

@@ -50,7 +50,6 @@ declare namespace API {
   }
 
   export interface ResponseType {
-    [x: string]: any;
     Result?: boolean;
     Content?: any;
     Page?: {};

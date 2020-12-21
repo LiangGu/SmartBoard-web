@@ -18,7 +18,7 @@ export async function getMonthChartData(params?: any) {
  * Date:2020-12-20
  */
 export async function getPortChartData(params?: any) {
-  return request<API.ResponseType>(`/api/Board/GetVolumeByPort`, {
+  return request(`/api/Board/GetVolumeByPort`, {
     method: 'POST',
     data: params,
   });

@@ -34,12 +34,20 @@ const Debt: React.FC<{}> = () => {
             let ReMoney180List: any = [];
             let ReMoney181List: any = [];
             if (result && result.length > 0) {
-                ReMoney30List = getTotalValue(Array.from(result, x => (x.ReMoney30 / 1000))).toFixed(2);
-                ReMoney45List = getTotalValue(Array.from(result, x => (x.ReMoney45 / 1000))).toFixed(2);
-                ReMoney60List = getTotalValue(Array.from(result, x => (x.ReMoney60 / 1000))).toFixed(2);
-                ReMoney90List = getTotalValue(Array.from(result, x => (x.ReMoney90 / 1000))).toFixed(2);
-                ReMoney180List = getTotalValue(Array.from(result, x => (x.ReMoney180 / 1000))).toFixed(2);
-                ReMoney181List = getTotalValue(Array.from(result, x => (x.ReMoney181 / 1000))).toFixed(2);
+                result.forEach((x: { ReMoney30: any;ReMoney45: any;ReMoney60: any;ReMoney90: any;ReMoney180: any;ReMoney181: any; }) => {
+                    ReMoney30List.push(x.ReMoney30 / 1000);
+                    ReMoney45List.push(x.ReMoney45 / 1000);
+                    ReMoney60List.push(x.ReMoney60 / 1000);
+                    ReMoney90List.push(x.ReMoney90 / 1000);
+                    ReMoney180List.push(x.ReMoney180 / 1000);
+                    ReMoney181List.push(x.ReMoney181 / 1000);
+                });
+                ReMoney30List = getTotalValue(ReMoney30List).toFixed(2);
+                ReMoney45List = getTotalValue(ReMoney45List).toFixed(2);
+                ReMoney60List = getTotalValue(ReMoney60List).toFixed(2);
+                ReMoney90List = getTotalValue(ReMoney90List).toFixed(2);
+                ReMoney180List = getTotalValue(ReMoney180List).toFixed(2);
+                ReMoney181List = getTotalValue(ReMoney181List).toFixed(2);
             }
             let DebtList: any = [ReMoney30List, ReMoney45List, ReMoney60List, ReMoney90List, ReMoney180List, ReMoney181List];
             //将值传给初始化图表的函数

@@ -6,7 +6,7 @@ import { request } from 'umi';
  * Date:2020-12-14
  */
 export async function getRankChartData(params?: any) {
-  return request<API.ResponseType>(`/api/Board/GetCustomerTop`, {
+  return request(`/api/Board/GetCustomerTop`, {
     method: 'POST',
     data: params,
   });
