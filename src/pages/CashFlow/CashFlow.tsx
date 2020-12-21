@@ -16,6 +16,8 @@ import 'echarts/lib/component/toolbox';
 import 'echarts/lib/component/dataZoom';
 //调用API
 import { getCashFlowChartData, } from '@/services/cashflow';
+//调用公式方法
+import { sortObjectArr, } from '@/utils/utils';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 import SearchResultList from '@/components/Search/SearchResultList';
@@ -34,10 +36,14 @@ const CashFlow: React.FC<{}> = () => {
       return;
     }
     if (result) {
+      let SortResultByDate: any = [];
       let SumDateList: any = [];
       let SumTodayList: any = [];
       if (result && result.length > 0) {
-        result.map((x: { SumDate: string; SumToday: any; }) => {
+        // 1、先把数据按照 日期 排序
+        SortResultByDate = result.sort(sortObjectArr('SumDate'));
+        // 2、分别存在不同的数组中
+        SortResultByDate.map((x: { SumDate: string; SumToday: any; }) => {
           SumDateList.push(x.SumDate);
           SumTodayList.push((x.SumToday / 1000).toFixed(2));
         });
