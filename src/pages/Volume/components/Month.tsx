@@ -15,6 +15,7 @@ import { getMonthChartData, } from '@/services/volume';
 import { getMaxValue, getMinValue, } from '@/utils/utils';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
+import SearchResultList from '@/components/Search/SearchResultList';
 //重点代码<React hooks之useContext父子组件传值>
 import ContextProps from '@/createContext';
 

@@ -41,7 +41,8 @@ const CashFlow: React.FC<{}> = () => {
       let SumTodayList: any = [];
       if (result && result.length > 0) {
         // 1、先把数据按照 日期 排序
-        SortResultByDate = result.sort(sortObjectArr('SumDate',1));
+        // SortResultByDate = result.sort(sortObjectArr('SumDate',1));
+        SortResultByDate = result.sort((a: any, b: any) => a.SumDate.localeCompare(b.SumDate));
         // 2、处理数据:数据累加
         if (SortResultByDate && SortResultByDate.length > 0) {
           SortResultByDate.forEach((x: { TotalAR: any; }) => {
@@ -50,7 +51,7 @@ const CashFlow: React.FC<{}> = () => {
         }
         // * 从第1个值开始,对应的值等于:当前值 + 当前值的后一个值
         for (let i = 1; i < CashFlowSourceValue.length; i++) {
-          CashFlowSourceValue[i] = CashFlowSourceValue[i] + CashFlowSourceValue[i-1];
+          CashFlowSourceValue[i] = CashFlowSourceValue[i] + CashFlowSourceValue[i - 1];
         }
         // 3、取现金流的 key 值
         SortResultByDate.map((x: { SumDate: string; }) => {
@@ -73,7 +74,7 @@ const CashFlow: React.FC<{}> = () => {
     let myChart = echarts.init(element as HTMLDivElement);
     let option: any = {
       title: {
-        text: '现金流',
+        text: '日现金流走势',
       },
       tooltip: {
         trigger: 'axis',
@@ -93,14 +94,14 @@ const CashFlow: React.FC<{}> = () => {
         }
       },
       xAxis: {
-        min: 1,
-        max: SumDateList.length,
-        axisLabel: { interval: 0, },
-        show: false,
+        type: 'category',
         boundaryGap: false,
         data: [...SumDateList]
       },
-      yAxis: { name: '单位: CNY(千)' },
+      yAxis: {
+        type: 'value',
+        name: '单位: CNY(千)'
+      },
       dataZoom: [
         {
           type: 'slider',         // 滑动条
