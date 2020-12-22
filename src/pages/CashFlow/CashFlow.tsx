@@ -36,15 +36,29 @@ const CashFlow: React.FC<{}> = () => {
     }
     if (result) {
       let SortResultByDate: any = [];
+      let CashFlowSourceValue: any = [];
       let SumDateList: any = [];
       let SumTodayList: any = [];
       if (result && result.length > 0) {
         // 1、先把数据按照 日期 排序
         SortResultByDate = result.sort(sortObjectArr('SumDate'));
-        // 2、分别存在不同的数组中
-        SortResultByDate.map((x: { SumDate: string; SumToday: any; }) => {
+        // 2、处理数据:数据累加
+        if (SortResultByDate && SortResultByDate.length > 0) {
+          SortResultByDate.forEach((x: { TotalAR: any; }) => {
+            CashFlowSourceValue.push(x.TotalAR);
+          });
+        }
+        // * 从第1个值开始,对应的值等于:当前值 + 当前值的后一个值
+        for (let i = 1; i < CashFlowSourceValue.length; i++) {
+          CashFlowSourceValue[i] = CashFlowSourceValue[i] + CashFlowSourceValue[i-1];
+        }
+        // 3、取现金流的 key 值
+        SortResultByDate.map((x: { SumDate: string; }) => {
           SumDateList.push(x.SumDate);
-          SumTodayList.push((x.SumToday / 1000).toFixed(2));
+        });
+        // 3、取现金流的 value 值
+        CashFlowSourceValue.map((x: Number) => {
+          SumTodayList.push(x.toFixed(2));
         });
       }
       //将值传给初始化图表的函数
@@ -83,7 +97,6 @@ const CashFlow: React.FC<{}> = () => {
         max: SumDateList.length,
         axisLabel: { interval: 0, },
         show: false,
-        name: `${SumDateList.length}`,
         boundaryGap: false,
         data: [...SumDateList]
       },
@@ -93,7 +106,7 @@ const CashFlow: React.FC<{}> = () => {
           type: 'slider',         // 滑动条
           xAxisIndex: 0,          // Y轴
           start: 0,               // 左边在 0% 的位置
-          end: 100,               // 右边在 100% 的位置
+          end: 50,                // 右边在 10% 的位置
         },
       ],
       series: [{

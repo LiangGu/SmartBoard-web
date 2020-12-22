@@ -13,7 +13,6 @@ import 'echarts/lib/component/tooltip'
 import { getMonthChartData, } from '@/services/volume';
 //调用公式方法
 import { getMaxValue, getMinValue, } from '@/utils/utils';
-import { getBranchID } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 import SearchResultList from '@/components/Search/SearchResultList';
@@ -23,12 +22,11 @@ import ContextProps from '@/createContext';
 const Month: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
-    const branchID: string|null = getBranchID();
     //获取数据
     let fetchData = async (SearchInfo: any) => {
         setloading(true);
         const result = await getMonthChartData(SearchInfo);
-        if (!result || branchID) {
+        if (!result || initialState?.currentBranch?.BranchID == undefined) {
             return;
         }
         if (result) {
@@ -124,7 +122,7 @@ const Month: React.FC<{}> = () => {
      */
     useEffect(() => {
         let SearchInfo: object = {
-            BranchID: Number(branchID),
+            BranchID: initialState?.currentBranch?.BranchID,
             // YearList: initialState?.searchInfo?.YearList,
             Year: initialState?.searchInfo?.Year,
             // Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -132,7 +130,7 @@ const Month: React.FC<{}> = () => {
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
         };
-        if (branchID || initialState?.searchInfo) {
+        if (initialState?.currentBranch?.BranchID || initialState?.searchInfo) {
             fetchData(SearchInfo);
         }
     }, [initialState]);

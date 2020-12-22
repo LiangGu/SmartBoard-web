@@ -17,7 +17,7 @@ import { getTotalValue, } from '@/utils/utils';
 
 const Debt: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
-    const [loading, setloading] = useState(false);
+    const [ loading, setloading] = useState(false);
 
     //获取数据
     let fetchData = async (SearchInfo: any) => {

@@ -3,7 +3,7 @@ import { LogoutOutlined,} from '@ant-design/icons';
 import { Menu, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import { outLogin } from '@/services/login';
-import { setSystemMes, getUserName, getBranchID} from '@/utils/auths';
+import { setSystemMes, getUserName,} from '@/utils/auths';
 import { stringify } from 'querystring';
 import styles from './index.less';
 //引入组件
@@ -75,10 +75,11 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     return loading;
   }
   const displayName:string | null = getUserName();
-  const branchID:string | null = getBranchID();
   if (!displayName) {
     return loading;
   }
+
+  const { currentUser , currentBranch} = initialState;
 
   const menuHeaderDropdown = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
@@ -92,7 +93,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     <div className={styles.right}>
         {/* 总部人员登录可以选择公司 */}
         {
-          branchID == '1'?
+          currentUser && currentUser.BranchID == 1?
           <>
             <ChooseBranch/>
             {/* <p>{currentBranch?.BranchName}</p> */}

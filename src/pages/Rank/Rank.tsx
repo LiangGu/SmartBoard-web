@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
-import { Card, Spin, } from 'antd';
+import { Card, Radio, Spin, } from 'antd';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts'
 // 引入需要用到的图表
@@ -9,6 +9,7 @@ import 'echarts/lib/chart/bar'
 // 引入提示框和标题组件
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/tooltip'
+import styles from '@/global.less';
 //调用API
 import { getRankChartData, } from '@/services/rank';
 //调用公式方法
@@ -21,7 +22,14 @@ import ContextProps from '@/createContext';
 
 const Rank: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
-    const [loading, setloading] = useState(false);
+    const [ loading, setloading] = useState(false);
+    const [ type, setType] = useState('收入');
+    // 将获取到的数据保存起来<用于在切换 Type 时直接使用而不用再调用后台接口>
+    const [ rankTopCTNameList, setRankTopCTNameList] = useState([]);
+    const [ rankTopTotalARList, setRankTopTotalARList] = useState([]);
+    const [ rankTopTotalFCLList, setRankTopTotalFCLList] = useState([]);
+    const [ rankTopTotalLCLList, setRankTopTotalLCLList] = useState([]);
+    const [ rankTopTotalBulkList, setRankTopTotalBulkList] = useState([]);
 
     //获取数据
     let fetchData = async (SearchInfo: any) => {
@@ -50,16 +58,40 @@ const Rank: React.FC<{}> = () => {
                     RankTopCTNameList.push(x.CustomerName);
                 });
             }
+            // *保存在 State 中
+            setRankTopCTNameList(RankTopCTNameList);
+            setRankTopTotalARList(RankTopTotalARList);
+            setRankTopTotalFCLList(RankTopTotalFCLList);
+            setRankTopTotalLCLList(RankTopTotalLCLList);
+            setRankTopTotalBulkList(RankTopTotalBulkList);
+
             //将值传给初始化图表的函数
-            initChart(RankTopCTNameList, RankTopTotalARList,);
+            initChart(RankTopCTNameList, RankTopTotalARList, RankTopTotalFCLList, RankTopTotalLCLList, RankTopTotalBulkList);
             setloading(false);
         }
     }
 
     //初始化图表
-    let initChart = (RankTopCTNameList: [], RankTopTotalARList: [],) => {
+    let initChart = (RankTopCTNameList: [], RankTopTotalARList: [], RankTopTotalFCLList: [], RankTopTotalLCLList: [], RankTopTotalBulkList: [],) => {
         let element = document.getElementById('main');
         let myChart = echarts.init(element as HTMLDivElement);
+        console.log(type)
+        // let type: Number = 2;
+        // let seriesData1 = [
+        //     {
+        //         name: '收入',
+        //         type: 'bar',
+        //         data: [...RankTopTotalARList]
+        //     }
+        // ];
+        // let seriesData2 = [
+        //     {
+        //         name: '整箱',
+        //         type: 'bar',
+        //         data: [...RankTopTotalFCLList]
+        //     }
+        // ]
+
         let option: any = {
             title: {
                 text: '前10客户收入排名',
@@ -81,6 +113,7 @@ const Rank: React.FC<{}> = () => {
                     saveAsImage: { show: true }
                 }
             },
+            legend: {data: ['收入', '整箱', '拼箱', '散货']},
             grid: {
                 left: '3%',
                 right: '4%',
@@ -104,7 +137,7 @@ const Rank: React.FC<{}> = () => {
                     formatter: function (value: any) {
                         if (value.length > 40) {
                             return value.substring(0, 40) + '\n' + value.substring(40, value.length);
-                        }else if (value.length > 20) {
+                        } else if (value.length > 20) {
                             return value.substring(0, 20) + '\n' + value.substring(20, value.length);
                         } else {
                             return value;
@@ -112,13 +145,29 @@ const Rank: React.FC<{}> = () => {
                     }
                 },
             },
-            series: [
-                {
-                    name: '收入',
-                    type: 'bar',
-                    data: [...RankTopTotalARList]
-                },
-            ]
+            // series: type == 1 ? seriesData1 : seriesData2,
+            // series: [
+                // {
+                //     name: '收入',
+                //     type: 'bar',
+                //     data: [...RankTopTotalARList]
+                // },
+                // {
+                //     name: '整箱',
+                //     type: 'bar',
+                //     data: [...RankTopTotalFCLList]
+                // },
+                // {
+                //     name: '拼箱',
+                //     type: 'bar',
+                //     data: [...RankTopTotalLCLList]
+                // },
+                // {
+                //     name: '散货',
+                //     type: 'bar',
+                //     data: [...RankTopTotalBulkList]
+                // },
+            // ]
         };
         myChart.setOption(option);
         window.addEventListener('resize', () => { myChart.resize() });
@@ -142,13 +191,32 @@ const Rank: React.FC<{}> = () => {
         }
     }, [initialState]);
 
+    /**
+     * 点击切换统计图表类型
+     */
+    const onChangeType = (e:any) => {
+        setType(e.target.value);
+    }
+
     return <>
         {/* <ContextProps.Provider value={3}>
             <SearchResultList />
         </ContextProps.Provider> */}
 
         <Spin tip="页面正在加载中..." spinning={loading}>
-            <Card>
+            <Card 
+                extra={
+                    <>
+                        {/* 切换统计图表类型 */}
+                        <Radio.Group defaultValue={type} buttonStyle="solid" onChange={onChangeType}>
+                            <Radio.Button value="收入">收入</Radio.Button>
+                            <Radio.Button value="整箱">整箱</Radio.Button>
+                            <Radio.Button value="拼箱">拼箱</Radio.Button>
+                            <Radio.Button value="散货">散货</Radio.Button>
+                        </Radio.Group>
+                    </>
+                }
+            >
                 <div id="main" style={{ width: '100%', height: 600 }}></div>
             </Card>
 

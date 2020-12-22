@@ -23,7 +23,7 @@ import logo from '@/assets/logo.svg'
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
-  // currentBranch?: API.SelectBranchInfo;
+  currentBranch?: API.SelectBranchInfo;
   searchInfo?: API.SearchInfo;
   searchResultList?: API.SearchResultList;
   menuData?: MenuDataItem[];
