@@ -47,6 +47,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         setInitialState({
           ...initialState,
           currentUser: undefined,
+          currentBranch: undefined,
           searchInfo: undefined,
           searchResultList: undefined,
         });
