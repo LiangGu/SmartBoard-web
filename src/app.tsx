@@ -90,6 +90,7 @@ export const layout = ({
       if (!userID && location.pathname !== '/user/login') {
         history.push('/user/login');
       }
+      
     },
     
     menuHeaderRender: false,
