@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicLayoutProps, Settings as LayoutSettings, MenuDataItem, SettingDrawerProps} from '@ant-design/pro-layout';
+import { BasicLayoutProps, Settings as LayoutSettings, MenuDataItem, } from '@ant-design/pro-layout';
 import { notification } from 'antd';
 import { history, RequestConfig } from 'umi';
 import RightContent from '@/components/RightContent';
@@ -23,30 +23,14 @@ import logo from '@/assets/logo.svg'
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
-  currentBranch?: API.SelectBranchInfo;
+  // currentBranch?: API.SelectBranchInfo;
   searchInfo?: API.SearchInfo;
   searchResultList?: API.SearchResultList;
   menuData?: MenuDataItem[];
-  settingDrawer?: SettingDrawerProps;
 }> {
-  try{
-    // 如果是登录页面，不执行
-    if (history.location.pathname !== '/user/login') {
-      return {
-        settings: defaultSettings,
-        settingDrawer: {
-          hideCopyButton: true,
-          hideHintAlert: true
-        }
-      };
-    }else{
-      
-    }
-  }catch(error){
-    history.push('/login');
-  }
-  
-  return {  settings: defaultSettings };
+  return {  
+    settings: defaultSettings,
+   };
 }
 
 const IconMap = {
@@ -99,11 +83,11 @@ export const layout = ({
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => false,
-    onPageChange: () => {
-      const { currentUser } = initialState;
+    onPageChange: (e) => {
       const { location } = history;
+      const userID : string | null = getUserID();
       // 如果没有登录,重定向到 login
-      if (!currentUser && location.pathname !== '/user/login') {
+      if (!userID && location.pathname !== '/user/login') {
         history.push('/user/login');
       }
     },
