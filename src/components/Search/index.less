@@ -1,7 +1,9 @@
 @import '~antd/es/style/themes/default.less';
 
-.searchBtn{width: 50px;height: 50px;border-radius: 25px;position: absolute;bottom: 20px;right: 20px;}
+// 搜索按钮组件
+.searchBtn{width: 50px;height: 50px;border-radius: 25px;position: absolute;bottom: 0;right: 0;}
 
+// 搜索条件区域样式
 .searchArea{
     width: 100%;
     border: 1px dashed #000;
@@ -10,17 +12,10 @@
     .searchAreaLable{
         border-bottom: 1px solid #000;
         padding-bottom: 10px;
-        .searchAreaTitle{
-            font-weight: bold;
-            color: #000;
-        }
+        .searchAreaTitle{font-weight: bold;color: #000;}
     }
-    .searchAreaContent{
-        padding-top: 10px;
-    }
+    .searchAreaContent{padding-top: 10px;}
 }
 
-.searchResultCard{
-    border: none !important;
-    margin-bottom: 12px !important;
-}
+// 搜索结果展示 Card
+.searchResultCard{border: none !important;margin-bottom: 12px !important;}

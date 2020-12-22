@@ -58,8 +58,8 @@ const CashFlow: React.FC<{}> = () => {
           SumDateList.push(x.SumDate);
         });
         // 3、取现金流的 value 值
-        CashFlowSourceValue.map((x: Number) => {
-          SumTodayList.push(x.toFixed(2));
+        CashFlowSourceValue.map((x: any) => {
+          SumTodayList.push((x / 1000).toFixed(2));
         });
       }
       //将值传给初始化图表的函数
@@ -107,7 +107,7 @@ const CashFlow: React.FC<{}> = () => {
           type: 'slider',         // 滑动条
           xAxisIndex: 0,          // Y轴
           start: 0,               // 左边在 0% 的位置
-          end: 50,                // 右边在 10% 的位置
+          end: 100,                // 右边在 10% 的位置
         },
       ],
       series: [{

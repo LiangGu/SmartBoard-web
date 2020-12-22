@@ -185,7 +185,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                 visible={DrawerVisible}
                 key={"right"}
                 footer={
-                    <Button type="primary" style={{ width: "100%" }} onClick={onSearch}>
+                    <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%" }} onClick={onSearch}>
                         确定
                     </Button>
                 }
