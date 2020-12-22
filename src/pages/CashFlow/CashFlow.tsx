@@ -41,7 +41,7 @@ const CashFlow: React.FC<{}> = () => {
       let SumTodayList: any = [];
       if (result && result.length > 0) {
         // 1、先把数据按照 日期 排序
-        SortResultByDate = result.sort(sortObjectArr('SumDate'));
+        SortResultByDate = result.sort(sortObjectArr('SumDate',1));
         // 2、处理数据:数据累加
         if (SortResultByDate && SortResultByDate.length > 0) {
           SortResultByDate.forEach((x: { TotalAR: any; }) => {

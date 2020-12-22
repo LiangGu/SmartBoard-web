@@ -45,8 +45,8 @@ export const getMaxValue = (list: Array<any>) => {
             //         }
             //     }
             // })
-            if(!(element === undefined || element === '')){
-                if(max < element){
+            if (!(element === undefined || element === '')) {
+                if (max < element) {
                     max = element;
                 }
             }
@@ -74,8 +74,8 @@ export const getMinValue = (list: Array<any>) => {
             //         }
             //     }
             // })
-            if(!(element === undefined || element === '')){
-                if(min > element){
+            if (!(element === undefined || element === '')) {
+                if (min > element) {
                     min = element;
                 }
             }
@@ -97,16 +97,16 @@ export const getTotalValue = (list: Array<Number>) => {
 
 /**
  * 对象数组排序
+ * T <1、从小到大 2、从大到小>
  */
-export const sortObjectArr = (prop: any) => {
+export const sortObjectArr = (prop: any, T: Number) => {
     return function (obj1: any, obj2: any) {
-        var val1 = obj1[prop];
-        var val2 = obj2[prop]; if (val1 < val2) {
-            return -1;
-        } else if (val1 > val2) {
-            return 1;
+        const val1 = obj1[prop];
+        const val2 = obj2[prop];
+        if (T == 1) {
+            return val1 - val2;
         } else {
-            return 0;
+            return val2 - val1;
         }
     }
 }
