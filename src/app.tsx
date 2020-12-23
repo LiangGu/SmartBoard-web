@@ -135,13 +135,13 @@ const errorHandler = (error: ResponseError) => {
       description: errorText,
     });
   }
-
-  if (!data) {
-    notification.error({
-      description: '您的网络发生异常,无法连接服务器',
-      message: '网络异常',
-    });
-  }
+  // 注释掉:要不线上用户退出登录会报这个错误
+  // if (!data) {
+  //   notification.error({
+  //     description: '您的网络发生异常,无法连接服务器',
+  //     message: '网络异常',
+  //   });
+  // }
   throw error;
 };
 
