@@ -1,5 +1,6 @@
 import Global from '@/global.d';
 import React,{ useState, } from 'react';
+import { useModel } from 'umi';
 import { Drawer, Button, Radio, Row, Col, } from 'antd';
 import styles from './index.less';
 //引入基础数据
@@ -18,6 +19,7 @@ import {
     getselectYear,
 } from '@/utils/auths';
 const ChooseBranch: React.FC<{}> = () => {
+    const { initialState, setInitialState } = useModel('@@initialState');
     const [ DrawerVisible, setDrawerVisible] = useState(false);
     const [ SelectBranchID,] = useState(() =>{
         // 惰性赋值 any 类型,要不默认值不起作用
@@ -43,6 +45,11 @@ const ChooseBranch: React.FC<{}> = () => {
      * 点击选择公司
      */
     const onChange = (e:any) => {
+        let searchInfo: object = Object.assign({initialState},{UpdateIndex: new Date().getTime()});
+        setInitialState({
+            ...initialState,
+            ...searchInfo,
+        });
         // 重置 Session 中的数据
         let userName:any = getUserName();
         let userID:any = getUserID();
@@ -67,8 +74,6 @@ const ChooseBranch: React.FC<{}> = () => {
         setDrawerVisible(false)
     }
     
-    console.log(SelectBranchID)
-
     return (
         <div>
             <Button

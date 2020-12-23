@@ -129,7 +129,7 @@ export const getYearList = () => {
     const date = new Date();
     const year = date.getFullYear();
     const YearList = [];
-    for (let i = 2018; i <= year; i++) {
+    for (let i = 2020; i <= year; i++) {
         YearList.push({
             Key: i,
             Value: `${i}年`,

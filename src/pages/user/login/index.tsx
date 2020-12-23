@@ -59,9 +59,12 @@ const Login: React.FC<{}> = () => {
         //当前登录用户信息
         let currentUser: API.CurrentUser = res.Content;
         let menuData:MenuDataItem[] = menu.menuData;
+        //让系统实时查询
+        let searchInfo:object = Object.assign({},{ UpdateIndex : new Date().getTime()});
         setInitialState({
           ...initialState,
           currentUser,
+          searchInfo,
           ...Object.assign(menuData),
         });
         let sysSaveData: Global.SessionSysSave = {
@@ -74,7 +77,7 @@ const Login: React.FC<{}> = () => {
           //将选择的年份和公司信息<会变化的数据>存在Session,防止用户刷新出现问题
           selectBranchID: res.Content.BranchID　== 1 ? 0 : res.Content.BranchID,      //总部BranchID传0
           selectBranchName: res.Content.BranchID　== 1 ? "香港外运(总部)" : BranchList.find( x => x.Key == res.Content.BranchID)?.Value || '',      //总部公司名显示:香港外运(总部)
-          selectYear: (new Date().getFullYear()).toString(),
+          selectYear: new Date().getFullYear(),
         }
         setSystemMes(sysSaveData);
         replaceGoto();

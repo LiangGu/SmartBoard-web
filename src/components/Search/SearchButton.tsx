@@ -158,6 +158,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
     const onSearch = () => {
         //Step 1 <*如果页面的搜索条件不同,则下面的 searchInfo 可以根据 PropsState 来判断赋值>
         let searchInfo: object = {
+            UpdateIndex: new Date().getTime(),
             YearList: checkedList1,
             MonthList: checkedList2,
             BizType1List: checkedList3,
@@ -233,7 +234,8 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" }} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                // YearList 变化时要修改下方 <Col span={8}>
+                                                return <Col span={24} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" }} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -305,7 +307,8 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" }} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                // YearList 变化时要修改下方 <Col span={8}>
+                                                return <Col span={24} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" }} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -326,7 +329,8 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                                // YearList 变化时要修改下方 <Col span={8}>
+                                                return <Col span={24} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -341,7 +345,8 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" }} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                // YearList 变化时要修改下方 <Col span={8}>
+                                                return <Col span={24} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" }} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
