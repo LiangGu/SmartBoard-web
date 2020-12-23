@@ -12,6 +12,8 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/tooltip'
 //调用API
 import { getICProfitChartData, } from '@/services/icprofit';
+//调用公式方法
+import { sortObjectArr, } from '@/utils/utils';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 import SearchResultList from '@/components/Search/SearchResultList';
@@ -30,11 +32,14 @@ const ICProfit: React.FC<{}> = () => {
       return;
     }
     if (result) {
+      let SortICProfitList: any = [];
       let TotalARList: any = [];
       let TotalAPList: any = [];
       let ProfitList: any = [];
-      if (result && result.length > 0) {
-        result.map((x: { TotalAR: any; TotalAP: any; Profit: any }) => {
+      // 根据 FinanceMonth 排序
+      SortICProfitList = result.sort(sortObjectArr('FinanceMonth',1));
+      if (SortICProfitList && SortICProfitList.length > 0) {
+        SortICProfitList.map((x: { TotalAR: any; TotalAP: any; Profit: any }) => {
           TotalARList.push((x.TotalAR / 1000).toFixed(2));
           TotalAPList.push((x.TotalAP / 1000).toFixed(2));
           ProfitList.push((x.Profit / 1000).toFixed(2));
