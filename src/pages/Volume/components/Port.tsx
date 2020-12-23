@@ -23,6 +23,7 @@ const Port: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [ loading, setloading] = useState(false);
     const [type, setType] = useState('收入');
+    const [result, setResult] = useState([]);
 
     //获取数据
     let fetchData = async (SearchInfo: any, T: string) => {
@@ -32,6 +33,7 @@ const Port: React.FC<{}> = () => {
             return;
         }
         if (result && result.length > 0) {
+            setResult(result);
             //将值传给初始化图表的函数
             initChart(result, T,);
             setloading(false);
@@ -39,7 +41,7 @@ const Port: React.FC<{}> = () => {
     }
 
     //初始化图表
-    let initChart = (result: [], type: string) => {
+    let initChart = (result: any, type: string) => {
         let element = document.getElementById('port');
         let myChart = echarts.init(element as HTMLDivElement);
         // 根据 type 排序
@@ -158,16 +160,7 @@ const Port: React.FC<{}> = () => {
      */
     const onChangeType = (e: any) => {
         setType(e.target.value);
-        let SearchInfo: object = {
-            BranchID: initialState?.currentBranch?.BranchID,
-            // YearList: initialState?.searchInfo?.YearList,
-            Year: initialState?.searchInfo?.Year,
-            Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
-            TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
-        };
-        fetchData(SearchInfo, e.target.value);
+        initChart(result, e.target.value);
     }
 
     return <>
