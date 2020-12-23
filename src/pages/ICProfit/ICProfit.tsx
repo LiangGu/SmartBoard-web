@@ -14,9 +14,9 @@ import 'echarts/lib/component/tooltip'
 import { getICProfitChartData, } from '@/services/icprofit';
 //调用公式方法
 import { sortObjectArr, } from '@/utils/utils';
+import { getselectBranchID, getselectYear, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
-import SearchResultList from '@/components/Search/SearchResultList';
 //重点代码<React hooks之useContext父子组件传值>
 import ContextProps from '@/createContext';
 
@@ -28,7 +28,7 @@ const ICProfit: React.FC<{}> = () => {
   let fetchData = async (SearchInfo: any) => {
     setloading(true);
     const result = await getICProfitChartData(SearchInfo);
-    if (!result || initialState?.currentBranch?.BranchID == undefined) {
+    if (!result || getselectBranchID() == '') {
       return;
     }
     if (result) {
@@ -113,25 +113,19 @@ const ICProfit: React.FC<{}> = () => {
    */
   useEffect(() => {
     let SearchInfo: object = {
-      BranchID: initialState?.currentBranch?.BranchID,
-      // YearList: initialState?.searchInfo?.YearList,
-      Year: initialState?.searchInfo?.Year,
-      // Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      BranchID: getselectBranchID(),
+      Year: getselectYear(),
       TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
       TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
       CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
     };
-    if (initialState?.currentBranch || initialState?.searchInfo) {
+    if (getselectBranchID() !=='') {
       fetchData(SearchInfo);
     }
   }, [initialState]);
 
   return (
     <PageContainer>
-      {/* <ContextProps.Provider value={5}>
-        <SearchResultList />
-      </ContextProps.Provider> */}
-
       <Spin tip="页面正在加载中..." spinning={loading}>
         <Card>
           <div id="main" style={{ width: '100%', height: 600 }}></div>

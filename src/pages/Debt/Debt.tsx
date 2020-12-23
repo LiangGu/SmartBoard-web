@@ -14,6 +14,7 @@ import 'echarts/lib/component/tooltip'
 import { getDebtChartData, } from '@/services/debt';
 //调用公式方法
 import { getTotalValue, } from '@/utils/utils';
+import { getselectBranchID, } from '@/utils/auths';
 
 const Debt: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
@@ -23,7 +24,7 @@ const Debt: React.FC<{}> = () => {
     let fetchData = async (SearchInfo: any) => {
         setloading(true);
         const result = await getDebtChartData(SearchInfo);
-        if (!result || initialState?.currentBranch?.BranchID == undefined) {
+        if (!result || getselectBranchID() == '') {
             return;
         }
         if (result) {
@@ -105,9 +106,9 @@ const Debt: React.FC<{}> = () => {
      */
     useEffect(() => {
         let SearchInfo: object = {
-            BranchID: initialState?.currentBranch?.BranchID,
+            BranchID: getselectBranchID(),
         };
-        if (initialState?.currentBranch) {
+        if (getselectBranchID() !=='') {
             fetchData(SearchInfo);
         }
     }, [initialState]);

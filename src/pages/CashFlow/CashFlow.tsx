@@ -17,9 +17,9 @@ import 'echarts/lib/component/dataZoom';
 import { getCashFlowChartData, } from '@/services/cashflow';
 //调用公式方法
 import { sortObjectArr, } from '@/utils/utils';
+import { getselectBranchID, getselectYear, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
-import SearchResultList from '@/components/Search/SearchResultList';
 //重点代码<React hooks之useContext父子组件传值>
 import ContextProps from '@/createContext';
 
@@ -31,7 +31,7 @@ const CashFlow: React.FC<{}> = () => {
   let fetchData = async (SearchInfo: any) => {
     setloading(true);
     const result = await getCashFlowChartData(SearchInfo);
-    if (!result || initialState?.currentBranch?.BranchID == undefined) {
+    if (!result || getselectBranchID() == '') {
       return;
     }
     if (result) {
@@ -141,20 +141,16 @@ const CashFlow: React.FC<{}> = () => {
    */
   useEffect(() => {
     let SearchInfo: object = {
-      BranchID: initialState?.currentBranch?.BranchID,
-      Year: initialState?.searchInfo?.Year,
+      BranchID: getselectBranchID(),
+      Year: getselectYear(),
     };
-    if (initialState?.currentBranch) {
+    if (getselectBranchID() !=='') {
       fetchData(SearchInfo);
     }
   }, [initialState]);
 
   return (
     <PageContainer>
-      {/* <ContextProps.Provider value={4}>
-        <SearchResultList />
-      </ContextProps.Provider> */}
-
       <Spin tip="页面正在加载中..." spinning={loading}>
         <Card>
           <div id="main" style={{ width: '100%', height: 600 }}></div>

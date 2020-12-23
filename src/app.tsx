@@ -23,9 +23,7 @@ import logo from '@/assets/logo.svg'
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
-  currentBranch?: API.SelectBranchInfo;
   searchInfo?: API.SearchInfo;
-  searchResultList?: API.SearchResultList;
   menuData?: MenuDataItem[];
 }> {
   return {  
@@ -64,9 +62,7 @@ export const layout = ({
     initialState: { 
       settings?: LayoutSettings;
       currentUser?: API.CurrentUser;
-      currentBranch?: API.SelectBranchInfo;
       searchInfo?: API.SearchInfo;
-      searchResultList?: API.SearchResultList;
       menuData?: MenuDataItem[];
     };
   }): BasicLayoutProps => {
@@ -97,9 +93,7 @@ export const layout = ({
     logo: logo,
     ...initialState?.settings,
     ...initialState?.currentUser,
-    ...initialState?.currentBranch,
     ...initialState?.searchInfo,
-    ...initialState?.searchResultList,
     ...initialState?.menuData,
   };
 };

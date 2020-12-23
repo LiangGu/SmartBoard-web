@@ -1,14 +1,29 @@
+import Global from '@/global.d';
 import React,{ useState, } from 'react';
-import { useModel } from 'umi';
 import { Drawer, Button, Radio, Row, Col, } from 'antd';
 import styles from './index.less';
 //引入基础数据
 import { BranchList } from '@/utils/baseData';
+import { 
+    setSystemMes,
+    getUserName,
+    getUserID,
+    getBranchID,
+    getBranchCode,
+    getToken,
+    getFuncCurr,
 
+    getselectBranchID,
+    getselectBranchName,
+    getselectYear,
+} from '@/utils/auths';
 const ChooseBranch: React.FC<{}> = () => {
-    const { initialState, setInitialState } = useModel('@@initialState');
     const [ DrawerVisible, setDrawerVisible] = useState(false);
-    const [ SelectBranchID, ] = useState(initialState?.currentBranch?.BranchID);
+    const [ SelectBranchID,] = useState(() =>{
+        // 惰性赋值 any 类型,要不默认值不起作用
+        let selectBranchID:any = getselectBranchID();
+        return selectBranchID;
+    });
 
     /**
      * 点击切换公司
@@ -28,14 +43,31 @@ const ChooseBranch: React.FC<{}> = () => {
      * 点击选择公司
      */
     const onChange = (e:any) => {
-        const selectBranchName:string | undefined = BranchList.find( x => x.Key == e.target.value)?.Value;
-        setInitialState({
-            ...initialState,
-            //保存总部人员选择的公司ID
-            currentBranch: Object.assign({},initialState?.currentBranch,{BranchID:e.target.value,BranchName:selectBranchName},)
-        });
+        // 重置 Session 中的数据
+        let userName:any = getUserName();
+        let userID:any = getUserID();
+        let branchID:any = getBranchID();
+        let branchCode:any = getBranchCode();
+        let token:any = getToken();
+        let funcCurrency:any = getFuncCurr();
+        let selectYear:any = getselectYear();
+        let sysSaveData: Global.SessionSysSave = {
+            userName: userName,
+            userID: userID,
+            branchID: branchID,
+            branchCode: branchCode,
+            token: token,
+            funcCurrency: funcCurrency,
+            // 保存到 Session 中,防止页面刷新数据丢失
+            selectBranchID: e.target.value,
+            selectBranchName: BranchList.find( x => x.Key == e.target.value)?.Value || '',
+            selectYear: selectYear,
+        }
+        setSystemMes(sysSaveData);
         setDrawerVisible(false)
     }
+    
+    console.log(SelectBranchID)
 
     return (
         <div>
@@ -45,7 +77,7 @@ const ChooseBranch: React.FC<{}> = () => {
                 type="dashed"
                 onClick={onMenuClick}
             >
-                {initialState?.currentBranch?.BranchName}
+                {getselectBranchName()}
             </Button>
 
             <Drawer
@@ -58,7 +90,7 @@ const ChooseBranch: React.FC<{}> = () => {
                 key={"right"}
                 width={200}
             >
-                <Radio.Group buttonStyle="solid" onChange={onChange} defaultValue={SelectBranchID}>
+                <Radio.Group buttonStyle="solid" onChange={onChange} defaultValue={parseInt(SelectBranchID)}>
                     <Row>
                         {
                             BranchList && BranchList.length > 0 ? BranchList.map(x =>{

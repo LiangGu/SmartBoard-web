@@ -1,4 +1,4 @@
-import Global from '@/global.d'
+import Global from '@/global.d';
 import { Alert, message } from 'antd';
 import React, { useState } from 'react';
 import { useModel, history, History } from 'umi';
@@ -58,17 +58,10 @@ const Login: React.FC<{}> = () => {
         message.success('登录成功！');
         //当前登录用户信息
         let currentUser: API.CurrentUser = res.Content;
-        //当前总部人员选择的公司信息
-        const selectBranchName:string | undefined = BranchList.find( x => x.Key == res.Content.BranchID)?.Value;
-        //总部BranchID传0＋公司名显示:香港外运(总部)
-        let currentBranch: any = Object.assign({},{BranchID:res.Content.BranchID　== 1 ? 0 : res.Content.BranchID,BranchName:res.Content.BranchID　== 1 ? "香港外运(总部)" : selectBranchName});
-        let searchInfo:object = Object.assign({},{Year: new Date().getFullYear(),});
         let menuData:MenuDataItem[] = menu.menuData;
         setInitialState({
           ...initialState,
           currentUser,
-          currentBranch,
-          searchInfo,
           ...Object.assign(menuData),
         });
         let sysSaveData: Global.SessionSysSave = {
@@ -78,6 +71,10 @@ const Login: React.FC<{}> = () => {
           branchCode: currentUser.BranchCode,
           token: currentUser.Token,
           funcCurrency: currentUser.FuncCurrency,
+          //将选择的年份和公司信息<会变化的数据>存在Session,防止用户刷新出现问题
+          selectBranchID: res.Content.BranchID　== 1 ? 0 : res.Content.BranchID,      //总部BranchID传0
+          selectBranchName: res.Content.BranchID　== 1 ? "香港外运(总部)" : BranchList.find( x => x.Key == res.Content.BranchID)?.Value || '',      //总部公司名显示:香港外运(总部)
+          selectYear: (new Date().getFullYear()).toString(),
         }
         setSystemMes(sysSaveData);
         replaceGoto();

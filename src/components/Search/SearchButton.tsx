@@ -1,3 +1,4 @@
+import Global from '@/global.d';
 import React, { useState, useContext, } from 'react';
 import { useModel } from 'umi';
 import { Button, Drawer, Checkbox, Row, Col, Radio, } from 'antd';
@@ -5,6 +6,19 @@ import { SearchOutlined } from '@ant-design/icons';
 import styles from './index.less';
 //引入自定义方法
 import { getYearList, } from '@/utils/utils';
+import { 
+    setSystemMes,
+    getUserName,
+    getUserID,
+    getBranchID,
+    getBranchCode,
+    getToken,
+    getFuncCurr,
+
+    getselectBranchID,
+    getselectBranchName,
+    getselectYear,
+} from '@/utils/auths';
 //引入基础数据
 import { MonthList, BizType1List, BizType2List, OceanTransportTypeList, transfromToTag, } from '@/utils/baseData';
 
@@ -25,7 +39,11 @@ const SearchButton: React.FC<{}> = ({ }) => {
     const [indeterminate1, setIndeterminate1] = useState(false);
     const [checkAll1, setCheckAll1] = useState(true);
 
-    const [year, setYear] = useState(initialState?.searchInfo?.Year);
+    const [year, setYear] = useState(() =>{
+        // 惰性赋值 any 类型,要不默认值不起作用
+        let selectYear:any = getselectYear();
+        return selectYear;
+    });
 
     // MonthList                    :2
     const [checkedList2, setCheckedList2] = useState(() => {
@@ -140,26 +158,38 @@ const SearchButton: React.FC<{}> = ({ }) => {
     const onSearch = () => {
         //Step 1 <*如果页面的搜索条件不同,则下面的 searchInfo 可以根据 PropsState 来判断赋值>
         let searchInfo: object = {
-            Year: year,
             YearList: checkedList1,
             MonthList: checkedList2,
             BizType1List: checkedList3,
             BizType2List: checkedList4,
             OceanTransportTypeList: checkedList5,
         };
-        let searchResultList: object = {
-            Year: year,
-            YearList: transfromToTag(1, checkedList1, YearList),
-            MonthList: transfromToTag(2, checkedList2, MonthList),
-            BizType1List: transfromToTag(3, checkedList3, BizType1List),
-            BizType2List: transfromToTag(4, checkedList4, BizType2List),
-            OceanTransportTypeList: transfromToTag(5, checkedList5, OceanTransportTypeList),
-        };
         setInitialState({
             ...initialState,
             searchInfo,
-            searchResultList,
         });
+        // 重置 Session 中的数据
+        let userName:any = getUserName();
+        let userID:any = getUserID();
+        let branchID:any = getBranchID();
+        let branchCode:any = getBranchCode();
+        let token:any = getToken();
+        let funcCurrency:any = getFuncCurr();
+        let selectBranchID:any = getselectBranchID();
+        let selectBranchName:any = getselectBranchName();
+        let sysSaveData: Global.SessionSysSave = {
+            userName: userName,
+            userID: userID,
+            branchID: branchID,
+            branchCode: branchCode,
+            token: token,
+            funcCurrency: funcCurrency,
+            // 保存到 Session 中,防止页面刷新数据丢失
+            selectBranchID: selectBranchID,
+            selectBranchName: selectBranchName,
+            selectYear: year,
+        }
+        setSystemMes(sysSaveData);
         //Step 2 <页面中 useEffect 根据 initialState 判断动态搜索>
 
         //Step 3
@@ -199,7 +229,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                 <Row className={styles.searchAreaLable}>
                                     <Col span={12} className={styles.searchAreaTitle}>年份</Col>
                                 </Row>
-                                <Radio.Group buttonStyle="solid" size="small" onChange={onYearRadioChange} defaultValue={year}>
+                                <Radio.Group buttonStyle="solid" size="small" onChange={onYearRadioChange} defaultValue={parseInt(year)}>
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
@@ -271,7 +301,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                 <Row className={styles.searchAreaLable}>
                                     <Col span={12} className={styles.searchAreaTitle}>年份</Col>
                                 </Row>
-                                <Radio.Group buttonStyle="solid" size="small" onChange={onYearRadioChange} defaultValue={year}>
+                                <Radio.Group buttonStyle="solid" size="small" onChange={onYearRadioChange} defaultValue={parseInt(year)}>
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
@@ -307,7 +337,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                 <Row className={styles.searchAreaLable}>
                                     <Col span={12} className={styles.searchAreaTitle}>年份</Col>
                                 </Row>
-                                <Radio.Group buttonStyle="solid" size="small" onChange={onYearRadioChange} defaultValue={year}>
+                                <Radio.Group buttonStyle="solid" size="small" onChange={onYearRadioChange} defaultValue={parseInt(year)}>
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {

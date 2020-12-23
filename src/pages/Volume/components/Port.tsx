@@ -13,9 +13,9 @@ import 'echarts/lib/component/tooltip'
 import { getPortChartData, } from '@/services/volume';
 //调用公式方法
 import { sortObjectArr, } from '@/utils/utils';
+import { getselectBranchID, getselectYear, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
-import SearchResultList from '@/components/Search/SearchResultList';
 //重点代码<React hooks之useContext父子组件传值>
 import ContextProps from '@/createContext';
 
@@ -29,7 +29,7 @@ const Port: React.FC<{}> = () => {
     let fetchData = async (SearchInfo: any, T: string) => {
         setloading(true);
         const result = await getPortChartData(SearchInfo);
-        if (!result || initialState?.currentBranch?.BranchID == undefined) {
+        if (!result || getselectBranchID() == '') {
             return;
         }
         if (result && result.length > 0) {
@@ -142,15 +142,14 @@ const Port: React.FC<{}> = () => {
      */
     useEffect(() => {
         let SearchInfo: object = {
-            BranchID: initialState?.currentBranch?.BranchID,
-            // YearList: initialState?.searchInfo?.YearList,
-            Year: initialState?.searchInfo?.Year,
+            BranchID: getselectBranchID(),
+            Year: getselectYear(),
             Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
         };
-        if (initialState?.currentBranch) {
+        if (getselectBranchID() !=='') {
             fetchData(SearchInfo,type);
         }
     }, [initialState]);
@@ -164,10 +163,6 @@ const Port: React.FC<{}> = () => {
     }
 
     return <>
-        {/* <ContextProps.Provider value={2}>
-            <SearchResultList />
-        </ContextProps.Provider> */}
-
         <Spin tip="页面正在加载中..." spinning={loading}>
             <Card
                 extra={
