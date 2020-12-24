@@ -27,7 +27,6 @@ import ContextProps from '@/createContext';
 const SearchButton: React.FC<{}> = ({ }) => {
     const PropsState = useContext(ContextProps);     //得到父组件过来的值
     const { initialState, setInitialState } = useModel('@@initialState');
-    console.log(initialState?.searchInfo)
     const [YearList,] = useState(() => {
         return getYearList();
     });
