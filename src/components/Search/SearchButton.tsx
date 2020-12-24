@@ -27,6 +27,7 @@ import ContextProps from '@/createContext';
 const SearchButton: React.FC<{}> = ({ }) => {
     const PropsState = useContext(ContextProps);     //得到父组件过来的值
     const { initialState, setInitialState } = useModel('@@initialState');
+    console.log(initialState?.searchInfo)
     const [YearList,] = useState(() => {
         return getYearList();
     });
@@ -34,10 +35,20 @@ const SearchButton: React.FC<{}> = ({ }) => {
     //多选框值
     // YearList                     :1
     const [checkedList1, setCheckedList1] = useState(() => {
-        return [2018, 2019, 2020];
+        if(initialState?.searchInfo?.YearList){
+            return initialState?.searchInfo?.YearList;
+        }else{
+            return [2018, 2019, 2020];
+        }
     });
     const [indeterminate1, setIndeterminate1] = useState(false);
-    const [checkAll1, setCheckAll1] = useState(true);
+    const [checkAll1, setCheckAll1] = useState(() =>{
+        if(initialState?.searchInfo?.YearList?.length == YearList.length){
+            return false;
+        }else{
+            return true;
+        }
+    });
 
     const [year, setYear] = useState(() =>{
         // 惰性赋值 any 类型,要不默认值不起作用
@@ -47,28 +58,68 @@ const SearchButton: React.FC<{}> = ({ }) => {
 
     // MonthList                    :2
     const [checkedList2, setCheckedList2] = useState(() => {
-        return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        if(initialState?.searchInfo?.MonthList){
+            return initialState?.searchInfo?.MonthList;
+        }else{
+            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        }
     });
     const [indeterminate2, setIndeterminate2] = useState(false);
-    const [checkAll2, setCheckAll2] = useState(true);
+    const [checkAll2, setCheckAll2] = useState(() =>{
+        if(initialState?.searchInfo?.MonthList?.length == MonthList.length){
+            return false;
+        }else{
+            return true;
+        }
+    });
     // BizType1List                 :3
     const [checkedList3, setCheckedList3] = useState(() => {
-        return [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14];
+        if(initialState?.searchInfo?.BizType1List){
+            return initialState?.searchInfo?.BizType1List;
+        }else{
+            return [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14];
+        } 
     });
     const [indeterminate3, setIndeterminate3] = useState(false);
-    const [checkAll3, setCheckAll3] = useState(true);
+    const [checkAll3, setCheckAll3] = useState(() =>{
+        if(initialState?.searchInfo?.BizType1List?.length == BizType1List.length){
+            return false;
+        }else{
+            return true;
+        }
+    });
     // BizType2List                 :4
     const [checkedList4, setCheckedList4] = useState(() => {
-        return [1, 2, 3, 4, 5, 6];
+        if(initialState?.searchInfo?.BizType2List){
+            return initialState?.searchInfo?.BizType2List;
+        }else{
+            return [1, 2, 3, 4, 5, 6];
+        } 
     });
     const [indeterminate4, setIndeterminate4] = useState(false);
-    const [checkAll4, setCheckAll4] = useState(true);
+    const [checkAll4, setCheckAll4] = useState(() =>{
+        if(initialState?.searchInfo?.BizType2List?.length == BizType2List.length){
+            return false;
+        }else{
+            return true;
+        }
+    });
     // OceanTransportTypeList       :5
     const [checkedList5, setCheckedList5] = useState(() => {
-        return [1, 2, 3, 6, 7];
+        if(initialState?.searchInfo?.OceanTransportTypeList){
+            return initialState?.searchInfo?.OceanTransportTypeList;
+        }else{
+            return [1, 2, 3, 6, 7];
+        } 
     });
     const [indeterminate5, setIndeterminate5] = useState(false);
-    const [checkAll5, setCheckAll5] = useState(true);
+    const [checkAll5, setCheckAll5] = useState(() =>{
+        if(initialState?.searchInfo?.OceanTransportTypeList?.length == OceanTransportTypeList.length){
+            return false;
+        }else{
+            return true;
+        }
+    });
 
     /**
      * 单选
