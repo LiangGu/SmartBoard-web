@@ -21,9 +21,9 @@ const Debt: React.FC<{}> = () => {
     const [ loading, setloading] = useState(false);
 
     //获取数据
-    let fetchData = async (SearchInfo: any) => {
+    let fetchData = async (ParamsInfo: any) => {
         setloading(true);
-        const result = await getDebtChartData(SearchInfo);
+        const result = await getDebtChartData(ParamsInfo);
         if (!result || getselectBranchID() == '') {
             return;
         }
@@ -105,11 +105,11 @@ const Debt: React.FC<{}> = () => {
      * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
      */
     useEffect(() => {
-        let SearchInfo: object = {
+        let ParamsInfo: object = {
             BranchID: getselectBranchID(),
         };
         if (getselectBranchID() !=='') {
-            fetchData(SearchInfo);
+            fetchData(ParamsInfo);
         }
     }, [initialState]);
 

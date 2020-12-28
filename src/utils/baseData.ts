@@ -71,39 +71,10 @@ export const BranchList = [
     { Key: 10, Value: "缅甸外运" },
     { Key: 11, Value: "中越外运" },
     { Key: 13, Value: "上海伟运工程" },
-    { Key: 17, Value: "香港供应链事业部" },
-    { Key: 19, Value: "上海空运事业部" },
-    { Key: 20, Value: "上海电商事业部" },
-    { Key: 21, Value: "香港电商事业部" },
-    { Key: 22, Value: "越南外运" },
-    { Key: 23, Value: "香港空运事业部" },
+    { Key: 17, Value: "大宗商品事业部" },
+    { Key: 19, Value: "空运事业部(伟运)" },
+    { Key: 20, Value: "电商事业部(伟运)" },
+    { Key: 21, Value: "电商事业部(香港)" },
+    { Key: 22, Value: "中越外运(E拼)" },
+    { Key: 23, Value: "空运事业部(香港)" },
 ]
-
-/**
- * 将用户选择的搜索条件转化成 Tag 的形式
- * @param list 
- * @param T 
- */
-export const transfromToTag = (T: Number, list: Array<Number>, baseList: Array<API.Tag>) => {
-    let TagList: Array<API.Tag> = [];
-    if (list && list.length > 0) {
-        if (T == 1) {
-            list.map(x => {
-                baseList.map(y => {
-                    if (parseInt(y.Value) == x) {
-                        TagList.push(y);
-                    }
-                });
-            });
-        } else {
-            list.map(x => {
-                baseList.map(y => {
-                    if (y.Key == x) {
-                        TagList.push(y);
-                    }
-                });
-            });
-        }
-    }
-    return TagList;
-}

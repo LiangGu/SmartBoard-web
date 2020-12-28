@@ -28,9 +28,9 @@ const CashFlow: React.FC<{}> = () => {
   const [loading, setloading] = useState(false);
 
   //获取数据
-  let fetchData = async (SearchInfo: any) => {
+  let fetchData = async (ParamsInfo: any) => {
     setloading(true);
-    const result = await getCashFlowChartData(SearchInfo);
+    const result = await getCashFlowChartData(ParamsInfo);
     if (!result || getselectBranchID() == '') {
       return;
     }
@@ -140,12 +140,12 @@ const CashFlow: React.FC<{}> = () => {
    * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
    */
   useEffect(() => {
-    let SearchInfo: object = {
+    let ParamsInfo: object = {
       BranchID: getselectBranchID(),
       Year: getselectYear(),
     };
     if (getselectBranchID() !=='') {
-      fetchData(SearchInfo);
+      fetchData(ParamsInfo);
     }
   }, [initialState]);
 

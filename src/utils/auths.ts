@@ -13,6 +13,7 @@ export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
         sessionStorage.setItem("selectBranchID", sysMes.selectBranchID);
         sessionStorage.setItem("selectBranchName", sysMes.selectBranchName);
         sessionStorage.setItem("selectYear", sysMes.selectYear);
+        sessionStorage.setItem("selectOceanTransportType", sysMes.selectOceanTransportType);
     }else{
         sessionStorage.setItem("userName", '');
         sessionStorage.setItem("userID", '');
@@ -24,6 +25,7 @@ export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
         sessionStorage.setItem("selectBranchID", '');
         sessionStorage.setItem("selectBranchName", '');
         sessionStorage.setItem("selectYear", '');
+        sessionStorage.setItem("selectOceanTransportType", '');
     }
 }
 
@@ -57,4 +59,8 @@ export function getselectBranchName() {
 
 export function getselectYear() {
     return sessionStorage.getItem("selectYear");
+}
+
+export function getselectOceanTransportType() {
+    return sessionStorage.getItem("selectOceanTransportType");
 }

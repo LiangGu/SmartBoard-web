@@ -14,7 +14,7 @@ import 'echarts/lib/component/tooltip'
 import { getICProfitChartData, } from '@/services/icprofit';
 //调用公式方法
 import { sortObjectArr, } from '@/utils/utils';
-import { getselectBranchID, getselectYear, } from '@/utils/auths';
+import { getselectBranchID, getselectYear, getselectOceanTransportType,} from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
@@ -25,9 +25,9 @@ const ICProfit: React.FC<{}> = () => {
   const [loading, setloading] = useState(false);
 
   //获取数据
-  let fetchData = async (SearchInfo: any) => {
+  let fetchData = async (ParamsInfo: any) => {
     setloading(true);
-    const result = await getICProfitChartData(SearchInfo);
+    const result = await getICProfitChartData(ParamsInfo);
     if (!result || getselectBranchID() == '') {
       return;
     }
@@ -77,7 +77,7 @@ const ICProfit: React.FC<{}> = () => {
         }
       },
       legend: {
-        data: ['收入', '支出', '利润']
+        data: ['收入', '支出', '毛利']
       },
       xAxis: {
         data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
@@ -97,7 +97,7 @@ const ICProfit: React.FC<{}> = () => {
           data: [...TotalAPList]
         },
         {
-          name: '利润',
+          name: '毛利',
           type: 'line',
           color: '#FF7C00',
           data: [...ProfitList]
@@ -112,15 +112,15 @@ const ICProfit: React.FC<{}> = () => {
    * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
    */
   useEffect(() => {
-    let SearchInfo: object = {
+    let ParamsInfo: object = {
       BranchID: getselectBranchID(),
       Year: getselectYear(),
       TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
       TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-      CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
+      CargoTypes: getselectOceanTransportType(),
     };
     if (getselectBranchID() !=='') {
-      fetchData(SearchInfo);
+      fetchData(ParamsInfo);
     }
   }, [initialState]);
 

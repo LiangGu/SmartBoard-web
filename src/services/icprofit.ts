@@ -1,7 +1,7 @@
 import { request } from 'umi';
 
 /**
- * 获取收支利润图表数据
+ * 获取收支毛利图表数据
  * By:Iverson.Tian
  * Date:2020-12-10
  */

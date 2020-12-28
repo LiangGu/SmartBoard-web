@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 /**
- * 收支利润图表数据
+ * 收支毛利图表数据
  * @param req 
  * @param res 
  * @param u 
@@ -61,7 +61,7 @@ function getICProfitChartData(req: Request, res: Response, u: string) {
   }
   
   /**
-   * 收支利润表格数据
+   * 收支毛利表格数据
    * @param req 
    * @param res 
    * @param u 
@@ -81,8 +81,8 @@ function getICProfitChartData(req: Request, res: Response, u: string) {
   }
 
   export default {
-    //获取收支利润图表数据
+    //获取收支毛利图表数据
     'GET /api/getICProfitChartData': getICProfitChartData,
-    //获取收支利润表格数据
+    //获取收支毛利表格数据
     'GET /api/getICProfitTableData': getICProfitTableData,
   };

@@ -13,7 +13,7 @@ import 'echarts/lib/component/tooltip'
 import { getRankChartData, } from '@/services/rank';
 //调用公式方法
 import { sortObjectArr, } from '@/utils/utils';
-import { getselectBranchID, getselectYear, } from '@/utils/auths';
+import { getselectBranchID, getselectYear, getselectOceanTransportType,} from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
@@ -26,9 +26,9 @@ const Rank: React.FC<{}> = () => {
     const [result, setResult] = useState([]);
 
     //获取数据
-    let fetchData = async (SearchInfo: any, T: string) => {
+    let fetchData = async (ParamsInfo: any, T: string) => {
         setloading(true);
-        const result = await getRankChartData(SearchInfo);
+        const result = await getRankChartData(ParamsInfo);
         if (!result || getselectBranchID() == '') {
             return;
         }
@@ -164,16 +164,16 @@ const Rank: React.FC<{}> = () => {
      * 第2个参数传 [initialState] 相当于 componentWillUnmount 钩子
      */
     useEffect(() => {
-        let SearchInfo: object = {
+        let ParamsInfo: object = {
             BranchID: getselectBranchID(),
             Year: getselectYear(),
             Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList || [1, 2, 3, 6, 7],
+            CargoTypes: getselectOceanTransportType(),
         };
         if (getselectBranchID() !=='') {
-            fetchData(SearchInfo, type);
+            fetchData(ParamsInfo, type);
         }
     }, [initialState]);
 

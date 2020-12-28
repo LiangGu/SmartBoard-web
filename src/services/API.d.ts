@@ -58,11 +58,9 @@ declare namespace API {
   // 页面的搜索条件
   export interface SearchInfo {
     UpdateIndex?: string,
-    YearList?: Array<Number>,
     MonthList?: Array<Number>,
     BizType1List?: Array<Number>,
     BizType2List?: Array<Number>,
-    OceanTransportTypeList?: Array<Number>,
   }
 
   export interface Tag {

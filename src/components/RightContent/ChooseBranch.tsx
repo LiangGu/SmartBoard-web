@@ -17,6 +17,7 @@ import {
     getselectBranchID,
     getselectBranchName,
     getselectYear,
+    getselectOceanTransportType,
 } from '@/utils/auths';
 const ChooseBranch: React.FC<{}> = () => {
     const { initialState, setInitialState } = useModel('@@initialState');
@@ -58,6 +59,7 @@ const ChooseBranch: React.FC<{}> = () => {
         let token:any = getToken();
         let funcCurrency:any = getFuncCurr();
         let selectYear:any = getselectYear();
+        let selectOceanTransportType:any = getselectOceanTransportType();
         let sysSaveData: Global.SessionSysSave = {
             userName: userName,
             userID: userID,
@@ -69,6 +71,7 @@ const ChooseBranch: React.FC<{}> = () => {
             selectBranchID: e.target.value,
             selectBranchName: BranchList.find( x => x.Key == e.target.value)?.Value || '',
             selectYear: selectYear,
+            selectOceanTransportType: selectOceanTransportType,
         }
         setSystemMes(sysSaveData);
         setDrawerVisible(false)

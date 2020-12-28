@@ -34,7 +34,8 @@ export interface SessionSysSave {
   token: string;
   funcCurrency: string;
   //将选择的年份和公司信息<会变化的数据>存在Session,防止用户刷新出现问题
-  selectBranchID: Number;
+  selectBranchID: string;
   selectBranchName: string;
-  selectYear: Number;
+  selectYear: string;
+  selectOceanTransportType: string;
 }
