@@ -70,70 +70,74 @@ const CashFlow: React.FC<{}> = () => {
 
   //初始化图表
   let initChart = (SumDateList: [], SumTodayList: []) => {
-    let element = document.getElementById('main');
-    let myChart = echarts.init(element as HTMLDivElement);
-    let option: any = {
-      title: {
-        text: '日现金流走势',
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#C23531'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          dataView: { show: true, readOnly: false },
-          magicType: { show: true, type: ['line', 'bar'] },
-          restore: { show: true },
-          saveAsImage: { show: true }
-        }
-      },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: [...SumDateList]
-      },
-      yAxis: {
-        type: 'value',
-        name: '单位: CNY(千)'
-      },
-      dataZoom: [
-        {
-          type: 'slider',         // 滑动条
-          xAxisIndex: 0,          // Y轴
-          start: 0,               // 左边在 0% 的位置
-          end: 100,                // 右边在 10% 的位置
+    let element = document.getElementById('CashFlowChart');
+    let myChart: any;
+    let option: any;
+    if(element){
+      myChart = echarts.init(element as HTMLDivElement);
+      option = {
+        title: {
+          text: '日现金流走势',
         },
-      ],
-      series: [{
-        name: '现金流',
-        color: '#C23531',
-        type: 'line',
-        barWidth: 20,
-        itemStyle: {
-          normal: {
-            //*根据后台数据动态为每条数据添加不同的颜色
-            color: function (params: any) {
-              if (params.value < 0) {
-                let color = ['#C23531'];
-                return params.itemStyle = color;
-              } else {
-                let color = ['#61A0A8'];
-                return params.itemStyle = color;
-              }
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#C23531'
+            }
+          }
+        },
+        toolbox: {
+          feature: {
+            dataView: { show: true, readOnly: false },
+            magicType: { show: true, type: ['line', 'bar'] },
+            restore: { show: true },
+            saveAsImage: { show: true }
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: [...SumDateList]
+        },
+        yAxis: {
+          type: 'value',
+          name: '单位: CNY(千)'
+        },
+        dataZoom: [
+          {
+            type: 'slider',         // 滑动条
+            xAxisIndex: 0,          // Y轴
+            start: 0,               // 左边在 0% 的位置
+            end: 100,                // 右边在 10% 的位置
+          },
+        ],
+        series: [{
+          name: '现金流',
+          color: '#C23531',
+          type: 'line',
+          barWidth: 20,
+          itemStyle: {
+            normal: {
+              //*根据后台数据动态为每条数据添加不同的颜色
+              color: function (params: any) {
+                if (params.value < 0) {
+                  let color = ['#C23531'];
+                  return params.itemStyle = color;
+                } else {
+                  let color = ['#61A0A8'];
+                  return params.itemStyle = color;
+                }
+              },
             },
           },
-        },
-        data: [...SumTodayList],
-      }],
-    };
-    myChart.setOption(option);
-    window.addEventListener('resize', () => { myChart.resize() });
+          data: [...SumTodayList],
+        }],
+      };
+      myChart.setOption(option);
+      window.addEventListener('resize', () => { myChart.resize() });
+    }
   };
 
   /**
@@ -153,7 +157,7 @@ const CashFlow: React.FC<{}> = () => {
     <PageContainer>
       <Spin tip="页面正在加载中..." spinning={loading}>
         <Card>
-          <div id="main" style={{ width: '100%', height: 600 }}></div>
+          <div id="CashFlowChart" style={{ width: '100%', height: 600 }}></div>
         </Card>
       </Spin>
 

@@ -42,8 +42,10 @@ const Rank: React.FC<{}> = () => {
 
     //初始化图表
     let initChart = (result: any, type: string) => {
-        let element = document.getElementById('main');
-        let myChart = echarts.init(element as HTMLDivElement);
+        let element = document.getElementById('RankChart');
+        let myChart: any;
+        let option: any;
+
         // 根据 type 排序
         let RankTopList: any = [];
         let RankTopTotalARList: any = [];       //Total AR
@@ -102,62 +104,65 @@ const Rank: React.FC<{}> = () => {
             yAxisName = '单位: TON'
         }
 
-        let option: any = {
-            title: {
-                text: `前10客户${type}排名`,
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#C23531'
-                    }
-                }
-            },
-            toolbox: {
-                feature: {
-                    dataView: { show: true, readOnly: false },
-                    magicType: { show: true, type: ['line', 'bar'] },
-                    restore: { show: true },
-                    saveAsImage: { show: true }
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.01]
-            },
-            yAxis: {
-                type: 'category',
-                scale: true,
-                name: yAxisName,
-                data: [...RankTopCTNameList],
-                //Y轴超长标签换行
-                axisLabel: {
-                    show: true,
-                    interval: 0,
-                    //设置字数限制
-                    formatter: function (value: any) {
-                        if (value.length > 40) {
-                            return value.substring(0, 40) + '\n' + value.substring(40, value.length);
-                        } else if (value.length > 20) {
-                            return value.substring(0, 20) + '\n' + value.substring(20, value.length);
-                        } else {
-                            return value;
+        if(element){
+            myChart = echarts.init(element as HTMLDivElement);
+            option = {
+                title: {
+                    text: `前10客户${type}排名`,
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#C23531'
                         }
                     }
                 },
-            },
-            series: seriesData,
-        };
-        myChart.setOption(option);
-        window.addEventListener('resize', () => { myChart.resize() });
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    boundaryGap: [0, 0.01]
+                },
+                yAxis: {
+                    type: 'category',
+                    scale: true,
+                    name: yAxisName,
+                    data: [...RankTopCTNameList],
+                    //Y轴超长标签换行
+                    axisLabel: {
+                        show: true,
+                        interval: 0,
+                        //设置字数限制
+                        formatter: function (value: any) {
+                            if (value.length > 40) {
+                                return value.substring(0, 40) + '\n' + value.substring(40, value.length);
+                            } else if (value.length > 20) {
+                                return value.substring(0, 20) + '\n' + value.substring(20, value.length);
+                            } else {
+                                return value;
+                            }
+                        }
+                    },
+                },
+                series: seriesData,
+            };
+            myChart.setOption(option);
+            window.addEventListener('resize', () => { myChart.resize() });
+        }
     };
 
     /**
@@ -201,7 +206,7 @@ const Rank: React.FC<{}> = () => {
                     </>
                 }
             >
-                <div id="main" style={{ width: '100%', height: 600 }}></div>
+                <div id="RankChart" style={{ width: '100%', height: 600 }}></div>
             </Card>
 
         </Spin>

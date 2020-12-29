@@ -53,59 +53,63 @@ const ICProfit: React.FC<{}> = () => {
 
   //初始化图表
   let initChart = (TotalARList: [], TotalAPList: [], ProfitList: []) => {
-    let element = document.getElementById('main');
-    let myChart = echarts.init(element as HTMLDivElement);
-    let option: any = {
-      title: {
-        text: '收支利润',
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#C23531'
+    let element = document.getElementById('ICProfitChart');
+    let myChart: any;
+    let option: any;
+    if(element){
+      myChart = echarts.init(element as HTMLDivElement);
+      option = {
+        title: {
+          text: '收支利润',
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#C23531'
+            }
           }
-        }
-      },
-      toolbox: {
-        feature: {
-          dataView: { show: true, readOnly: false },
-          magicType: { show: true, type: ['line', 'bar'] },
-          restore: { show: true },
-          saveAsImage: { show: true }
-        }
-      },
-      legend: {
-        data: ['收入', '支出', '毛利']
-      },
-      xAxis: {
-        data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
-      },
-      yAxis: { name: '单位: CNY(千)' },
-      series: [
-        {
-          name: '收入',
-          type: 'bar',
-          color: '#61A0A8',
-          data: [...TotalARList]
         },
-        {
-          name: '支出',
-          type: 'bar',
-          color: '#C23531',
-          data: [...TotalAPList]
+        toolbox: {
+          feature: {
+            dataView: { show: true, readOnly: false },
+            magicType: { show: true, type: ['line', 'bar'] },
+            restore: { show: true },
+            saveAsImage: { show: true }
+          }
         },
-        {
-          name: '毛利',
-          type: 'line',
-          color: '#FF7C00',
-          data: [...ProfitList]
+        legend: {
+          data: ['收入', '支出', '毛利']
         },
-      ]
-    };
-    myChart.setOption(option);
-    window.addEventListener('resize', () => { myChart.resize() });
+        xAxis: {
+          data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
+        },
+        yAxis: { name: '单位: CNY(千)' },
+        series: [
+          {
+            name: '收入',
+            type: 'bar',
+            color: '#61A0A8',
+            data: [...TotalARList]
+          },
+          {
+            name: '支出',
+            type: 'bar',
+            color: '#C23531',
+            data: [...TotalAPList]
+          },
+          {
+            name: '毛利',
+            type: 'line',
+            color: '#FF7C00',
+            data: [...ProfitList]
+          },
+        ]
+      };
+      myChart.setOption(option);
+      window.addEventListener('resize', () => { myChart.resize() });
+    }
   };
 
   /**
@@ -128,7 +132,7 @@ const ICProfit: React.FC<{}> = () => {
     <PageContainer>
       <Spin tip="页面正在加载中..." spinning={loading}>
         <Card>
-          <div id="main" style={{ width: '100%', height: 600 }}></div>
+          <div id="ICProfitChart" style={{ width: '100%', height: 600 }}></div>
         </Card>
       </Spin>
 

@@ -45,76 +45,80 @@ const Month: React.FC<{}> = () => {
     }
     //初始化图表
     let initChart = (VolumeData: any, IncomeDate: any,) => {
-        let element = document.getElementById('main');
-        let myChart = echarts.init(element as HTMLDivElement);
-        let option: any = {
-            title: {
-                text: '月份货量',
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#C23531'
+        let element = document.getElementById('MonthChart');
+        let myChart: any;
+        let option: any;
+        if(element){
+            myChart = echarts.init(element as HTMLDivElement);
+            option = {
+                title: {
+                    text: '月份货量',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#C23531'
+                        }
                     }
-                }
-            },
-            toolbox: {
-                feature: {
-                    dataView: { show: true, readOnly: false },
-                    magicType: { show: true, type: ['line', 'bar'] },
-                    restore: { show: true },
-                    saveAsImage: { show: true }
-                }
-            },
-            legend: {
-                data: ['RT', 'CNY']
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
                 },
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    scale: true,
-                    name: '单位: RT',
-                    min: getMinValue(VolumeData),
-                    max: getMaxValue(VolumeData),
-                    splitNumber: 5,
-                    interval: (getMaxValue(VolumeData) - getMinValue(VolumeData)) / 5
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
                 },
-                {
-                    type: 'value',
-                    scale: true,
-                    name: '单位: CNY(千)',
-                    min: getMinValue(IncomeDate),
-                    max: getMaxValue(IncomeDate),
-                    splitNumber: 5,
-                    interval: (getMaxValue(IncomeDate) - getMinValue(IncomeDate)) / 5
-                }
-            ],
-            series: [
-                {
-                    name: 'RT',
-                    type: 'bar',
-                    color: '#61A0A8',
-                    data: [...VolumeData]
+                legend: {
+                    data: ['RT', 'CNY']
                 },
-                {
-                    name: 'CNY(千)',
-                    type: 'line',
-                    color: '#C23531',
-                    yAxisIndex: 1,
-                    data: [...IncomeDate]
-                },
-            ]
-        };
-        myChart.setOption(option);
-        window.addEventListener('resize', () => { myChart.resize() });
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                    },
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        scale: true,
+                        name: '单位: RT',
+                        min: getMinValue(VolumeData),
+                        max: getMaxValue(VolumeData),
+                        splitNumber: 5,
+                        interval: (getMaxValue(VolumeData) - getMinValue(VolumeData)) / 5
+                    },
+                    {
+                        type: 'value',
+                        scale: true,
+                        name: '单位: CNY(千)',
+                        min: getMinValue(IncomeDate),
+                        max: getMaxValue(IncomeDate),
+                        splitNumber: 5,
+                        interval: (getMaxValue(IncomeDate) - getMinValue(IncomeDate)) / 5
+                    }
+                ],
+                series: [
+                    {
+                        name: 'RT',
+                        type: 'bar',
+                        color: '#61A0A8',
+                        data: [...VolumeData]
+                    },
+                    {
+                        name: 'CNY(千)',
+                        type: 'line',
+                        color: '#C23531',
+                        yAxisIndex: 1,
+                        data: [...IncomeDate]
+                    },
+                ]
+            };
+            myChart.setOption(option);
+            window.addEventListener('resize', () => { myChart.resize() });
+        }
     };
 
     /**
@@ -136,7 +140,7 @@ const Month: React.FC<{}> = () => {
     return <>
         <Spin tip="页面正在加载中..." spinning={loading}>
             <Card>
-                <div id="main" style={{ width: '100%', height: 600 }}></div>
+                <div id="MonthChart" style={{ width: '100%', height: 600 }}></div>
             </Card>
         </Spin>
 

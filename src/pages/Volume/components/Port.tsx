@@ -43,7 +43,9 @@ const Port: React.FC<{}> = () => {
     //初始化图表
     let initChart = (result: any, type: string) => {
         let element = document.getElementById('port');
-        let myChart = echarts.init(element as HTMLDivElement);
+        let myChart: any;
+        let option: any;
+
         // 根据 type 排序
         let PortTopList: any = [];
         let PortTopTotalARList: any = [];       //Total AR
@@ -102,47 +104,50 @@ const Port: React.FC<{}> = () => {
             yAxisName = '单位: TON'
         }
 
-        let option: any = {
-            title: {
-                text: `前10港口${type}排名`,
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#C23531'
+        if(element){
+            myChart = echarts.init(element as HTMLDivElement);
+            option = {
+                title: {
+                    text: `前10港口${type}排名`,
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#C23531'
+                        }
                     }
-                }
-            },
-            toolbox: {
-                feature: {
-                    dataView: { show: true, readOnly: false },
-                    magicType: { show: true, type: ['line', 'bar'] },
-                    restore: { show: true },
-                    saveAsImage: { show: true }
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.01]
-            },
-            yAxis: {
-                type: 'category',
-                scale: true,
-                name: yAxisName,
-                data: [...PortTopPortNameList],
-            },
-            series: seriesData,
-        };
-        myChart.setOption(option);
-        window.addEventListener('resize', () => { myChart.resize() });
+                },
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    boundaryGap: [0, 0.01]
+                },
+                yAxis: {
+                    type: 'category',
+                    scale: true,
+                    name: yAxisName,
+                    data: [...PortTopPortNameList],
+                },
+                series: seriesData,
+            };
+            myChart.setOption(option);
+            window.addEventListener('resize', () => { myChart.resize() });
+        }
     };
 
     /**

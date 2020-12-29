@@ -59,46 +59,50 @@ const Debt: React.FC<{}> = () => {
 
     //初始化图表
     let initChart = (DebtList: []) => {
-        let element = document.getElementById('main');
-        let myChart = echarts.init(element as HTMLDivElement);
-        let option: any = {
-            title: {
-                text: '应收账款',
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#C23531'
-                    }
-                }
-            },
-            toolbox: {
-                feature: {
-                    dataView: { show: true, readOnly: false },
-                    magicType: { show: true, type: ['line', 'bar'] },
-                    restore: { show: true },
-                    saveAsImage: { show: true }
-                }
-            },
-            legend: {
-                data: ['应收账款']
-            },
-            xAxis: {
-                data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-180天", "大于180天"]
-            },
-            yAxis: { name: '单位: CNY(千)' },
-            series: [
-                {
-                    name: '应收账款',
-                    type: 'bar',
-                    data: [...DebtList]
+        let element = document.getElementById('DebtChart');
+        let myChart: any;
+        let option: any;
+        if(element){
+            myChart = echarts.init(element as HTMLDivElement);
+            option = {
+                title: {
+                    text: '应收账款',
                 },
-            ]
-        };
-        myChart.setOption(option);
-        window.addEventListener('resize', () => { myChart.resize() });
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#C23531'
+                        }
+                    }
+                },
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                legend: {
+                    data: ['应收账款']
+                },
+                xAxis: {
+                    data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-180天", "大于180天"]
+                },
+                yAxis: { name: '单位: CNY(千)' },
+                series: [
+                    {
+                        name: '应收账款',
+                        type: 'bar',
+                        data: [...DebtList]
+                    },
+                ]
+            };
+            myChart.setOption(option);
+            window.addEventListener('resize', () => { myChart.resize() });
+        }
     };
 
     /**
@@ -117,7 +121,7 @@ const Debt: React.FC<{}> = () => {
         <PageContainer>
             <Spin tip="页面正在加载中..." spinning={loading}>
                 <Card>
-                    <div id="main" style={{ width: '100%', height: 600 }}></div>
+                    <div id="DebtChart" style={{ width: '100%', height: 600 }}></div>
                 </Card>
             </Spin>
         </PageContainer>
