@@ -77,7 +77,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
     // BizType2List                 :4
     const [checkedList4, setCheckedList4] = useState(() => {
         let searchInfoBizType2List:any = initialState?.searchInfo?.BizType2List;
-        if(searchInfoBizType2List){
+        if(initialState?.searchInfo?.BizType2List){
             return searchInfoBizType2List;
         }else{
             return [1, 2, 3, 4, 5, 6];
@@ -266,7 +266,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                         全选
                                     </Checkbox>
                                 </Row>
-                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(3, list)}>
+                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(2, list)}>
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             BizType1List && BizType1List.length > 0 ? BizType1List.map(x => {
@@ -284,7 +284,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                         全选
                                     </Checkbox>
                                 </Row>
-                                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(4, list)}>
+                                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(3, list)}>
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
@@ -371,7 +371,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                         全选
                                     </Checkbox>
                                 </Row>
-                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(3, list)}>
+                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(2, list)}>
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             BizType1List && BizType1List.length > 0 ? BizType1List.map(x => {
@@ -389,7 +389,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                         全选
                                     </Checkbox>
                                 </Row>
-                                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(4, list)}>
+                                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(3, list)}>
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
