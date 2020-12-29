@@ -34,7 +34,7 @@ const Debt: React.FC<{}> = () => {
             let ReMoney90List: any = [];
             let ReMoney180List: any = [];
             let ReMoney181List: any = [];
-            if (result && result.length > 0) {
+            if (result) {
                 result.forEach((x: { ReMoney30: any;ReMoney45: any;ReMoney60: any;ReMoney90: any;ReMoney180: any;ReMoney181: any; }) => {
                     ReMoney30List.push(x.ReMoney30 / 1000);
                     ReMoney45List.push(x.ReMoney45 / 1000);

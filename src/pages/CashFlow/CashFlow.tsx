@@ -39,7 +39,7 @@ const CashFlow: React.FC<{}> = () => {
       let CashFlowSourceValue: any = [];
       let SumDateList: any = [];
       let SumTodayList: any = [];
-      if (result && result.length > 0) {
+      if (result) {
         // 1、先把数据按照 日期 排序
         // SortResultByDate = result.sort(sortObjectArr('SumDate',1));
         SortResultByDate = result.sort((a: any, b: any) => a.SumDate.localeCompare(b.SumDate));

@@ -32,7 +32,7 @@ const Port: React.FC<{}> = () => {
         if (!result || getselectBranchID() == '') {
             return;
         }
-        if (result && result.length > 0) {
+        if (result) {
             setResult(result);
             //将值传给初始化图表的函数
             initChart(result, T,);

@@ -32,7 +32,7 @@ const Month: React.FC<{}> = () => {
         if (result) {
             let VolumeList: any = [];
             let TotalARList: any = [];
-            if (result && result.length > 0) {
+            if (result) {
                 result.map((x: { Volume: Number; TotalAR: any; }) => {
                     VolumeList.push(x.Volume);
                     TotalARList.push(parseFloat((x.TotalAR / 1000).toFixed(2)));
@@ -48,6 +48,32 @@ const Month: React.FC<{}> = () => {
         let element = document.getElementById('MonthChart');
         let myChart: any;
         let option: any;
+        // 赋值 legend 和图表 series 和 yAxis 中的 name
+        let legendData:any = [];
+        let yAxisName = '';
+        let seriesName = '';
+        if(Number(getselectOceanTransportType()) == 1){
+            legendData = ['TEU','CNY(千)'];
+            yAxisName = '单位: TEU';
+            seriesName = 'TEU';
+        }else if(Number(getselectOceanTransportType()) == 2){
+            legendData = ['CBM','CNY(千)'];
+            yAxisName = '单位: CBM';
+            seriesName = 'CBM';
+        }else if(Number(getselectOceanTransportType()) == 3){
+            legendData = ['KGS','CNY(千)'];
+            yAxisName = '单位: KGS';
+            seriesName = 'KGS';
+        }else if(Number(getselectOceanTransportType()) == 6){
+            legendData = ['批次','CNY(千)'];
+            yAxisName = '单位: 批次';
+            seriesName = '批次';
+        }else{
+            legendData = ['KGS','CNY(千)'];
+            yAxisName = '单位: KGS';
+            seriesName = 'KGS';
+        }
+
         if(element){
             myChart = echarts.init(element as HTMLDivElement);
             option = {
@@ -72,7 +98,7 @@ const Month: React.FC<{}> = () => {
                     }
                 },
                 legend: {
-                    data: ['RT', 'CNY']
+                    data: [...legendData],
                 },
                 xAxis: [
                     {
@@ -84,7 +110,7 @@ const Month: React.FC<{}> = () => {
                     {
                         type: 'value',
                         scale: true,
-                        name: '单位: RT',
+                        name: yAxisName,
                         min: getMinValue(VolumeData),
                         max: getMaxValue(VolumeData),
                         splitNumber: 5,
@@ -102,7 +128,7 @@ const Month: React.FC<{}> = () => {
                 ],
                 series: [
                     {
-                        name: 'RT',
+                        name: seriesName,
                         type: 'bar',
                         color: '#61A0A8',
                         data: [...VolumeData]
