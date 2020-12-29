@@ -77,7 +77,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
     // BizType2List                 :4
     const [checkedList4, setCheckedList4] = useState(() => {
         let searchInfoBizType2List:any = initialState?.searchInfo?.BizType2List;
-        if(initialState?.searchInfo?.BizType2List){
+        if(searchInfoBizType2List){
             return searchInfoBizType2List;
         }else{
             return [1, 2, 3, 4, 5, 6];
