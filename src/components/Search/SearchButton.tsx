@@ -42,8 +42,9 @@ const SearchButton: React.FC<{}> = ({ }) => {
 
     // MonthList                    :2
     const [checkedList2, setCheckedList2] = useState(() => {
-        if(initialState?.searchInfo?.MonthList){
-            return initialState?.searchInfo?.MonthList;
+        let searchInfoMonthList:any = initialState?.searchInfo?.MonthList;
+        if(searchInfoMonthList){
+            return searchInfoMonthList;
         }else{
             return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         }
@@ -58,8 +59,9 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     // BizType1List                 :3
     const [checkedList3, setCheckedList3] = useState(() => {
-        if(initialState?.searchInfo?.BizType1List){
-            return initialState?.searchInfo?.BizType1List;
+        let searchInfoBizType1List:any = initialState?.searchInfo?.BizType1List;
+        if(searchInfoBizType1List){
+            return searchInfoBizType1List;
         }else{
             return [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14];
         } 
@@ -74,8 +76,9 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     // BizType2List                 :4
     const [checkedList4, setCheckedList4] = useState(() => {
-        if(initialState?.searchInfo?.BizType2List){
-            return initialState?.searchInfo?.BizType2List;
+        let searchInfoBizType2List:any = initialState?.searchInfo?.BizType2List;
+        if(searchInfoBizType2List){
+            return searchInfoBizType2List;
         }else{
             return [1, 2, 3, 4, 5, 6];
         } 
