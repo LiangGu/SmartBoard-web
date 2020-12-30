@@ -28,6 +28,11 @@ declare namespace API {
     Token: string;
   }
 
+  export interface CurrentBranch{
+    BranchID:Number,      
+    BranchName:string,     
+  }
+
   export interface PUA {
     ProjectID: number;
     ProjectName: string;

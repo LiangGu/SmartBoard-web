@@ -6,8 +6,8 @@ import RightContent from '@/components/RightContent';
 import { RequestOptionsInit, ResponseError } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
 import menu from '../config/menu';
-import {extend} from '@/utils/utils';
-import {getUserID, getToken} from '@/utils/auths';
+import { extend } from '@/utils/utils';
+import { getCurrentUser, getToken, getUserID } from '@/utils/auths';
 import {
   SmileOutlined,
   HeartOutlined,
@@ -26,9 +26,19 @@ export async function getInitialState(): Promise<{
   searchInfo?: API.SearchInfo;
   menuData?: MenuDataItem[];
 }> {
-  return {  
+  // 如果是登录页面，不执行
+  if (history.location.pathname !== '/user/login') {
+    const currUser: string | null = getCurrentUser();
+    if(currUser){
+      return {  
+        settings: defaultSettings,
+        currentUser: JSON.parse(currUser),
+      };
+    }
+  }
+  return{
     settings: defaultSettings,
-   };
+  }
 }
 
 const IconMap = {
@@ -64,10 +74,11 @@ export const layout = ({
       currentUser?: API.CurrentUser;
       searchInfo?: API.SearchInfo;
       menuData?: MenuDataItem[];
+      token?: string | null;
     };
   }): BasicLayoutProps => {
   let menuData:MenuDataItem[] = menu.menuData;
-  if(initialState && initialState.menuData){
+  if(initialState?.menuData){
     menuData = [];
     extend(menuData, initialState.menuData);
   }
@@ -80,13 +91,12 @@ export const layout = ({
     disableContentMargin: false,
     footerRender: () => false,
     onPageChange: (e) => {
+      const currentUser = initialState?.currentUser;
       const { location } = history;
-      const userID : string | null = getUserID();
-      // 如果没有登录,重定向到 login
-      if (!userID && location.pathname !== '/user/login') {
+      //如果没有登录, 重定向到 login
+      if (!currentUser && location.pathname !== '/user/login') {
         history.push('/user/login');
       }
-      
     },
     
     menuHeaderRender: false,

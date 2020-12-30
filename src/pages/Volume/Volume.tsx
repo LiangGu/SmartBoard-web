@@ -12,7 +12,7 @@ const Volume: React.FC<{}> = () => {
   const onTabChange = (key: string) => {
     setCurrentT(key);
   };
-
+  
   return (
     <PageContainer>
       <Tabs defaultActiveKey={currentT} onChange={onTabChange} tabBarGutter={20}>
