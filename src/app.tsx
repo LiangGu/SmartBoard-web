@@ -1,13 +1,13 @@
 import React from 'react';
 import { BasicLayoutProps, Settings as LayoutSettings, MenuDataItem, } from '@ant-design/pro-layout';
 import { notification } from 'antd';
-import { history, RequestConfig } from 'umi';
+import { history, RequestConfig,} from 'umi';
 import RightContent from '@/components/RightContent';
 import { RequestOptionsInit, ResponseError } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
 import menu from '../config/menu';
 import { extend } from '@/utils/utils';
-import { getCurrentUser, getToken, getUserID } from '@/utils/auths';
+import { getToken, getUserID } from '@/utils/auths';
 import {
   SmileOutlined,
   HeartOutlined,
@@ -25,17 +25,8 @@ export async function getInitialState(): Promise<{
   currentUser?: API.CurrentUser;
   searchInfo?: API.SearchInfo;
   menuData?: MenuDataItem[];
+  token?: string;
 }> {
-  // 如果是登录页面，不执行
-  if (history.location.pathname !== '/user/login') {
-    const currUser: string | null = getCurrentUser();
-    if(currUser){
-      return {  
-        settings: defaultSettings,
-        currentUser: JSON.parse(currUser),
-      };
-    }
-  }
   return{
     settings: defaultSettings,
   }
@@ -91,10 +82,9 @@ export const layout = ({
     disableContentMargin: false,
     footerRender: () => false,
     onPageChange: (e) => {
-      const currentUser = initialState?.currentUser;
-      const { location } = history;
+      const token = getToken();
       //如果没有登录, 重定向到 login
-      if (!currentUser && location.pathname !== '/user/login') {
+      if (!token && location.pathname !== '/user/login') {
         history.push('/user/login');
       }
     },

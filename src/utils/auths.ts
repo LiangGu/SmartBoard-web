@@ -3,64 +3,68 @@ import global from '../global.d';
 export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
     //设置token到客户端，并且同时设置登录用户权限到客户端
     if(sysMes){
-        sessionStorage.setItem("userName", sysMes.userName);
-        sessionStorage.setItem("userID", sysMes.userID);
-        sessionStorage.setItem("branchID", sysMes.branchID);
-        sessionStorage.setItem("branchCode", sysMes.branchCode);
-        sessionStorage.setItem("token", sysMes.token);
-        sessionStorage.setItem("funcCurrency", sysMes.funcCurrency);
+        sessionStorage.setItem("USER_NAME", sysMes.userName);
+        sessionStorage.setItem("USER_ID", sysMes.userID);
+        sessionStorage.setItem("BRANCH_ID", sysMes.branchID);
+        sessionStorage.setItem("BRANCH_CODE", sysMes.branchCode);
+        sessionStorage.setItem("TOKEN", sysMes.token);
+        sessionStorage.setItem("FUNC_CURRENCY", sysMes.funcCurrency);
         //将选择的年份和公司信息<会变化的数据>存在Session,防止用户刷新出现问题
-        sessionStorage.setItem("selectBranchID", sysMes.selectBranchID);
-        sessionStorage.setItem("selectBranchName", sysMes.selectBranchName);
-        sessionStorage.setItem("selectYear", sysMes.selectYear);
-        sessionStorage.setItem("selectOceanTransportType", sysMes.selectOceanTransportType);
+        sessionStorage.setItem("SELECT_BRANCH_ID", sysMes.selectBranchID);
+        sessionStorage.setItem("SELECT_BRANCH_NAME", sysMes.selectBranchName);
+        sessionStorage.setItem("SELECT_YEAR", sysMes.selectYear);
+        sessionStorage.setItem("SELECT_OCEAN_TRANSPORT_TYPE", sysMes.selectOceanTransportType);
     }else{
-        sessionStorage.setItem("userName", '');
-        sessionStorage.setItem("userID", '');
-        sessionStorage.setItem("branchID", '');
-        sessionStorage.setItem("branchCode", '');
-        sessionStorage.setItem("token", '');
-        sessionStorage.setItem("FuncCurrency", '');
+        sessionStorage.setItem("USER_NAME", '');
+        sessionStorage.setItem("USER_ID", '');
+        sessionStorage.setItem("BRANCH_ID", '');
+        sessionStorage.setItem("BRANCH_CODE", '');
+        sessionStorage.setItem("TOKEN", '');
+        sessionStorage.setItem("FUNC_CURRENCY", '');
         //将选择的年份和公司信息<会变化的数据>存在Session,防止用户刷新出现问题
-        sessionStorage.setItem("selectBranchID", '');
-        sessionStorage.setItem("selectBranchName", '');
-        sessionStorage.setItem("selectYear", '');
-        sessionStorage.setItem("selectOceanTransportType", '');
+        sessionStorage.setItem("SELECT_BRANCH_ID", '');
+        sessionStorage.setItem("SELECT_BRANCH_NAME", '');
+        sessionStorage.setItem("SELECT_YEAR", '');
+        sessionStorage.setItem("SELECT_OCEAN_TRANSPORT_TYPE", '');
     }
 }
 
+export function getCurrentUser(){
+    return sessionStorage.getItem("");
+}
+
 export function getUserName() {
-    return sessionStorage.getItem("userName");
+    return sessionStorage.getItem("USER_NAME");
 }
 export function getUserID() {
-    return sessionStorage.getItem("userID");
+    return sessionStorage.getItem("USER_ID");
 }
 export function getBranchID() {
-    return sessionStorage.getItem("branchID");
+    return sessionStorage.getItem("BRANCH_ID");
 }
 export function getBranchCode() {
-    return sessionStorage.getItem("branchCode");
+    return sessionStorage.getItem("BRANCH_CODE");
 }
 export function getToken() {
-    return sessionStorage.getItem("token");
+    return sessionStorage.getItem("TOKEN");
 }
 export function getFuncCurr() {
-    return sessionStorage.getItem("FuncCurrency");
+    return sessionStorage.getItem("FUNC_CURRENCY");
 }
 
 //将选择的年份和公司信息<会变化的数据>存在Session,防止用户刷新出现问题
 export function getselectBranchID() {
-    return sessionStorage.getItem("selectBranchID");
+    return sessionStorage.getItem("SELECT_BRANCH_ID");
 }
 
 export function getselectBranchName() {
-    return sessionStorage.getItem("selectBranchName");
+    return sessionStorage.getItem("SELECT_BRANCH_NAME");
 }
 
 export function getselectYear() {
-    return sessionStorage.getItem("selectYear");
+    return sessionStorage.getItem("SELECT_YEAR");
 }
 
 export function getselectOceanTransportType() {
-    return sessionStorage.getItem("selectOceanTransportType");
+    return sessionStorage.getItem("SELECT_OCEAN_TRANSPORT_TYPE");
 }
