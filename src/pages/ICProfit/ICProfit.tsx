@@ -3,13 +3,14 @@ import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Spin, } from 'antd';
 //  引入 ECharts 主模块
-import echarts from 'echarts/lib/echarts'
+import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
-import 'echarts/lib/chart/line'
-import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line';
+import 'echarts/lib/chart/bar';
 // 引入提示框和标题组件
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
 //调用API
 import { getICProfitChartData, } from '@/services/icprofit';
 //调用公式方法
@@ -60,7 +61,7 @@ const ICProfit: React.FC<{}> = () => {
       myChart = echarts.init(element as HTMLDivElement);
       option = {
         title: {
-          text: '收支利润',
+          text: '收支毛利',
         },
         tooltip: {
           trigger: 'axis',

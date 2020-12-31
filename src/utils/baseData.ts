@@ -49,6 +49,7 @@ export const BizType2List = [
  * OceanTransportTypeList
  */
 export const OceanTransportTypeList = [
+    { Key: 0, Value: "不限" },                      //传 0 取全部
     { Key: 1, Value: "整箱" },
     { Key: 2, Value: "拼箱" },
     { Key: 3, Value: "散货" },

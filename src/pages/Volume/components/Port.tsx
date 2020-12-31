@@ -2,18 +2,18 @@ import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { Card, Radio, Spin, } from 'antd';
 //引入 ECharts 主模块
-import echarts from 'echarts/lib/echarts'
+import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
-import 'echarts/lib/chart/line'
-import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line';
+import 'echarts/lib/chart/bar';
 // 引入提示框和标题组件
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title';
+import 'echarts/lib/component/tooltip';
 //调用API
 import { getPortChartData, } from '@/services/volume';
 //调用公式方法
 import { sortObjectArr, } from '@/utils/utils';
-import { getselectBranchID, getselectYear, getselectOceanTransportType,} from '@/utils/auths';
+import { getselectBranchID, getselectYear,} from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
@@ -80,28 +80,28 @@ const Port: React.FC<{}> = () => {
                 type: 'bar',
                 data: [...PortTopTotalARList]
             });
-            yAxisName = '单位: CNY(千)'
+            yAxisName = '收入: CNY(千)'
         } else if (type == '整箱') {
             seriesData.push({
                 name: type,
                 type: 'bar',
                 data: [...PortTopTotalFCLList]
             });
-            yAxisName = '单位: TEU'
+            yAxisName = '整箱: TEU'
         } else if (type == '拼箱') {
             seriesData.push({
                 name: type,
                 type: 'bar',
                 data: [...PortTopTotalLCLList]
             });
-            yAxisName = '单位: CBM'
+            yAxisName = '拼箱: CBM'
         } else {
             seriesData.push({
                 name: type,
                 type: 'bar',
                 data: [...PortTopTotalBulkList]
             });
-            yAxisName = '单位: TON'
+            yAxisName = '散货: TON'
         }
 
         if(element){
@@ -160,7 +160,6 @@ const Port: React.FC<{}> = () => {
             Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: getselectOceanTransportType(),
         };
         if (getselectBranchID() !=='') {
             fetchData(ParamsInfo,type);

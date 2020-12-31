@@ -2,13 +2,14 @@ import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { Card, Spin, } from 'antd';
 //引入 ECharts 主模块
-import echarts from 'echarts/lib/echarts'
+import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
-import 'echarts/lib/chart/line'
-import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line';
+import 'echarts/lib/chart/bar';
 // 引入提示框和标题组件
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
 //调用API
 import { getMonthChartData, } from '@/services/volume';
 //调用公式方法
@@ -54,24 +55,28 @@ const Month: React.FC<{}> = () => {
         let seriesName = '';
         if(Number(getselectOceanTransportType()) == 1){
             legendData = ['TEU','CNY(千)'];
-            yAxisName = '单位: TEU';
+            yAxisName = '整箱: TEU';
             seriesName = 'TEU';
         }else if(Number(getselectOceanTransportType()) == 2){
             legendData = ['CBM','CNY(千)'];
-            yAxisName = '单位: CBM';
+            yAxisName = '拼箱: CBM';
             seriesName = 'CBM';
         }else if(Number(getselectOceanTransportType()) == 3){
             legendData = ['KGS','CNY(千)'];
-            yAxisName = '单位: KGS';
+            yAxisName = '散货: KGS';
             seriesName = 'KGS';
         }else if(Number(getselectOceanTransportType()) == 6){
             legendData = ['批次','CNY(千)'];
-            yAxisName = '单位: 批次';
+            yAxisName = '整车: 批次';
             seriesName = '批次';
-        }else{
+        }else if(Number(getselectOceanTransportType()) == 7){
             legendData = ['KGS','CNY(千)'];
-            yAxisName = '单位: KGS';
+            yAxisName = '零担: KGS';
             seriesName = 'KGS';
+        }else{
+            legendData = ['RT','CNY(千)'];
+            yAxisName = 'RT';
+            seriesName = 'RT';
         }
 
         if(element){
@@ -119,7 +124,7 @@ const Month: React.FC<{}> = () => {
                     {
                         type: 'value',
                         scale: true,
-                        name: '单位: CNY(千)',
+                        name: '收入: CNY(千)',
                         min: getMinValue(IncomeDate),
                         max: getMaxValue(IncomeDate),
                         splitNumber: 5,

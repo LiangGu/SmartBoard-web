@@ -103,7 +103,7 @@ const CashFlow: React.FC<{}> = () => {
         },
         yAxis: {
           type: 'value',
-          name: '单位: CNY(千)'
+          name: '收入: CNY(千)'
         },
         dataZoom: [
           {

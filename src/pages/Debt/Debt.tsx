@@ -3,13 +3,13 @@ import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Spin, } from 'antd';
 //引入 ECharts 主模块
-import echarts from 'echarts/lib/echarts'
+import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
-import 'echarts/lib/chart/line'
-import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line';
+import 'echarts/lib/chart/bar';
 // 引入提示框和标题组件
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title';
+import 'echarts/lib/component/tooltip';
 //调用API
 import { getDebtChartData, } from '@/services/debt';
 //调用公式方法
@@ -84,9 +84,6 @@ const Debt: React.FC<{}> = () => {
                         restore: { show: true },
                         saveAsImage: { show: true }
                     }
-                },
-                legend: {
-                    data: ['应收账款']
                 },
                 xAxis: {
                     data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-180天", "大于180天"]

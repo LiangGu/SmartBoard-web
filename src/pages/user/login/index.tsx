@@ -60,7 +60,12 @@ const Login: React.FC<{}> = () => {
         let currentUser: API.CurrentUser = res.Content;
         let menuData:MenuDataItem[] = menu.menuData;
         //让系统实时查询
-        let searchInfo:object = Object.assign({},{ UpdateIndex : new Date().getTime()});
+        let searchInfo:object = Object.assign({},{ 
+          UpdateIndex : new Date().getTime(),
+          MonthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          BizType1List: [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
+          BizType2List: [1, 2, 3, 4, 5, 6],
+        });
         setInitialState({
           ...initialState,
           currentUser,
@@ -78,7 +83,7 @@ const Login: React.FC<{}> = () => {
           selectBranchID: res.Content.BranchID　== 1 ? 0 : res.Content.BranchID,      //总部BranchID传0
           selectBranchName: res.Content.BranchID　== 1 ? "香港外运(总部)" : BranchList.find( x => x.Key == res.Content.BranchID)?.Value || '',      //总部公司名显示:香港外运(总部)
           selectYear: new Date().getFullYear().toString(),
-          selectOceanTransportType: '1',      //默认整箱
+          selectOceanTransportType: '0',      //默认不限制
         }
         setSystemMes(sysSaveData);
         replaceGoto();

@@ -51,11 +51,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     const [indeterminate2, setIndeterminate2] = useState(false);
     const [checkAll2, setCheckAll2] = useState(() =>{
-        if(initialState?.searchInfo?.MonthList?.length == MonthList.length){
-            return false;
-        }else{
-            return true;
-        }
+        return initialState?.searchInfo?.MonthList?.length == MonthList.length;
     });
     // BizType1List                 :3
     const [checkedList3, setCheckedList3] = useState(() => {
@@ -68,11 +64,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     const [indeterminate3, setIndeterminate3] = useState(false);
     const [checkAll3, setCheckAll3] = useState(() =>{
-        if(initialState?.searchInfo?.BizType1List?.length == BizType1List.length){
-            return false;
-        }else{
-            return true;
-        }
+        return initialState?.searchInfo?.BizType1List?.length == BizType1List.length;
     });
     // BizType2List                 :4
     const [checkedList4, setCheckedList4] = useState(() => {
@@ -85,14 +77,10 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     const [indeterminate4, setIndeterminate4] = useState(false);
     const [checkAll4, setCheckAll4] = useState(() =>{
-        if(initialState?.searchInfo?.BizType2List?.length == BizType2List.length){
-            return false;
-        }else{
-            return true;
-        }
+        return initialState?.searchInfo?.BizType2List?.length == BizType2List.length;
     });
 
-    // OceanTransportTypeList                 :5
+    // OceanTransportTypeList        :5
     const [oceanTransportType, setOceanTransportType] = useState(() =>{
         // 惰性赋值 any 类型,要不默认值不起作用
         let selectOceanTransportType:any = getselectOceanTransportType();
@@ -240,7 +228,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
             >
 
                 {
-                    // 月份货量和收支利润没有月份的搜索条件
+                    // 月份货量和收支毛利没有月份的搜索条件
                     PropsState && PropsState == 1 || PropsState && PropsState == 5 ?
                         <>
                             <div className={styles.searchArea}>
@@ -310,6 +298,79 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                 </Radio.Group>
                             </div>
                         </> :
+                    // 港口没有货物类型的搜索条件
+                    PropsState && PropsState == 2 ?
+                        <>
+                            <div className={styles.searchArea}>
+                                <Row className={styles.searchAreaLable}>
+                                    <Col span={12} className={styles.searchAreaTitle}>年份</Col>
+                                </Row>
+                                <Radio.Group buttonStyle="solid" size="small" onChange={(e) => onRadioChange(1, e)} defaultValue={parseInt(year)}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            YearList && YearList.length > 0 ? YearList.map(x => {
+                                                // YearList 变化时要修改下方 <Col span={8}>
+                                                return <Col span={24} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Radio.Group>
+                            </div>
+
+                            <div className={styles.searchArea}>
+                                <Row className={styles.searchAreaLable}>
+                                    <Col span={12} className={styles.searchAreaTitle}>月份</Col>
+                                    <Checkbox indeterminate={indeterminate2} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll2}>
+                                        全选
+                                    </Checkbox>
+                                </Row>
+                                <Checkbox.Group value={checkedList2} onChange={(list) => onChange(2, list)}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            MonthList && MonthList.length > 0 ? MonthList.map(x => {
+                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Checkbox.Group>
+                            </div>
+
+                            <div className={styles.searchArea}>
+                                <Row className={styles.searchAreaLable}>
+                                    <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
+                                    <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(2, e)} checked={checkAll3}>
+                                        全选
+                                    </Checkbox>
+                                </Row>
+                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(2, list)}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            BizType1List && BizType1List.length > 0 ? BizType1List.map(x => {
+                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Checkbox.Group>
+                            </div>
+
+                            <div className={styles.searchArea}>
+                                <Row className={styles.searchAreaLable}>
+                                    <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
+                                    <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll4}>
+                                        全选
+                                    </Checkbox>
+                                </Row>
+                                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(3, list)}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
+                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Checkbox.Group>
+                            </div>
+                        </>:
                     // 现金流只有年份的搜索条件
                     PropsState && PropsState == 4 ?
                         <>
