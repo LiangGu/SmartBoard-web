@@ -41,9 +41,9 @@ const ICProfit: React.FC<{}> = () => {
       SortICProfitList = result.sort(sortObjectArr('FinanceMonth',1));
       if (SortICProfitList && SortICProfitList.length > 0) {
         SortICProfitList.map((x: { TotalAR: any; TotalAP: any; Profit: any }) => {
-          TotalARList.push((x.TotalAR / 1000).toFixed(2));
-          TotalAPList.push((x.TotalAP / 1000).toFixed(2));
-          ProfitList.push((x.Profit / 1000).toFixed(2));
+          TotalARList.push((x.TotalAR / 10000).toFixed(2));
+          TotalAPList.push((x.TotalAP / 10000).toFixed(2));
+          ProfitList.push((x.Profit / 10000).toFixed(2));
         });
       }
       //将值传给初始化图表的函数
@@ -86,7 +86,7 @@ const ICProfit: React.FC<{}> = () => {
         xAxis: {
           data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
         },
-        yAxis: { name: '单位: CNY(千)' },
+        yAxis: { name: '单位: CNY(万)' },
         series: [
           {
             name: '收入',

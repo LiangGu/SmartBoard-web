@@ -64,7 +64,7 @@ const Rank: React.FC<{}> = () => {
         }
         if (RankTopList.length > 0) {
             RankTopList.map((x: { TotalAR: any; FLCVolume: Number; LCLVolume: Number; BulkVolume: Number; CustomerName: string; }) => {
-                RankTopTotalARList.push((x.TotalAR / 1000).toFixed(2));             //Total AR
+                RankTopTotalARList.push((x.TotalAR / 10000).toFixed(2));             //Total AR
                 RankTopTotalFCLList.push(x.FLCVolume);          //Total AR
                 RankTopTotalLCLList.push(x.LCLVolume);          //Total AR
                 RankTopTotalBulkList.push(x.BulkVolume);        //Total AR
@@ -80,7 +80,7 @@ const Rank: React.FC<{}> = () => {
                 type: 'bar',
                 data: [...RankTopTotalARList]
             });
-            yAxisName = '收入: CNY(千)'
+            yAxisName = '收入: CNY(万)'
         } else if (type == '整箱') {
             seriesData.push({
                 name: type,
@@ -101,7 +101,7 @@ const Rank: React.FC<{}> = () => {
                 type: 'bar',
                 data: [...RankTopTotalBulkList]
             });
-            yAxisName = '散货: TON'
+            yAxisName = '散货: KGS'
         }
 
         if(element){
@@ -196,7 +196,6 @@ const Rank: React.FC<{}> = () => {
                 extra={
                     <>
                         {/* 切换统计图表类型 */}
-                        <span style={{marginRight:10}}>排序方式:</span>
                         <Radio.Group size="small" defaultValue={type} buttonStyle="solid" onChange={onChangeType}>
                             <Radio.Button value="收入">收入</Radio.Button>
                             <Radio.Button value="整箱">整箱</Radio.Button>

@@ -36,7 +36,7 @@ const Month: React.FC<{}> = () => {
             if (result) {
                 result.map((x: { Volume: Number; TotalAR: any; }) => {
                     VolumeList.push(x.Volume);
-                    TotalARList.push(parseFloat((x.TotalAR / 1000).toFixed(2)));
+                    TotalARList.push(parseFloat((x.TotalAR / 10000).toFixed(2)));
                 });
             }
             //将值传给初始化图表的函数
@@ -54,27 +54,27 @@ const Month: React.FC<{}> = () => {
         let yAxisName = '';
         let seriesName = '';
         if(Number(getselectOceanTransportType()) == 1){
-            legendData = ['TEU','CNY(千)'];
+            legendData = ['TEU','CNY(万)'];
             yAxisName = '整箱: TEU';
             seriesName = 'TEU';
         }else if(Number(getselectOceanTransportType()) == 2){
-            legendData = ['CBM','CNY(千)'];
+            legendData = ['CBM','CNY(万)'];
             yAxisName = '拼箱: CBM';
             seriesName = 'CBM';
         }else if(Number(getselectOceanTransportType()) == 3){
-            legendData = ['KGS','CNY(千)'];
+            legendData = ['KGS','CNY(万)'];
             yAxisName = '散货: KGS';
             seriesName = 'KGS';
         }else if(Number(getselectOceanTransportType()) == 6){
-            legendData = ['批次','CNY(千)'];
+            legendData = ['批次','CNY(万)'];
             yAxisName = '整车: 批次';
             seriesName = '批次';
         }else if(Number(getselectOceanTransportType()) == 7){
-            legendData = ['KGS','CNY(千)'];
+            legendData = ['KGS','CNY(万)'];
             yAxisName = '零担: KGS';
             seriesName = 'KGS';
         }else{
-            legendData = ['RT','CNY(千)'];
+            legendData = ['RT','CNY(万)'];
             yAxisName = 'RT';
             seriesName = 'RT';
         }
@@ -124,7 +124,7 @@ const Month: React.FC<{}> = () => {
                     {
                         type: 'value',
                         scale: true,
-                        name: '收入: CNY(千)',
+                        name: '收入: CNY(万)',
                         min: getMinValue(IncomeDate),
                         max: getMaxValue(IncomeDate),
                         splitNumber: 5,
@@ -139,7 +139,7 @@ const Month: React.FC<{}> = () => {
                         data: [...VolumeData]
                     },
                     {
-                        name: 'CNY(千)',
+                        name: 'CNY(万)',
                         type: 'line',
                         color: '#C23531',
                         yAxisIndex: 1,

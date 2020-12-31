@@ -36,12 +36,12 @@ const Debt: React.FC<{}> = () => {
             let ReMoney181List: any = [];
             if (result) {
                 result.forEach((x: { ReMoney30: any;ReMoney45: any;ReMoney60: any;ReMoney90: any;ReMoney180: any;ReMoney181: any; }) => {
-                    ReMoney30List.push(x.ReMoney30 / 1000);
-                    ReMoney45List.push(x.ReMoney45 / 1000);
-                    ReMoney60List.push(x.ReMoney60 / 1000);
-                    ReMoney90List.push(x.ReMoney90 / 1000);
-                    ReMoney180List.push(x.ReMoney180 / 1000);
-                    ReMoney181List.push(x.ReMoney181 / 1000);
+                    ReMoney30List.push(x.ReMoney30 / 10000);
+                    ReMoney45List.push(x.ReMoney45 / 10000);
+                    ReMoney60List.push(x.ReMoney60 / 10000);
+                    ReMoney90List.push(x.ReMoney90 / 10000);
+                    ReMoney180List.push(x.ReMoney180 / 10000);
+                    ReMoney181List.push(x.ReMoney181 / 10000);
                 });
                 ReMoney30List = getTotalValue(ReMoney30List).toFixed(2);
                 ReMoney45List = getTotalValue(ReMoney45List).toFixed(2);
@@ -88,7 +88,7 @@ const Debt: React.FC<{}> = () => {
                 xAxis: {
                     data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-180天", "大于180天"]
                 },
-                yAxis: { name: '单位: CNY(千)' },
+                yAxis: { name: '单位: CNY(万)' },
                 series: [
                     {
                         name: '应收账款',

@@ -64,7 +64,7 @@ const Port: React.FC<{}> = () => {
         }
         if (PortTopList.length > 0) {
             PortTopList.map((x: { TotalAR: any; FLCVolume: any; LCLVolume: any; BulkVolume: any; PortName: string; }) => {
-                PortTopTotalARList.push((x.TotalAR / 1000).toFixed(2));             //Total AR
+                PortTopTotalARList.push((x.TotalAR / 10000).toFixed(2));             //Total AR
                 PortTopTotalFCLList.push(x.FLCVolume);          //Total AR
                 PortTopTotalLCLList.push(x.LCLVolume);          //Total AR
                 PortTopTotalBulkList.push(x.BulkVolume);        //Total AR
@@ -80,7 +80,7 @@ const Port: React.FC<{}> = () => {
                 type: 'bar',
                 data: [...PortTopTotalARList]
             });
-            yAxisName = '收入: CNY(千)'
+            yAxisName = '收入: CNY(万)'
         } else if (type == '整箱') {
             seriesData.push({
                 name: type,
@@ -101,7 +101,7 @@ const Port: React.FC<{}> = () => {
                 type: 'bar',
                 data: [...PortTopTotalBulkList]
             });
-            yAxisName = '散货: TON'
+            yAxisName = '散货: KGS'
         }
 
         if(element){
@@ -180,7 +180,6 @@ const Port: React.FC<{}> = () => {
                 extra={
                     <>
                         {/* 切换统计图表类型 */}
-                        <span style={{marginRight:10}}>排序方式:</span>
                         <Radio.Group size="small" defaultValue={type} buttonStyle="solid" onChange={onChangeType}>
                             <Radio.Button value="收入">收入</Radio.Button>
                             <Radio.Button value="整箱">整箱</Radio.Button>
