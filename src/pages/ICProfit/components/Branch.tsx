@@ -14,7 +14,7 @@ import 'echarts/lib/component/legend';
 //调用API
 import { getICProfitChartData, } from '@/services/icprofit';
 //调用公式方法
-import { sortObjectArr, transIntofArraay,} from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay,} from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -22,7 +22,6 @@ import SearchButton from '@/components/Search/SearchButton';
 import ContextProps from '@/createContext';
 
 const ICProfitBranch: React.FC<{}> = () => {
-    const PropsState = useContext(ContextProps);     //得到父组件过来的值
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
     const [type, setType] = useState('收入');
@@ -147,7 +146,7 @@ const ICProfitBranch: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(ProfitList),
+                        data: transIntOfArraay(ProfitList),
                     },
                     {
                         name: '收入',
@@ -167,7 +166,7 @@ const ICProfitBranch: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(TotalARList),
+                        data: transIntOfArraay(TotalARList),
                     },
                     {
                         name: '支出',
@@ -187,7 +186,7 @@ const ICProfitBranch: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(TotalAPList),
+                        data: transIntOfArraay(TotalAPList),
                     }
                 ]
             };
@@ -238,7 +237,7 @@ const ICProfitBranch: React.FC<{}> = () => {
             </Spin>
 
             {/*重点代码*/}
-            <ContextProps.Provider value={7}>
+            <ContextProps.Provider value={8}>
                 <SearchButton />
             </ContextProps.Provider>
         </PageContainer>

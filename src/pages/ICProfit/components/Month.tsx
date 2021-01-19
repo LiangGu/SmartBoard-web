@@ -14,7 +14,7 @@ import 'echarts/lib/component/legend';
 //调用API
 import { getICProfitChartData, } from '@/services/icprofit';
 //调用公式方法
-import { sortObjectArr, transIntofArraay, } from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -22,7 +22,6 @@ import SearchButton from '@/components/Search/SearchButton';
 import ContextProps from '@/createContext';
 
 const ICProfitMonth: React.FC<{}> = () => {
-    const PropsState = useContext(ContextProps);     //得到父组件过来的值
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
 
@@ -128,7 +127,7 @@ const ICProfitMonth: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(TotalARList),
+                        data: transIntOfArraay(TotalARList),
                     },
                     {
                         type: 'bar',
@@ -147,13 +146,13 @@ const ICProfitMonth: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(TotalAPList),
+                        data: transIntOfArraay(TotalAPList),
                     },
                     {
                         type: 'line',
                         name: '毛利',
                         color: '#FF7C00',
-                        data: transIntofArraay(ProfitList),
+                        data: transIntOfArraay(ProfitList),
                     },
                 ]
             };

@@ -15,7 +15,7 @@ import 'echarts/lib/component/legend';
 //调用API
 import { getICProfitChartData, } from '@/services/icprofit';
 //调用公式方法
-import { transIntofArraay,} from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay,} from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -32,7 +32,6 @@ import img_Contract from '@/assets/businessLine/contract.svg';
 import img_Ecommerce from '@/assets/businessLine/ecommerce.svg';
 
 const VolumeBusinessLine: React.FC<{}> = () => {
-    const PropsState = useContext(ContextProps);     //得到父组件过来的值
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
     const [businessLine, setBusinessLine] = useState(1);
@@ -257,7 +256,7 @@ const VolumeBusinessLine: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(BarSeriesData2020),
+                        data: transIntOfArraay(BarSeriesData2020),
                     },
                     {
                         type: 'bar',
@@ -275,7 +274,7 @@ const VolumeBusinessLine: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(BarSeriesData2019),
+                        data: transIntOfArraay(BarSeriesData2019),
                     },
                 ]
             };

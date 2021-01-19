@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Spin, } from 'antd';
@@ -12,44 +12,25 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 //调用API
-import { getICProfitChartData, } from '@/services/icprofit';
+import { getBranchChartData, } from '@/services/volume';
 //调用公式方法
-import { sortObjectArr, transIntofArraay,} from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay, calculateOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
+//引入基础数据
+import { BranchList, } from '@/utils/baseData';
 //重点代码<React hooks之useContext父子组件传值>
 import ContextProps from '@/createContext';
 
 const VolumeBranch: React.FC<{}> = () => {
-    const PropsState = useContext(ContextProps);     //得到父组件过来的值
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
 
     //获取数据
     let fetchData = async (ParamsInfo: any,) => {
         setloading(true);
-        // const result = await getICProfitChartData(ParamsInfo);
-
-        // 假数据
-        const result = [
-            { TotalVolume: 5492.57, BranchName: '香港船务', },
-            { TotalVolume: 83151.9, BranchName: '上海伟运货代', },
-            { TotalVolume: 68515.67, BranchName: '泰国外运', },
-            { TotalVolume: 21063.71, BranchName: '马来西亚外运', },
-            { TotalVolume: 1721794.09, BranchName: '印尼外运', },
-            { TotalVolume: 22615.23, BranchName: '柬埔寨外运', },
-            { TotalVolume: 22621.66, BranchName: '缅甸外运', },
-            { TotalVolume: 14577.93, BranchName: '中越外运', },
-            // {TotalVolume: 0,BranchName: '上海伟运工程',},
-            // {TotalVolume: 0,BranchName: '大宗商品事业部',},
-            // {TotalVolume: 4.08,BranchName: '空运事业部(伟运)',},
-            // {TotalVolume: 35,BranchName: '电商事业部(伟运)',},
-            // {TotalVolume: 0,BranchName: '电商事业部(香港)',},
-            { TotalVolume: 570.82, BranchName: '中越外运(E拼)', },
-            // {TotalVolume: 0,BranchName: '空运事业部(香港)',},
-        ];
-
+        const result = await getBranchChartData(ParamsInfo);
         if (!result || getselectBranchID() == '') {
             return;
         }
@@ -58,11 +39,11 @@ const VolumeBranch: React.FC<{}> = () => {
             let TotalVolumeList: any = [];
             let yAxisData: any = [];
             if (result.length > 0) {
-                SortVolumeBranchList = result.sort(sortObjectArr('TotalVolume', 1));
+                SortVolumeBranchList = result.sort(sortObjectArr('Volume', 1));
                 if (SortVolumeBranchList && SortVolumeBranchList.length > 0) {
-                    SortVolumeBranchList.map((x: { TotalVolume: any; BranchName: any }) => {
-                        TotalVolumeList.push(x.TotalVolume);
-                        yAxisData.push(`${x.BranchName}`);
+                    SortVolumeBranchList.map((x: { Volume: any; BranchName: any; BranchID: Number }) => {
+                        TotalVolumeList.push(x.Volume);
+                        yAxisData.push(BranchList.find(y => y.Key == x.BranchID)?.Value);      //*后台返回的 BranchName 是 null ,先前台自行过滤
                     });
                 }
             }
@@ -80,6 +61,23 @@ const VolumeBranch: React.FC<{}> = () => {
             myChart.dispose();
         }
         let option: any;
+        //赋值月度货量图表中的单位
+        let UnitName = '';
+        if (Number(getselectOceanTransportType()) == 1) {
+            UnitName = '单位: TEU';
+        } else if (Number(getselectOceanTransportType()) == 2) {
+            UnitName = '单位: CBM';
+        } else if (Number(getselectOceanTransportType()) == 3) {
+            UnitName = '单位: TON';
+            //后台散货存的是 KGS
+            TotalVolumeList = calculateOfArraay(TotalVolumeList, '/', 1000);
+        } else if (Number(getselectOceanTransportType()) == 6) {
+            UnitName = '单位: 批次';
+        } else if (Number(getselectOceanTransportType()) == 7) {
+            UnitName = '单位: KGS';
+        } else {
+            UnitName = '单位: RT';
+        }
         if (element) {
             myChart = echarts.init(element as HTMLDivElement);
             option = {
@@ -113,7 +111,7 @@ const VolumeBranch: React.FC<{}> = () => {
                 yAxis: [
                     {
                         type: 'category',
-                        name: '单位: RT',
+                        name: UnitName,
                         axisLabel: {
                             show: true,
                             color: 'black',
@@ -129,7 +127,7 @@ const VolumeBranch: React.FC<{}> = () => {
                 series: [
                     {
                         type: 'bar',
-                        name: '货量',
+                        name: UnitName,
                         color: '#C23531',
                         label: {
                             show: true,
@@ -144,7 +142,7 @@ const VolumeBranch: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(TotalVolumeList),
+                        data: transIntOfArraay(TotalVolumeList),
                     },
                 ]
             };
@@ -178,9 +176,9 @@ const VolumeBranch: React.FC<{}> = () => {
             </Spin>
 
             {/*重点代码*/}
-            {/* <ContextProps.Provider value={7}>
+            <ContextProps.Provider value={6}>
                 <SearchButton />
-            </ContextProps.Provider> */}
+            </ContextProps.Provider>
         </PageContainer>
     )
 };

@@ -38,13 +38,6 @@ export const getMaxValue = (list: Array<any>) => {
     let maxval = 0;
     if (list && list.length > 0) {
         list.forEach((element) => {
-            // element.forEach((x: any) => {
-            //     if (!(x === undefined || x === '')) {
-            //         if (max < x) {
-            //             max = x;
-            //         }
-            //     }
-            // })
             if (!(element === undefined || element === '')) {
                 if (max < element) {
                     max = element;
@@ -67,13 +60,6 @@ export const getMinValue = (list: Array<any>) => {
     let minval = 0;
     if (list && list.length > 0) {
         list.forEach((element) => {
-            // element.forEach((x: any) => {
-            //     if (!(x === undefined || x === '')) {
-            //         if (min > x) {
-            //             min = x;
-            //         }
-            //     }
-            // })
             if (!(element === undefined || element === '')) {
                 if (min > element) {
                     min = element;
@@ -100,14 +86,38 @@ export const getTotalValue = (list: Array<Number>) => {
  * @param prop
  * @param T 
  */
-export const transIntofArraay = (list: Array<Number>) => {
+export const transIntOfArraay = (list: Array<Number>) => {
     let IntList: number[] = [];
-    if(list && list.length > 0){
-        list.map((x:any) => {
+    if (list && list.length > 0) {
+        list.map((x: any) => {
             IntList.push(Math.round(x));
         });
     }
     return IntList;
+}
+
+/**
+ * 数组中的数据进行加减乘除
+ * @param list
+ * @param type
+ * @param value
+ */
+export const calculateOfArraay = (list: Array<Number>, type: string, value: number) => {
+    let List: number[] = [];
+    if (list && list.length > 0) {
+        list.map((x: any) => {
+            if (type == '+') {
+                List.push(x + value);
+            } else if (type == '-') {
+                List.push(x - value);
+            } else if (type == '*') {
+                List.push(x * value);
+            } else if (type == '/') {
+                List.push(x / value);
+            }
+        });
+    }
+    return List;
 }
 
 /**

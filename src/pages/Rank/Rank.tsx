@@ -12,7 +12,7 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getRankChartData, } from '@/services/rank';
 //调用公式方法
-import { sortObjectArr, transIntofArraay,} from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay, calculateOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -27,7 +27,7 @@ const Rank: React.FC<{}> = () => {
     const [result, setResult] = useState([]);
 
     //获取数据
-    let fetchData = async (ParamsInfo: any, Type: string , Top: Number) => {
+    let fetchData = async (ParamsInfo: any, Type: string, Top: Number) => {
         setloading(true);
         const result = await getRankChartData(ParamsInfo);
         if (!result || getselectBranchID() == '') {
@@ -38,14 +38,14 @@ const Rank: React.FC<{}> = () => {
                 setResult(result);
             }
             //将值传给初始化图表的函数
-            initChart(result, Type , Top);
+            initChart(result, Type, Top);
             setloading(false);
         };
     }
 
     //初始化图表
     let myChart: any;
-    let initChart = (result: any, type: string , top: Number) => {
+    let initChart = (result: any, type: string, top: Number) => {
         let element = document.getElementById('RankChart');
         if (myChart != null && myChart != "" && myChart != undefined) {
             myChart.dispose();
@@ -89,8 +89,9 @@ const Rank: React.FC<{}> = () => {
             seriesData = [...RankTopTotalLCLList];
             yAxisName = '单位: CBM';
         } else {
-            seriesData = [...RankTopTotalBulkList];
-            yAxisName = '单位: KGS';
+            //后台散货存的是 KGS
+            seriesData = calculateOfArraay(RankTopTotalBulkList, '/', 1000);
+            yAxisName = '单位: TON';
         }
 
         if (element) {
@@ -121,17 +122,17 @@ const Rank: React.FC<{}> = () => {
                 },
                 xAxis: {
                     axisLabel: {
-                        show: true,
+                        show: false,
                         // 让显示所有 X 轴
                         // interval: 0,
-                        // rotate: 10,
+                        // rotate: 30,
                         color: 'black',
                         fontSize: 16,
                     },
                     data: [...RankTopCTNameList],
                 },
                 yAxis: {
-                    name: '单位: CNY(万)',
+                    name: yAxisName,
                     nameTextStyle: {
                         color: 'black',
                         fontSize: 16,
@@ -160,7 +161,7 @@ const Rank: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(seriesData),
+                        data: transIntOfArraay(seriesData),
                     }
                 ],
             };
@@ -182,7 +183,7 @@ const Rank: React.FC<{}> = () => {
             CargoTypes: getselectOceanTransportType(),
         };
         if (getselectBranchID() !== '') {
-            fetchData(ParamsInfo, type , top);
+            fetchData(ParamsInfo, type, top);
         }
     }, [initialState]);
 
@@ -191,7 +192,7 @@ const Rank: React.FC<{}> = () => {
      */
     const onChangeType = (e: any) => {
         setType(e.target.value);
-        initChart(result, e.target.value , top);
+        initChart(result, e.target.value, top);
     }
 
     /**
@@ -207,7 +208,7 @@ const Rank: React.FC<{}> = () => {
             <Card
                 extra={
                     <>
-                        <Radio.Group defaultValue={top} buttonStyle="solid" onChange={onChangeTop} style={{marginRight:20}}>
+                        <Radio.Group defaultValue={top} buttonStyle="solid" onChange={onChangeTop} style={{ marginRight: 20 }}>
                             <Radio.Button value={10}>前10</Radio.Button>
                             <Radio.Button value={20}>前20</Radio.Button>
                             <Radio.Button value={30}>前30</Radio.Button>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { Card, Radio, Spin, } from 'antd';
 //引入 ECharts 主模块
@@ -12,7 +12,7 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getPortChartData, } from '@/services/volume';
 //调用公式方法
-import { sortObjectArr, transIntofArraay,} from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay, calculateOfArraay,} from '@/utils/utils';
 import { getselectBranchID, getselectYear, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -20,7 +20,6 @@ import SearchButton from '@/components/Search/SearchButton';
 import ContextProps from '@/createContext';
 
 const VolumePort: React.FC<{}> = () => {
-    const PropsState = useContext(ContextProps);     //得到父组件过来的值
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
     const [type, setType] = useState('收入');
@@ -90,8 +89,9 @@ const VolumePort: React.FC<{}> = () => {
             seriesData = [...PortTopTotalLCLList];
             yAxisName = '单位: CBM';
         } else {
-            seriesData = [...PortTopTotalBulkList];
-            yAxisName = '单位: KGS';
+            //后台散货存的是 KGS
+            seriesData = calculateOfArraay(PortTopTotalBulkList, '/', 1000);
+            yAxisName = '单位: TON';
         }
 
         if (element) {
@@ -162,7 +162,7 @@ const VolumePort: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(seriesData),
+                        data: transIntOfArraay(seriesData),
                     }
                 ],
             };

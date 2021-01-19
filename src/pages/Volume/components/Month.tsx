@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { Card, Spin, } from 'antd';
 //引入 ECharts 主模块
@@ -13,7 +13,7 @@ import 'echarts/lib/component/legend';
 //调用API
 import { getMonthChartData, } from '@/services/volume';
 //调用公式方法
-import { getMaxValue, getMinValue, transIntofArraay, getTotalValue, } from '@/utils/utils';
+import { transIntOfArraay, getTotalValue, calculateOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -21,7 +21,6 @@ import SearchButton from '@/components/Search/SearchButton';
 import ContextProps from '@/createContext';
 
 const VolumeMonth: React.FC<{}> = () => {
-    const PropsState = useContext(ContextProps);     //得到父组件过来的值
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
     const [totalRT, settotalRT] = useState(0);
@@ -43,8 +42,8 @@ const VolumeMonth: React.FC<{}> = () => {
                     TotalARList.push(parseFloat((x.TotalAR / 10000).toFixed(2)));
                 });
             }
-            settotalRT(getTotalValue(transIntofArraay(VolumeList)));
-            settotalIncome(getTotalValue(transIntofArraay(TotalARList)))
+            settotalRT(getTotalValue(transIntOfArraay(VolumeList)));
+            settotalIncome(getTotalValue(transIntOfArraay(TotalARList)))
             //将值传给初始化图表的函数
             initChart(VolumeList, TotalARList);
             setloading(false);
@@ -67,19 +66,21 @@ const VolumeMonth: React.FC<{}> = () => {
         let Option_Income: any;
 
         //赋值月度货量图表中的单位
-        let yAxisName = '';
+        let UnitName = '';
         if (Number(getselectOceanTransportType()) == 1) {
-            yAxisName = '单位: TEU';
+            UnitName = '单位: TEU';
         } else if (Number(getselectOceanTransportType()) == 2) {
-            yAxisName = '单位: CBM';
+            UnitName = '单位: CBM';
         } else if (Number(getselectOceanTransportType()) == 3) {
-            yAxisName = '单位: TON';
+            UnitName = '单位: TON';
+            //后台散货存的是 KGS
+            VolumeData = calculateOfArraay(VolumeData, '/', 1000);
         } else if (Number(getselectOceanTransportType()) == 6) {
-            yAxisName = '单位: 批次';
+            UnitName = '单位: 批次';
         } else if (Number(getselectOceanTransportType()) == 7) {
-            yAxisName = '单位: KGS';
+            UnitName = '单位: KGS';
         } else {
-            yAxisName = '单位: RT';
+            UnitName = '单位: RT';
         }
 
         if (Element_RT) {
@@ -114,7 +115,7 @@ const VolumeMonth: React.FC<{}> = () => {
                     },
                 ],
                 yAxis: {
-                    name: yAxisName,
+                    name: UnitName,
                     nameTextStyle: {
                         color: 'black',
                         fontSize: 16,
@@ -128,7 +129,7 @@ const VolumeMonth: React.FC<{}> = () => {
                 series: [
                     {
                         type: 'bar',
-                        name: yAxisName,
+                        name: UnitName,
                         color: '#C23531',
                         label: {
                             show: true,
@@ -143,7 +144,7 @@ const VolumeMonth: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(VolumeData),
+                        data: transIntOfArraay(VolumeData),
                     },
                 ]
             };
@@ -211,7 +212,7 @@ const VolumeMonth: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(IncomeDate),
+                        data: transIntOfArraay(IncomeDate),
                     },
                 ]
             };

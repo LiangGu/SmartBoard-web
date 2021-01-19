@@ -13,7 +13,7 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getDebtChartData, } from '@/services/debt';
 //调用公式方法
-import { getTotalValue, sortObjectArr, transIntofArraay, } from '@/utils/utils';
+import { getTotalValue, sortObjectArr, transIntOfArraay, } from '@/utils/utils';
 import { getselectBranchID, } from '@/utils/auths';
 
 const Debt: React.FC<{}> = () => {
@@ -190,7 +190,7 @@ const Debt: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(DebtList),
+                        data: transIntOfArraay(DebtList),
                     },
                 ]
             };
@@ -275,7 +275,7 @@ const Debt: React.FC<{}> = () => {
                                 }
                             },
                         },
-                        data: transIntofArraay(seriesData),
+                        data: transIntOfArraay(seriesData),
                     }
                 ],
             };
