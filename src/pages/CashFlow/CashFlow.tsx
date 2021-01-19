@@ -15,8 +15,6 @@ import 'echarts/lib/component/toolbox';
 import 'echarts/lib/component/dataZoom';
 //调用API
 import { getCashFlowChartData, } from '@/services/cashflow';
-//调用公式方法
-import { sortObjectArr, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -39,9 +37,8 @@ const CashFlow: React.FC<{}> = () => {
       let CashFlowSourceValue: any = [];
       let SumDateList: any = [];
       let SumTodayList: any = [];
-      if (result) {
+      if (result.length > 0) {
         // 1、先把数据按照 日期 排序
-        // SortResultByDate = result.sort(sortObjectArr('SumDate',1));
         SortResultByDate = result.sort((a: any, b: any) => a.SumDate.localeCompare(b.SumDate));
         // 2、处理数据:数据累加
         if (SortResultByDate && SortResultByDate.length > 0) {
@@ -57,7 +54,7 @@ const CashFlow: React.FC<{}> = () => {
         SortResultByDate.map((x: { SumDate: string; }) => {
           SumDateList.push(x.SumDate);
         });
-        // 3、取现金流的 value 值
+        // 4、取现金流的 value 值
         CashFlowSourceValue.map((x: any) => {
           SumTodayList.push((x / 10000).toFixed(2));
         });
@@ -69,11 +66,14 @@ const CashFlow: React.FC<{}> = () => {
   }
 
   //初始化图表
+  let myChart: any;
   let initChart = (SumDateList: [], SumTodayList: []) => {
     let element = document.getElementById('CashFlowChart');
-    let myChart: any;
+    if (myChart != null && myChart != "" && myChart != undefined) {
+      myChart.dispose();
+    }
     let option: any;
-    if(element){
+    if (element) {
       myChart = echarts.init(element as HTMLDivElement);
       option = {
         title: {
@@ -84,56 +84,72 @@ const CashFlow: React.FC<{}> = () => {
           axisPointer: {
             type: 'cross',
             label: {
-              backgroundColor: '#C23531'
-            }
-          }
+              backgroundColor: '#C23531',
+            },
+          },
         },
         toolbox: {
           feature: {
             dataView: { show: true, readOnly: false },
             magicType: { show: true, type: ['line', 'bar'] },
             restore: { show: true },
-            saveAsImage: { show: true }
-          }
+            saveAsImage: { show: true },
+          },
         },
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: [...SumDateList]
+          axisLabel: {
+            show: true,
+            color: 'black',
+            fontSize: 16,
+          },
+          data: [...SumDateList],
         },
         yAxis: {
           type: 'value',
-          name: '收入: CNY(万)'
+          name: '收入: CNY(万)',
+          nameTextStyle: {
+            color: 'black',
+            fontSize: 16,
+          },
+          axisLabel: {
+            show: true,
+            color: 'black',
+            fontSize: 16,
+          },
         },
         dataZoom: [
           {
-            type: 'slider',         // 滑动条
-            xAxisIndex: 0,          // Y轴
-            start: 0,               // 左边在 0% 的位置
-            end: 100,                // 右边在 10% 的位置
+            type: 'slider',
+            xAxisIndex: 0,
+            start: 0,
+            end: 100,
           },
         ],
-        series: [{
-          name: '现金流',
-          color: '#C23531',
-          type: 'line',
-          barWidth: 20,
-          itemStyle: {
-            normal: {
-              //*根据后台数据动态为每条数据添加不同的颜色
-              color: function (params: any) {
-                if (params.value < 0) {
-                  let color = ['#C23531'];
-                  return params.itemStyle = color;
-                } else {
-                  let color = ['#61A0A8'];
-                  return params.itemStyle = color;
-                }
+        series: [
+          {
+            name: '现金流',
+            color: '#C23531',
+            type: 'line',
+            barWidth: 20,
+            itemStyle: {
+              normal: {
+                //*根据后台数据动态为每条数据添加不同的颜色
+                color: function (params: any) {
+                  if (params.value < 0) {
+                    let color = ['#C23531'];
+                    return params.itemStyle = color;
+                  } else {
+                    let color = ['green'];
+                    return params.itemStyle = color;
+                  }
+                },
               },
             },
-          },
-          data: [...SumTodayList],
-        }],
+            data: [...SumTodayList],
+          }
+        ],
       };
       myChart.setOption(option);
       window.addEventListener('resize', () => { myChart.resize() });
@@ -148,14 +164,14 @@ const CashFlow: React.FC<{}> = () => {
       BranchID: getselectBranchID(),
       Year: getselectYear(),
     };
-    if (getselectBranchID() !=='') {
+    if (getselectBranchID() !== '') {
       fetchData(ParamsInfo);
     }
   }, [initialState]);
 
   return (
     <PageContainer>
-      <Spin tip="页面正在加载中..." spinning={loading}>
+      <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
         <Card>
           <div id="CashFlowChart" style={{ width: '100%', height: 600 }}></div>
         </Card>

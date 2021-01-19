@@ -51,7 +51,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     const [indeterminate2, setIndeterminate2] = useState(false);
     const [checkAll2, setCheckAll2] = useState(() =>{
-        return initialState?.searchInfo?.MonthList?.length == MonthList.length;
+        return initialState?.searchInfo?.MonthList ? initialState?.searchInfo?.MonthList?.length == MonthList.length : true;
     });
     // BizType1List                 :3
     const [checkedList3, setCheckedList3] = useState(() => {
@@ -64,7 +64,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     const [indeterminate3, setIndeterminate3] = useState(false);
     const [checkAll3, setCheckAll3] = useState(() =>{
-        return initialState?.searchInfo?.BizType1List?.length == BizType1List.length;
+        return initialState?.searchInfo?.BizType1List ? initialState?.searchInfo?.BizType1List?.length == BizType1List.length : true;
     });
     // BizType2List                 :4
     const [checkedList4, setCheckedList4] = useState(() => {
@@ -77,7 +77,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     const [indeterminate4, setIndeterminate4] = useState(false);
     const [checkAll4, setCheckAll4] = useState(() =>{
-        return initialState?.searchInfo?.BizType2List?.length == BizType2List.length;
+        return initialState?.searchInfo?.BizType2List ? initialState?.searchInfo?.BizType2List?.length == BizType2List.length : true;
     });
 
     // OceanTransportTypeList        :5
@@ -214,14 +214,13 @@ const SearchButton: React.FC<{}> = ({ }) => {
         <>
             <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} />
             <Drawer
-                title="请选择搜索条件"
                 placement={"right"}
                 closable={false}
                 onClose={onClose}
                 visible={DrawerVisible}
                 key={"right"}
                 footer={
-                    <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%" }} onClick={onSearch}>
+                    <Button type="primary" icon={<SearchOutlined />} style={{width: "100%",fontSize:16,height:'unset'}} onClick={onSearch}>
                         确定
                     </Button>
                 }
@@ -239,8 +238,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                // YearList 变化时要修改下方 <Col span={8}>
-                                                return <Col span={24} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -309,8 +307,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                // YearList 变化时要修改下方 <Col span={8}>
-                                                return <Col span={24} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -324,7 +321,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                         全选
                                     </Checkbox>
                                 </Row>
-                                <Checkbox.Group value={checkedList2} onChange={(list) => onChange(2, list)}>
+                                <Checkbox.Group value={checkedList2} onChange={(list) => onChange(1, list)}>
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             MonthList && MonthList.length > 0 ? MonthList.map(x => {
@@ -382,8 +379,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                // YearList 变化时要修改下方 <Col span={8}>
-                                                return <Col span={24} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -399,8 +395,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                // YearList 变化时要修改下方 <Col span={8}>
-                                                return <Col span={24} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -414,7 +409,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                         全选
                                     </Checkbox>
                                 </Row>
-                                <Checkbox.Group value={checkedList2} onChange={(list) => onChange(2, list)}>
+                                <Checkbox.Group value={checkedList2} onChange={(list) => onChange(1, list)}>
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             MonthList && MonthList.length > 0 ? MonthList.map(x => {

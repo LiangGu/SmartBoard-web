@@ -1,4 +1,4 @@
-import React, { useState, useEffect, } from 'react';
+import React, { useState, useEffect, useContext, } from 'react';
 import { useModel } from 'umi';
 import { Card, Radio, Spin, } from 'antd';
 //引入 ECharts 主模块
@@ -12,16 +12,17 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getPortChartData, } from '@/services/volume';
 //调用公式方法
-import { sortObjectArr, } from '@/utils/utils';
-import { getselectBranchID, getselectYear,} from '@/utils/auths';
+import { sortObjectArr, transIntofArraay,} from '@/utils/utils';
+import { getselectBranchID, getselectYear, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
 import ContextProps from '@/createContext';
 
-const Port: React.FC<{}> = () => {
+const VolumePort: React.FC<{}> = () => {
+    const PropsState = useContext(ContextProps);     //得到父组件过来的值
     const { initialState, } = useModel('@@initialState');
-    const [ loading, setloading] = useState(false);
+    const [loading, setloading] = useState(false);
     const [type, setType] = useState('收入');
     const [result, setResult] = useState([]);
 
@@ -33,41 +34,46 @@ const Port: React.FC<{}> = () => {
             return;
         }
         if (result) {
-            setResult(result);
+            if (result.length > 0) {
+                setResult(result);
+            }
             //将值传给初始化图表的函数
-            initChart(result, T,);
+            initChart(result, T);
             setloading(false);
-         }
+        }
     }
 
     //初始化图表
+    let myChart: any;
     let initChart = (result: any, type: string) => {
-        let element = document.getElementById('port');
-        let myChart: any;
+        let element = document.getElementById('VolumePort');
+        if (myChart != null && myChart != "" && myChart != undefined) {
+            myChart.dispose();
+        }
         let option: any;
 
         // 根据 type 排序
         let PortTopList: any = [];
-        let PortTopTotalARList: any = [];       //Total AR
-        let PortTopTotalFCLList: any = [];      //Total FCL
-        let PortTopTotalLCLList: any = [];      //Total LCL
-        let PortTopTotalBulkList: any = [];     //Total Bulk
+        let PortTopTotalARList: any = [];
+        let PortTopTotalFCLList: any = [];
+        let PortTopTotalLCLList: any = [];
+        let PortTopTotalBulkList: any = [];
         let PortTopPortNameList: any = [];
         if (type == '收入') {
-            PortTopList = (result.sort(sortObjectArr('TotalAR',2)).slice(0, 10)).sort(sortObjectArr('TotalAR',1));
+            PortTopList = (result.sort(sortObjectArr('TotalAR', 2)).slice(0, 10)).sort(sortObjectArr('TotalAR', 1));
         } else if (type == '整箱') {
-            PortTopList = (result.sort(sortObjectArr('FLCVolume',2)).slice(0, 10)).sort(sortObjectArr('FLCVolume',1));
+            PortTopList = (result.sort(sortObjectArr('FLCVolume', 2)).slice(0, 10)).sort(sortObjectArr('FLCVolume', 1));
         } else if (type == '拼箱') {
-            PortTopList = (result.sort(sortObjectArr('LCLVolume',2)).slice(0, 10)).sort(sortObjectArr('LCLVolume',1));
+            PortTopList = (result.sort(sortObjectArr('LCLVolume', 2)).slice(0, 10)).sort(sortObjectArr('LCLVolume', 1));
         } else {
-            PortTopList = (result.sort(sortObjectArr('BulkVolume',2)).slice(0, 10)).sort(sortObjectArr('BulkVolume',1));
+            PortTopList = (result.sort(sortObjectArr('BulkVolume', 2)).slice(0, 10)).sort(sortObjectArr('BulkVolume', 1));
         }
         if (PortTopList.length > 0) {
             PortTopList.map((x: { TotalAR: any; FLCVolume: any; LCLVolume: any; BulkVolume: any; PortName: string; }) => {
-                PortTopTotalARList.push((x.TotalAR / 10000).toFixed(2));             //Total AR
-                PortTopTotalFCLList.push(x.FLCVolume);          //Total AR
-                PortTopTotalLCLList.push(x.LCLVolume);          //Total AR
-                PortTopTotalBulkList.push(x.BulkVolume);        //Total AR
+                PortTopTotalARList.push((x.TotalAR / 10000).toFixed(2));
+                PortTopTotalFCLList.push(x.FLCVolume);
+                PortTopTotalLCLList.push(x.LCLVolume);
+                PortTopTotalBulkList.push(x.BulkVolume);
                 PortTopPortNameList.push(x.PortName);
             });
         }
@@ -75,36 +81,20 @@ const Port: React.FC<{}> = () => {
         let seriesData = [];
         let yAxisName = '';
         if (type == '收入') {
-            seriesData.push({
-                name: type,
-                type: 'bar',
-                data: [...PortTopTotalARList]
-            });
-            yAxisName = '收入: CNY(万)'
+            seriesData = [...PortTopTotalARList];
+            yAxisName = '单位: CNY(万)';
         } else if (type == '整箱') {
-            seriesData.push({
-                name: type,
-                type: 'bar',
-                data: [...PortTopTotalFCLList]
-            });
-            yAxisName = '整箱: TEU'
+            seriesData = [...PortTopTotalFCLList];
+            yAxisName = '单位: TEU';
         } else if (type == '拼箱') {
-            seriesData.push({
-                name: type,
-                type: 'bar',
-                data: [...PortTopTotalLCLList]
-            });
-            yAxisName = '拼箱: CBM'
+            seriesData = [...PortTopTotalLCLList];
+            yAxisName = '单位: CBM';
         } else {
-            seriesData.push({
-                name: type,
-                type: 'bar',
-                data: [...PortTopTotalBulkList]
-            });
-            yAxisName = '散货: KGS'
+            seriesData = [...PortTopTotalBulkList];
+            yAxisName = '单位: KGS';
         }
 
-        if(element){
+        if (element) {
             myChart = echarts.init(element as HTMLDivElement);
             option = {
                 title: {
@@ -113,37 +103,68 @@ const Port: React.FC<{}> = () => {
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
-                        type: 'cross',
-                        label: {
-                            backgroundColor: '#C23531'
-                        }
-                    }
+                        type: 'shadow',
+                    },
                 },
                 toolbox: {
                     feature: {
                         dataView: { show: true, readOnly: false },
                         magicType: { show: true, type: ['line', 'bar'] },
                         restore: { show: true },
-                        saveAsImage: { show: true }
-                    }
+                        saveAsImage: { show: true },
+                    },
                 },
                 grid: {
                     left: '3%',
                     right: '4%',
                     bottom: '3%',
-                    containLabel: true
+                    containLabel: true,
                 },
                 xAxis: {
                     type: 'value',
-                    boundaryGap: [0, 0.01]
+                    axisLabel: {
+                        show: true,
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    boundaryGap: [0, 0.01],
                 },
                 yAxis: {
                     type: 'category',
-                    scale: true,
                     name: yAxisName,
+                    scale: true,
+                    axisLabel: {
+                        show: true,
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    nameTextStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
                     data: [...PortTopPortNameList],
                 },
-                series: seriesData,
+                series: [
+                    {
+                        type: 'bar',
+                        name: type,
+                        color: '#C23531',
+                        label: {
+                            show: true,
+                            position: 'right',
+                            color: 'black',
+                            fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return ' ';
+                                }
+                            },
+                        },
+                        data: transIntofArraay(seriesData),
+                    }
+                ],
             };
             myChart.setOption(option);
             window.addEventListener('resize', () => { myChart.resize() });
@@ -161,8 +182,8 @@ const Port: React.FC<{}> = () => {
             TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
         };
-        if (getselectBranchID() !=='') {
-            fetchData(ParamsInfo,type);
+        if (getselectBranchID() !== '') {
+            fetchData(ParamsInfo, type);
         }
     }, [initialState]);
 
@@ -175,12 +196,11 @@ const Port: React.FC<{}> = () => {
     }
 
     return <>
-        <Spin tip="页面正在加载中..." spinning={loading}>
+        <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
             <Card
                 extra={
                     <>
-                        {/* 切换统计图表类型 */}
-                        <Radio.Group size="small" defaultValue={type} buttonStyle="solid" onChange={onChangeType}>
+                        <Radio.Group defaultValue={type} buttonStyle="solid" onChange={onChangeType}>
                             <Radio.Button value="收入">收入</Radio.Button>
                             <Radio.Button value="整箱">整箱</Radio.Button>
                             <Radio.Button value="拼箱">拼箱</Radio.Button>
@@ -189,7 +209,7 @@ const Port: React.FC<{}> = () => {
                     </>
                 }
             >
-                <div id="port" style={{ width: '100%', height: 600 }}></div>
+                <div id="VolumePort" style={{ width: '100%', height: 600 }}></div>
             </Card>
         </Spin>
 
@@ -200,4 +220,4 @@ const Port: React.FC<{}> = () => {
     </>
 };
 
-export default Port;
+export default VolumePort;

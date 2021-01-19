@@ -1,7 +1,7 @@
 import global from '../global.d';
 
 export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
-    //设置token到客户端，并且同时设置登录用户权限到客户端
+    //设置token到客户端,并且同时设置登录用户权限到客户端
     if(sysMes){
         sessionStorage.setItem("USER_NAME", sysMes.userName);
         sessionStorage.setItem("USER_ID", sysMes.userID);

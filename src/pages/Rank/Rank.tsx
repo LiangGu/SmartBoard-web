@@ -12,8 +12,8 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getRankChartData, } from '@/services/rank';
 //调用公式方法
-import { sortObjectArr, } from '@/utils/utils';
-import { getselectBranchID, getselectYear, getselectOceanTransportType,} from '@/utils/auths';
+import { sortObjectArr, transIntofArraay,} from '@/utils/utils';
+import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
@@ -23,51 +23,56 @@ const Rank: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
     const [type, setType] = useState('收入');
+    const [top, setTop] = useState(10);
     const [result, setResult] = useState([]);
 
     //获取数据
-    let fetchData = async (ParamsInfo: any, T: string) => {
+    let fetchData = async (ParamsInfo: any, Type: string , Top: Number) => {
         setloading(true);
         const result = await getRankChartData(ParamsInfo);
         if (!result || getselectBranchID() == '') {
             return;
         }
         if (result) {
-            setResult(result);
+            if (result.length > 0) {
+                setResult(result);
+            }
             //将值传给初始化图表的函数
-            initChart(result, T);
+            initChart(result, Type , Top);
             setloading(false);
         };
     }
 
     //初始化图表
-    let initChart = (result: any, type: string) => {
+    let myChart: any;
+    let initChart = (result: any, type: string , top: Number) => {
         let element = document.getElementById('RankChart');
-        let myChart: any;
+        if (myChart != null && myChart != "" && myChart != undefined) {
+            myChart.dispose();
+        }
         let option: any;
-
         // 根据 type 排序
         let RankTopList: any = [];
-        let RankTopTotalARList: any = [];       //Total AR
-        let RankTopTotalFCLList: any = [];      //Total FCL
-        let RankTopTotalLCLList: any = [];      //Total LCL
-        let RankTopTotalBulkList: any = [];     //Total Bulk
+        let RankTopTotalARList: any = [];
+        let RankTopTotalFCLList: any = [];
+        let RankTopTotalLCLList: any = [];
+        let RankTopTotalBulkList: any = [];
         let RankTopCTNameList: any = [];
         if (type == '收入') {
-            RankTopList = (result.sort(sortObjectArr('TotalAR',2)).slice(0, 10)).sort(sortObjectArr('TotalAR',1));
+            RankTopList = (result.sort(sortObjectArr('TotalAR', 2)).slice(0, top));
         } else if (type == '整箱') {
-            RankTopList = (result.sort(sortObjectArr('FLCVolume',2)).slice(0, 10)).sort(sortObjectArr('FLCVolume',1));
+            RankTopList = (result.sort(sortObjectArr('FLCVolume', 2)).slice(0, top));
         } else if (type == '拼箱') {
-            RankTopList = (result.sort(sortObjectArr('LCLVolume',2)).slice(0, 10)).sort(sortObjectArr('LCLVolume',1));
+            RankTopList = (result.sort(sortObjectArr('LCLVolume', 2)).slice(0, top));
         } else {
-            RankTopList = (result.sort(sortObjectArr('BulkVolume',2)).slice(0, 10)).sort(sortObjectArr('BulkVolume',1));
+            RankTopList = (result.sort(sortObjectArr('BulkVolume', 2)).slice(0, top));
         }
         if (RankTopList.length > 0) {
             RankTopList.map((x: { TotalAR: any; FLCVolume: Number; LCLVolume: Number; BulkVolume: Number; CustomerName: string; }) => {
-                RankTopTotalARList.push((x.TotalAR / 10000).toFixed(2));             //Total AR
-                RankTopTotalFCLList.push(x.FLCVolume);          //Total AR
-                RankTopTotalLCLList.push(x.LCLVolume);          //Total AR
-                RankTopTotalBulkList.push(x.BulkVolume);        //Total AR
+                RankTopTotalARList.push((x.TotalAR / 10000).toFixed(2));
+                RankTopTotalFCLList.push(x.FLCVolume);
+                RankTopTotalLCLList.push(x.LCLVolume);
+                RankTopTotalBulkList.push(x.BulkVolume);
                 RankTopCTNameList.push(x.CustomerName);
             });
         };
@@ -75,90 +80,89 @@ const Rank: React.FC<{}> = () => {
         let seriesData = [];
         let yAxisName = '';
         if (type == '收入') {
-            seriesData.push({
-                name: type,
-                type: 'bar',
-                data: [...RankTopTotalARList]
-            });
-            yAxisName = '收入: CNY(万)'
+            seriesData = [...RankTopTotalARList];
+            yAxisName = '单位: CNY(万)';
         } else if (type == '整箱') {
-            seriesData.push({
-                name: type,
-                type: 'bar',
-                data: [...RankTopTotalFCLList]
-            });
-            yAxisName = '整箱: TEU'
+            seriesData = [...RankTopTotalFCLList];
+            yAxisName = '单位: TEU';
         } else if (type == '拼箱') {
-            seriesData.push({
-                name: type,
-                type: 'bar',
-                data: [...RankTopTotalLCLList]
-            });
-            yAxisName = '拼箱: CBM'
+            seriesData = [...RankTopTotalLCLList];
+            yAxisName = '单位: CBM';
         } else {
-            seriesData.push({
-                name: type,
-                type: 'bar',
-                data: [...RankTopTotalBulkList]
-            });
-            yAxisName = '散货: KGS'
+            seriesData = [...RankTopTotalBulkList];
+            yAxisName = '单位: KGS';
         }
 
-        if(element){
+        if (element) {
             myChart = echarts.init(element as HTMLDivElement);
             option = {
                 title: {
-                    text: `前10客户${type}排名`,
+                    text: `前${top}客户${type}排名`,
                 },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
-                        type: 'cross',
-                        label: {
-                            backgroundColor: '#C23531'
-                        }
-                    }
+                        type: 'shadow',
+                    },
                 },
                 toolbox: {
                     feature: {
                         dataView: { show: true, readOnly: false },
                         magicType: { show: true, type: ['line', 'bar'] },
                         restore: { show: true },
-                        saveAsImage: { show: true }
-                    }
+                        saveAsImage: { show: true },
+                    },
                 },
                 grid: {
                     left: '3%',
                     right: '4%',
                     bottom: '3%',
-                    containLabel: true
+                    containLabel: true,
                 },
                 xAxis: {
-                    type: 'value',
-                    boundaryGap: [0, 0.01]
-                },
-                yAxis: {
-                    type: 'category',
-                    scale: true,
-                    name: yAxisName,
-                    data: [...RankTopCTNameList],
-                    //Y轴超长标签换行
                     axisLabel: {
                         show: true,
-                        interval: 0,
-                        //设置字数限制
-                        formatter: function (value: any) {
-                            if (value.length > 40) {
-                                return value.substring(0, 40) + '\n' + value.substring(40, value.length);
-                            } else if (value.length > 20) {
-                                return value.substring(0, 20) + '\n' + value.substring(20, value.length);
-                            } else {
-                                return value;
-                            }
-                        }
+                        // 让显示所有 X 轴
+                        // interval: 0,
+                        // rotate: 10,
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    data: [...RankTopCTNameList],
+                },
+                yAxis: {
+                    name: '单位: CNY(万)',
+                    nameTextStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    axisLabel: {
+                        show: true,
+                        color: 'black',
+                        fontSize: 16,
                     },
                 },
-                series: seriesData,
+                series: [
+                    {
+                        type: 'bar',
+                        name: type,
+                        color: '#C23531',
+                        label: {
+                            show: true,
+                            position: 'top',
+                            color: 'black',
+                            fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return ' ';
+                                }
+                            },
+                        },
+                        data: transIntofArraay(seriesData),
+                    }
+                ],
             };
             myChart.setOption(option);
             window.addEventListener('resize', () => { myChart.resize() });
@@ -177,8 +181,8 @@ const Rank: React.FC<{}> = () => {
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: getselectOceanTransportType(),
         };
-        if (getselectBranchID() !=='') {
-            fetchData(ParamsInfo, type);
+        if (getselectBranchID() !== '') {
+            fetchData(ParamsInfo, type , top);
         }
     }, [initialState]);
 
@@ -187,16 +191,31 @@ const Rank: React.FC<{}> = () => {
      */
     const onChangeType = (e: any) => {
         setType(e.target.value);
-        initChart(result, e.target.value);
+        initChart(result, e.target.value , top);
+    }
+
+    /**
+     * 点击切换统计图表类型
+     */
+    const onChangeTop = (e: any) => {
+        setTop(e.target.value);
+        initChart(result, type, e.target.value);
     }
 
     return <>
-        <Spin tip="页面正在加载中..." spinning={loading}>
+        <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
             <Card
                 extra={
                     <>
-                        {/* 切换统计图表类型 */}
-                        <Radio.Group size="small" defaultValue={type} buttonStyle="solid" onChange={onChangeType}>
+                        <Radio.Group defaultValue={top} buttonStyle="solid" onChange={onChangeTop} style={{marginRight:20}}>
+                            <Radio.Button value={10}>前10</Radio.Button>
+                            <Radio.Button value={20}>前20</Radio.Button>
+                            <Radio.Button value={30}>前30</Radio.Button>
+                            <Radio.Button value={40}>前40</Radio.Button>
+                            <Radio.Button value={50}>前50</Radio.Button>
+                        </Radio.Group>
+
+                        <Radio.Group defaultValue={type} buttonStyle="solid" onChange={onChangeType}>
                             <Radio.Button value="收入">收入</Radio.Button>
                             <Radio.Button value="整箱">整箱</Radio.Button>
                             <Radio.Button value="拼箱">拼箱</Radio.Button>

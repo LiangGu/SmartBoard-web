@@ -96,6 +96,21 @@ export const getTotalValue = (list: Array<Number>) => {
 }
 
 /**
+ * 数组数据全部保留整数
+ * @param prop
+ * @param T 
+ */
+export const transIntofArraay = (list: Array<Number>) => {
+    let IntList: number[] = [];
+    if(list && list.length > 0){
+        list.map((x:any) => {
+            IntList.push(Math.round(x));
+        });
+    }
+    return IntList;
+}
+
+/**
  * 对象数组排序
  * T <1、从小到大 2、从大到小>
  */
@@ -129,7 +144,7 @@ export const getYearList = () => {
     const date = new Date();
     const year = date.getFullYear();
     const YearList = [];
-    for (let i = 2020; i <= year; i++) {
+    for (let i = 2019; i <= year; i++) {
         YearList.push({
             Key: i,
             Value: `${i}年`,

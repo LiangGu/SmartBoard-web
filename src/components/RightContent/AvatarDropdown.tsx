@@ -21,7 +21,7 @@ export interface GlobalHeaderRightProps {
 const loginOut = async () => {
   await outLogin();
   const { query, pathname } = history.location;
-  const { redirect } = query;
+  const redirect  = query?.redirect;
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/user/login' && !redirect) {
     history.replace({
@@ -62,7 +62,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
-      <Spin
+      <Spin 
         size="small"
         style={{
           marginLeft: 8,

@@ -65,7 +65,7 @@ function getTopCTTableData(req: Request, res: Response, u: string) {
       },
       {
         id:7,
-        companyName:"光达国际（亚洲）有限公司",
+        companyName:"光达国际(亚洲)有限公司",
         type:"直客",
         income:1426436.8 * 4,
         fcl:1446 * 4,
@@ -92,7 +92,7 @@ function getTopCTTableData(req: Request, res: Response, u: string) {
       },
       {
         id:10,
-        companyName:"施家商贸（上海）有限公司",
+        companyName:"施家商贸(上海)有限公司",
         type:"同行",
         income:991767.82 * 4,
         fcl:49 * 4,

@@ -73,7 +73,7 @@ const NoticeIcon: React.FC<NoticeIconProps> & {
     });
     return (
       <>
-        <Spin spinning={loading} delay={300}>
+        <Spin tip="数据正在加载中,请稍等..." spinning={loading} delay={300}>
           <Tabs className={styles.tabs} onChange={onTabChange}>
             {panes}
           </Tabs>

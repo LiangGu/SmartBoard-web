@@ -81,7 +81,7 @@ const ChooseBranch: React.FC<{}> = () => {
         <div>
             <Button
                 className={styles.switchBranchBtn}
-                shape="round"
+                // shape="round"
                 type="dashed"
                 onClick={onMenuClick}
             >
@@ -89,10 +89,8 @@ const ChooseBranch: React.FC<{}> = () => {
             </Button>
 
             <Drawer
-                title="请选择公司"
                 placement={"right"}
                 closable={false}
-                // maskClosable={false}
                 onClose={onClose}
                 visible={DrawerVisible}
                 key={"right"}
@@ -102,7 +100,7 @@ const ChooseBranch: React.FC<{}> = () => {
                     <Row>
                         {
                             BranchList && BranchList.length > 0 ? BranchList.map(x =>{
-                                return <Col span={24} key={x.Key} style={{marginBottom:10,}}><Radio.Button style={{width:"100%"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                return <Col span={24} key={x.Key} style={{marginBottom:10,}}><Radio.Button style={{width:"100%",fontSize:16}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                             }) : null
                         }
                     </Row>

@@ -2,14 +2,14 @@
 
 html,
 body,
-#root {height: 100%;}
+#root {
+  height: 100%;
+  font-size: 16px;
+}
 
 .colorWeak {filter: invert(80%);}
 
 .ant-layout {
-  // .ant-pro-basicLayout-content{
-  //   margin: 0!important;
-  // }
   min-height: 100vh;
 }
 
@@ -48,3 +48,32 @@ ol {list-style: none;}
 }
 // 去掉顶部面包屑
 .ant-page-header{display: none;}
+// Card title 字体
+.ant-card-head{
+  font-size: 16px !important;
+}
+// Menu 字体
+.ant-menu-item{
+  font-size: 16px !important;
+}
+// Tab 字体
+.ant-tabs-tab{
+  font-size: 16px !important;
+}
+// 加载中动画样式
+.ant-spin-nested-loading > div > .ant-spin{
+  min-height: 600px;
+}
+.ant-spin-container::after{
+  background-color: rgba(0, 0, 0, .5);
+}
+.ant-spin-nested-loading > div > .ant-spin .ant-spin-text{
+  font-size: 16px !important;
+}
+// 搜索条件组件
+.ant-checkbox-wrapper{
+  font-size: 16px !important;
+}
+.ant-radio-button-wrapper{
+  font-size: 16px !important;
+}

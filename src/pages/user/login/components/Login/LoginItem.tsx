@@ -81,7 +81,7 @@ const LoginItem: React.FC<LoginItemProps> = (props) => {
     if (result === false) {
       return;
     }
-    message.success('获取验证码成功！验证码为：1234');
+    message.success('获取验证码成功！验证码为:1234');
     setTiming(true);
   }, []);
 
@@ -127,7 +127,7 @@ const LoginItem: React.FC<LoginItemProps> = (props) => {
               <Button
                 disabled={timing}
                 className={styles.getCaptcha}
-                size="large"
+                
                 onClick={() => {
                   const value = getFieldValue('mobile');
                   onGetCaptcha(value);
