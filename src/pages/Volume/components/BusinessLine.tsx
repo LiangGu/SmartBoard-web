@@ -322,6 +322,26 @@ const VolumeBusinessLine: React.FC<{}> = () => {
     return (
         <PageContainer>
 
+            <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
+                <Card
+                    title={title}
+                    style={{ marginBottom: 10 }}
+                    extra={
+                        <span style={{ fontSize: 16 }}>
+                            {unit}
+                        </span>
+                    }>
+                    <Row>
+                        <Col span={12}>
+                            <div id="VolumeBusinessLinePie" style={{ width: '100%', height: 600 }}></div>
+                        </Col>
+                        <Col span={12}>
+                            <div id="VolumeBusinessLineBar" style={{ width: '100%', height: 600 }}></div>
+                        </Col>
+                    </Row>
+                </Card>
+            </Spin>
+
             <div className={styles.BusinessLineContainer}>
                 <Tooltip placement="top" title={'水路货代 - 集装箱'}>
                     <div className={styles.ImgContainer} onClick={() => onChangeBusinessLine(1, '水路货代 - 集装箱量', '单位:TEU')} >
@@ -364,26 +384,6 @@ const VolumeBusinessLine: React.FC<{}> = () => {
                     </div>
                 </Tooltip> */}
             </div>
-
-            <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
-                <Card
-                    title={title}
-                    style={{ marginBottom: 10 }}
-                    extra={
-                        <span style={{ fontSize: 16 }}>
-                            {unit}
-                        </span>
-                    }>
-                    <Row>
-                        <Col span={12}>
-                            <div id="VolumeBusinessLinePie" style={{ width: '100%', height: 600 }}></div>
-                        </Col>
-                        <Col span={12}>
-                            <div id="VolumeBusinessLineBar" style={{ width: '100%', height: 600 }}></div>
-                        </Col>
-                    </Row>
-                </Card>
-            </Spin>
 
             {/*重点代码*/}
             {/* <ContextProps.Provider value={7}>

@@ -219,6 +219,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                 onClose={onClose}
                 visible={DrawerVisible}
                 key={"right"}
+                width={300}
                 footer={
                     <Button type="primary" icon={<SearchOutlined />} style={{width: "100%",fontSize:16,height:'unset'}} onClick={onSearch}>
                         确定
