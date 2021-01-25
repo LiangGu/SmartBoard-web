@@ -146,13 +146,13 @@ const Rank: React.FC<{}> = () => {
                         fontSize: 16,
                         interval: 0,
                         //设置字数限制
-                        formatter: function (value: any) {
-                            if (value.length > 40) {
-                                return value.substring(0, 40) + '\n' + value.substring(40, value.length);
-                            } else {
-                                return value;
-                            }
-                        },
+                        // formatter: function (value: any) {
+                        //     if (value.length > 40) {
+                        //         return value.substring(0, 40) + '\n' + value.substring(40, value.length);
+                        //     } else {
+                        //         return value;
+                        //     }
+                        // },
                     },
                 },
                 series: [
