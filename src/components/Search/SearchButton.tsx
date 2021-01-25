@@ -239,7 +239,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -308,7 +308,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -380,7 +380,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>
@@ -396,7 +396,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Row className={styles.searchAreaContent}>
                                         {
                                             YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
                                             }) : null
                                         }
                                     </Row>

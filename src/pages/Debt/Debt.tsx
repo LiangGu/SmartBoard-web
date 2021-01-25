@@ -7,6 +7,7 @@ import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/bar';
+import 'echarts/lib/chart/pie';
 // 引入提示框和标题组件
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
@@ -40,18 +41,24 @@ const Debt: React.FC<{}> = () => {
     }
 
     //初始化图表
-    let Chart_Crosswise: any;
+    let Chart_Crosswise_Bar: any;
+    let Chart_Crosswise_Pie: any;
     let Chart_Lengthways: any;
     let initChart = (result: any, type: string) => {
-        let Element_Crosswise = document.getElementById('DebtChartCrosswise');
+        let Element_Crosswise_Bar = document.getElementById('DebtChartCrosswiseBar');
+        let Element_Crosswise_Pie = document.getElementById('DebtChartCrosswisePie');
         let Element_Lengthways = document.getElementById('DebtChartLengthways');
-        if (Chart_Crosswise != null && Chart_Crosswise != "" && Chart_Crosswise != undefined) {
-            Chart_Crosswise.dispose();
+        if (Chart_Crosswise_Bar != null && Chart_Crosswise_Bar != "" && Chart_Crosswise_Bar != undefined) {
+            Chart_Crosswise_Bar.dispose();
+        }
+        if (Chart_Crosswise_Pie != null && Chart_Crosswise_Pie != "" && Chart_Crosswise_Pie != undefined) {
+            Chart_Crosswise_Pie.dispose();
         }
         if (Chart_Lengthways != null && Chart_Lengthways != "" && Chart_Lengthways != undefined) {
             Chart_Lengthways.dispose();
         }
-        let Option_Crosswise: any;
+        let Option_Crosswise_Bar: any;
+        let Option_Crosswise_Pie: any;
         let Option_Lengthways: any;
 
         // 处理 应收账款-区间 数据
@@ -61,6 +68,7 @@ const Debt: React.FC<{}> = () => {
         let ReMoney90List: any = [];
         let ReMoney180List: any = [];
         let ReMoney181List: any = [];
+        let PieSeriesData: any = [];
         result.forEach((x: { ReMoney30: any; ReMoney45: any; ReMoney60: any; ReMoney90: any; ReMoney180: any; ReMoney181: any; }) => {
             ReMoney30List.push(x.ReMoney30 / 10000);
             ReMoney45List.push(x.ReMoney45 / 10000);
@@ -76,6 +84,16 @@ const Debt: React.FC<{}> = () => {
         ReMoney180List = getTotalValue(ReMoney180List).toFixed(2);
         ReMoney181List = getTotalValue(ReMoney181List).toFixed(2);
         let DebtList: any = [ReMoney30List, ReMoney45List, ReMoney60List, ReMoney90List, ReMoney180List, ReMoney181List];
+        
+        PieSeriesData = [
+            {value:ReMoney30List,name:'小于30天'},
+            {value:ReMoney45List,name:'31-45天'},
+            {value:ReMoney60List,name:'46-60天'},
+            {value:ReMoney90List,name:'61-90天'},
+            {value:ReMoney180List,name:'91-180天'},
+            {value:ReMoney181List,name:'大于180天'},
+        ];
+
         // 根据 type 排序
         let DebtTopList: any = [];
         let ReMoneyMoneyTopList: any = [];
@@ -132,11 +150,12 @@ const Debt: React.FC<{}> = () => {
             seriesData = [...ReMoney181TopList];
         }
 
-        if (Element_Crosswise) {
-            Chart_Crosswise = echarts.init(Element_Crosswise as HTMLDivElement);
-            Option_Crosswise = {
+        //应收账款
+        if (Element_Crosswise_Bar) {
+            Chart_Crosswise_Bar = echarts.init(Element_Crosswise_Bar as HTMLDivElement);
+            Option_Crosswise_Bar = {
                 title: {
-                    text: '应收账款-区间',
+                    text: '应收账款',
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -194,9 +213,63 @@ const Debt: React.FC<{}> = () => {
                     },
                 ]
             };
-            Chart_Crosswise.setOption(Option_Crosswise);
-            window.addEventListener('resize', () => { Chart_Crosswise.resize() });
+            Chart_Crosswise_Bar.setOption(Option_Crosswise_Bar);
+            window.addEventListener('resize', () => { Chart_Crosswise_Bar.resize() });
         }
+        //应收账款-比例
+        if(Element_Crosswise_Pie){
+            Chart_Crosswise_Pie = echarts.init(Element_Crosswise_Pie as HTMLDivElement);
+            Option_Crosswise_Pie = {
+                title: {
+                    text: '累计占比',
+                    left: 'center',
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b} : {c} ({d}%)',
+                },
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true },
+                    },
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    textStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-180天", "大于180天"],
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: '70%',
+                        center: ['50%', '50%'],
+                        data: [...PieSeriesData],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                            }
+                        },
+                        label: {
+                            show: true,
+                            fontSize: 16,
+                        },
+                    },
+                ]
+            };
+            Chart_Crosswise_Pie.setOption(Option_Crosswise_Pie);
+            window.addEventListener('resize', () => { Chart_Crosswise_Pie.resize() });
+        }
+
+        //应收账款-前10客户
         if (Element_Lengthways) {
             Chart_Lengthways = echarts.init(Element_Lengthways as HTMLDivElement);
             Option_Lengthways = {
@@ -308,7 +381,14 @@ const Debt: React.FC<{}> = () => {
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card style={{ marginBottom: 10 }}>
-                    <div id="DebtChartCrosswise" style={{ width: '100%', height: 500 }}></div>
+                    <Row>
+                        <Col span={12}>
+                            <div id="DebtChartCrosswiseBar" style={{ width: '100%', height: 600 }}></div>
+                        </Col>
+                        <Col span={12}>
+                            <div id="DebtChartCrosswisePie" style={{ width: '100%', height: 600 }}></div>
+                        </Col>
+                    </Row>
                 </Card>
             </Spin>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
@@ -327,7 +407,7 @@ const Debt: React.FC<{}> = () => {
                         </>
                     }
                 >
-                    <div id="DebtChartLengthways" style={{ width: '100%', height: 500 }}></div>
+                    <div id="DebtChartLengthways" style={{ width: '100%', height: 600 }}></div>
                 </Card>
             </Spin>
         </PageContainer>

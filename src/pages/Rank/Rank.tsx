@@ -25,9 +25,10 @@ const Rank: React.FC<{}> = () => {
     const [type, setType] = useState('收入');
     const [top, setTop] = useState(10);
     const [result, setResult] = useState([]);
+    const [domHeight, setDomHeight] = useState(600);
 
     //获取数据
-    let fetchData = async (ParamsInfo: any, Type: string, Top: Number) => {
+    let fetchData = async (ParamsInfo: any, Type: string, Top: Number , domHeight: Number) => {
         setloading(true);
         const result = await getRankChartData(ParamsInfo);
         if (!result || getselectBranchID() == '') {
@@ -38,14 +39,14 @@ const Rank: React.FC<{}> = () => {
                 setResult(result);
             }
             //将值传给初始化图表的函数
-            initChart(result, Type, Top);
+            initChart(result, Type, Top , domHeight);
             setloading(false);
         };
     }
 
     //初始化图表
     let myChart: any;
-    let initChart = (result: any, type: string, top: Number) => {
+    let initChart = (result: any, type: string, top: Number, domHeight: Number) => {
         let element = document.getElementById('RankChart');
         if (myChart != null && myChart != "" && myChart != undefined) {
             myChart.dispose();
@@ -59,13 +60,13 @@ const Rank: React.FC<{}> = () => {
         let RankTopTotalBulkList: any = [];
         let RankTopCTNameList: any = [];
         if (type == '收入') {
-            RankTopList = (result.sort(sortObjectArr('TotalAR', 2)).slice(0, top));
+            RankTopList = (result.sort(sortObjectArr('TotalAR', 2)).slice(0, top)).sort(sortObjectArr('TotalAR', 1));
         } else if (type == '整箱') {
-            RankTopList = (result.sort(sortObjectArr('FLCVolume', 2)).slice(0, top));
+            RankTopList = (result.sort(sortObjectArr('FLCVolume', 2)).slice(0, top)).sort(sortObjectArr('FLCVolume', 1));
         } else if (type == '拼箱') {
-            RankTopList = (result.sort(sortObjectArr('LCLVolume', 2)).slice(0, top));
+            RankTopList = (result.sort(sortObjectArr('LCLVolume', 2)).slice(0, top)).sort(sortObjectArr('LCLVolume', 1));
         } else {
-            RankTopList = (result.sort(sortObjectArr('BulkVolume', 2)).slice(0, top));
+            RankTopList = (result.sort(sortObjectArr('BulkVolume', 2)).slice(0, top)).sort(sortObjectArr('BulkVolume', 1));
         }
         if (RankTopList.length > 0) {
             RankTopList.map((x: { TotalAR: any; FLCVolume: Number; LCLVolume: Number; BulkVolume: Number; CustomerName: string; }) => {
@@ -121,26 +122,37 @@ const Rank: React.FC<{}> = () => {
                     containLabel: true,
                 },
                 xAxis: {
-                    axisLabel: {
-                        show: false,
-                        // 让显示所有 X 轴
-                        // interval: 0,
-                        // rotate: 30,
-                        color: 'black',
-                        fontSize: 16,
-                    },
-                    data: [...RankTopCTNameList],
-                },
-                yAxis: {
-                    name: yAxisName,
-                    nameTextStyle: {
-                        color: 'black',
-                        fontSize: 16,
-                    },
+                    type: 'value',
                     axisLabel: {
                         show: true,
                         color: 'black',
                         fontSize: 16,
+                    },
+                    boundaryGap: [0, 0.01],
+                },
+                yAxis: {
+                    type: 'category',
+                    name: yAxisName,
+                    scale: true,
+                    nameTextStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    data: [...RankTopCTNameList],
+                    //Y轴超长标签换行
+                    axisLabel: {
+                        show: true,
+                        color: 'black',
+                        fontSize: 16,
+                        interval: 0,
+                        //设置字数限制
+                        formatter: function (value: any) {
+                            if (value.length > 40) {
+                                return value.substring(0, 40) + '\n' + value.substring(40, value.length);
+                            } else {
+                                return value;
+                            }
+                        },
                     },
                 },
                 series: [
@@ -150,7 +162,7 @@ const Rank: React.FC<{}> = () => {
                         color: '#C23531',
                         label: {
                             show: true,
-                            position: 'top',
+                            position: 'right',
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
@@ -166,6 +178,7 @@ const Rank: React.FC<{}> = () => {
                 ],
             };
             myChart.setOption(option);
+            myChart.resize({height: domHeight});
             window.addEventListener('resize', () => { myChart.resize() });
         }
     };
@@ -183,7 +196,7 @@ const Rank: React.FC<{}> = () => {
             CargoTypes: getselectOceanTransportType(),
         };
         if (getselectBranchID() !== '') {
-            fetchData(ParamsInfo, type, top);
+            fetchData(ParamsInfo, type, top, domHeight);
         }
     }, [initialState]);
 
@@ -192,7 +205,7 @@ const Rank: React.FC<{}> = () => {
      */
     const onChangeType = (e: any) => {
         setType(e.target.value);
-        initChart(result, e.target.value, top);
+        initChart(result, e.target.value, top, domHeight);
     }
 
     /**
@@ -200,7 +213,22 @@ const Rank: React.FC<{}> = () => {
      */
     const onChangeTop = (e: any) => {
         setTop(e.target.value);
-        initChart(result, type, e.target.value);
+        let DomHeight = domHeight;
+        if(e && e.target.value){
+            if(e.target.value == 10){
+                DomHeight = 600;
+            }else if(e.target.value == 20){
+                DomHeight = 800;
+            }else if(e.target.value == 30){
+                DomHeight = 1100;
+            }else if(e.target.value == 40){
+                DomHeight = 1300;
+            }else if(e.target.value == 50){
+                DomHeight = 1500;
+            }
+        }
+        setDomHeight(DomHeight);
+        initChart(result, type, e.target.value , DomHeight);
     }
 
     return <>
@@ -225,7 +253,7 @@ const Rank: React.FC<{}> = () => {
                     </>
                 }
             >
-                <div id="RankChart" style={{ width: '100%', height: 600 }}></div>
+                <div id="RankChart" style={{ width: '100%', height: domHeight }}></div>
             </Card>
 
         </Spin>

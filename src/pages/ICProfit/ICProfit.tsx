@@ -25,10 +25,13 @@ const ICProfit: React.FC<{}> = () => {
             </TabPane> : null
         } */}
 
-        <TabPane tab="月份" key="2">
+        {/* <TabPane tab="月份" key="2">
             <Month />
-        </TabPane>
+        </TabPane> */}
       </Tabs>
+
+      <Month />
+
     </PageContainer>
   );
 };
