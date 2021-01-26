@@ -14,7 +14,7 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getDebtChartData, } from '@/services/debt';
 //调用公式方法
-import { getTotalValue, sortObjectArr, transIntOfArraay, } from '@/utils/utils';
+import { getTotalValue, sortObjectArr, transIntOfArraay, FilterZeroOfArraay, } from '@/utils/utils';
 import { getselectBranchID, } from '@/utils/auths';
 
 const Debt: React.FC<{}> = () => {
@@ -84,14 +84,14 @@ const Debt: React.FC<{}> = () => {
         ReMoney180List = getTotalValue(ReMoney180List).toFixed(2);
         ReMoney181List = getTotalValue(ReMoney181List).toFixed(2);
         let DebtList: any = [ReMoney30List, ReMoney45List, ReMoney60List, ReMoney90List, ReMoney180List, ReMoney181List];
-        
+
         PieSeriesData = [
-            {value:ReMoney30List,name:'小于30天'},
-            {value:ReMoney45List,name:'31-45天'},
-            {value:ReMoney60List,name:'46-60天'},
-            {value:ReMoney90List,name:'61-90天'},
-            {value:ReMoney180List,name:'91-180天'},
-            {value:ReMoney181List,name:'大于180天'},
+            { value: ReMoney30List, name: '小于30天' },
+            { value: ReMoney45List, name: '31-45天' },
+            { value: ReMoney60List, name: '46-60天' },
+            { value: ReMoney90List, name: '61-90天' },
+            { value: ReMoney180List, name: '91-180天' },
+            { value: ReMoney181List, name: '大于180天' },
         ];
 
         // 根据 type 排序
@@ -106,19 +106,19 @@ const Debt: React.FC<{}> = () => {
         let DebtTopCTNameList: any = [];
 
         if (type == '总金额') {
-            DebtTopList = (result.sort(sortObjectArr('ReceiveMoney', 2)).slice(0, 10)).sort(sortObjectArr('ReceiveMoney', 1));
+            DebtTopList = FilterZeroOfArraay((result.sort(sortObjectArr('ReceiveMoney', 2)).slice(0, 10)).sort(sortObjectArr('ReceiveMoney', 1)), 10000, 'ReceiveMoney');
         } else if (type == '小于30天') {
-            DebtTopList = (result.sort(sortObjectArr('ReMoney30', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney30', 1));
+            DebtTopList = FilterZeroOfArraay((result.sort(sortObjectArr('ReMoney30', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney30', 1)), 10000, 'ReMoney30');
         } else if (type == '31-45天') {
-            DebtTopList = (result.sort(sortObjectArr('ReMoney45', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney45', 1));
+            DebtTopList = FilterZeroOfArraay((result.sort(sortObjectArr('ReMoney45', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney45', 1)), 10000, 'ReMoney45');
         } else if (type == '46-60天') {
-            DebtTopList = (result.sort(sortObjectArr('ReMoney60', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney60', 1));
+            DebtTopList = FilterZeroOfArraay((result.sort(sortObjectArr('ReMoney60', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney60', 1)), 10000, 'ReMoney60');
         } else if (type == '61-90天') {
-            DebtTopList = (result.sort(sortObjectArr('ReMoney90', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney90', 1));
+            DebtTopList = FilterZeroOfArraay((result.sort(sortObjectArr('ReMoney90', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney90', 1)), 10000, 'ReMoney90');
         } else if (type == '91-180天') {
-            DebtTopList = (result.sort(sortObjectArr('ReMoney180', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney180', 1));
+            DebtTopList = FilterZeroOfArraay((result.sort(sortObjectArr('ReMoney180', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney180', 1)), 10000, 'ReMoney180');
         } else {
-            DebtTopList = (result.sort(sortObjectArr('ReMoney181', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney181', 1));
+            DebtTopList = FilterZeroOfArraay((result.sort(sortObjectArr('ReMoney181', 2)).slice(0, 10)).sort(sortObjectArr('ReMoney181', 1)), 10000, 'ReMoney181');
         }
         if (DebtTopList.length > 0) {
             DebtTopList.map((x: { ReceiveMoney: any; ReMoney30: any; ReMoney45: any; ReMoney60: any; ReMoney90: any; ReMoney180: any; ReMoney181: any; CTName: string; }) => {
@@ -217,7 +217,7 @@ const Debt: React.FC<{}> = () => {
             window.addEventListener('resize', () => { Chart_Crosswise_Bar.resize() });
         }
         //应收账款-比例
-        if(Element_Crosswise_Pie){
+        if (Element_Crosswise_Pie) {
             Chart_Crosswise_Pie = echarts.init(Element_Crosswise_Pie as HTMLDivElement);
             Option_Crosswise_Pie = {
                 title: {
@@ -383,16 +383,16 @@ const Debt: React.FC<{}> = () => {
                 <Card style={{ marginBottom: 10 }}>
                     <Row>
                         <Col span={12}>
-                            <div id="DebtChartCrosswiseBar" style={{ width: '100%', height: 600 }}></div>
+                            <div id="DebtChartCrosswiseBar" style={{ width: '100%', height: 500 }}></div>
                         </Col>
                         <Col span={12}>
-                            <div id="DebtChartCrosswisePie" style={{ width: '100%', height: 600 }}></div>
+                            <div id="DebtChartCrosswisePie" style={{ width: '100%', height: 500 }}></div>
                         </Col>
                     </Row>
                 </Card>
             </Spin>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
-                <Card 
+                <Card
                     extra={
                         <>
                             <Radio.Group defaultValue={type} buttonStyle="solid" onChange={onChangeType}>
@@ -407,7 +407,7 @@ const Debt: React.FC<{}> = () => {
                         </>
                     }
                 >
-                    <div id="DebtChartLengthways" style={{ width: '100%', height: 600 }}></div>
+                    <div id="DebtChartLengthways" style={{ width: '100%', height: 500 }}></div>
                 </Card>
             </Spin>
         </PageContainer>

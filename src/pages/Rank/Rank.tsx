@@ -12,7 +12,7 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getRankChartData, } from '@/services/rank';
 //调用公式方法
-import { sortObjectArr, transIntOfArraay, calculateOfArraay, } from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay, calculateOfArraay, FilterZeroOfArraay,} from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -25,7 +25,7 @@ const Rank: React.FC<{}> = () => {
     const [type, setType] = useState('收入');
     const [top, setTop] = useState(10);
     const [result, setResult] = useState([]);
-    const [domHeight, setDomHeight] = useState(600);
+    const [domHeight, setDomHeight] = useState(window.innerHeight - 252);
 
     //获取数据
     let fetchData = async (ParamsInfo: any, Type: string, Top: Number , domHeight: Number) => {
@@ -60,13 +60,13 @@ const Rank: React.FC<{}> = () => {
         let RankTopTotalBulkList: any = [];
         let RankTopCTNameList: any = [];
         if (type == '收入') {
-            RankTopList = (result.sort(sortObjectArr('TotalAR', 2)).slice(0, top)).sort(sortObjectArr('TotalAR', 1));
+            RankTopList = FilterZeroOfArraay((result.sort(sortObjectArr('TotalAR', 2)).slice(0, top)).sort(sortObjectArr('TotalAR', 1)),10000,'TotalAR');
         } else if (type == '整箱') {
-            RankTopList = (result.sort(sortObjectArr('FLCVolume', 2)).slice(0, top)).sort(sortObjectArr('FLCVolume', 1));
+            RankTopList = FilterZeroOfArraay((result.sort(sortObjectArr('FLCVolume', 2)).slice(0, top)).sort(sortObjectArr('FLCVolume', 1)),0,'FLCVolume');
         } else if (type == '拼箱') {
-            RankTopList = (result.sort(sortObjectArr('LCLVolume', 2)).slice(0, top)).sort(sortObjectArr('LCLVolume', 1));
+            RankTopList = FilterZeroOfArraay((result.sort(sortObjectArr('LCLVolume', 2)).slice(0, top)).sort(sortObjectArr('LCLVolume', 1)),0,'LCLVolume');
         } else {
-            RankTopList = (result.sort(sortObjectArr('BulkVolume', 2)).slice(0, top)).sort(sortObjectArr('BulkVolume', 1));
+            RankTopList = FilterZeroOfArraay((result.sort(sortObjectArr('BulkVolume', 2)).slice(0, top)).sort(sortObjectArr('BulkVolume', 1)),0,'BulkVolume');
         }
         if (RankTopList.length > 0) {
             RankTopList.map((x: { TotalAR: any; FLCVolume: Number; LCLVolume: Number; BulkVolume: Number; CustomerName: string; }) => {
@@ -216,15 +216,15 @@ const Rank: React.FC<{}> = () => {
         let DomHeight = domHeight;
         if(e && e.target.value){
             if(e.target.value == 10){
-                DomHeight = 600;
+                DomHeight = window.innerHeight - 252;
             }else if(e.target.value == 20){
-                DomHeight = 800;
+                DomHeight = window.innerHeight - 52;
             }else if(e.target.value == 30){
-                DomHeight = 1100;
+                DomHeight = window.innerHeight + 248;
             }else if(e.target.value == 40){
-                DomHeight = 1300;
+                DomHeight = window.innerHeight + 448;
             }else if(e.target.value == 50){
-                DomHeight = 1500;
+                DomHeight = window.innerHeight + 648;
             }
         }
         setDomHeight(DomHeight);

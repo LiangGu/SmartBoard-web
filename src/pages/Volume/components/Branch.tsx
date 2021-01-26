@@ -14,7 +14,7 @@ import 'echarts/lib/component/legend';
 //调用API
 import { getBranchChartData, } from '@/services/volume';
 //调用公式方法
-import { sortObjectArr, transIntOfArraay, calculateOfArraay, } from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay, calculateOfArraay, FilterZeroOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -39,7 +39,7 @@ const VolumeBranch: React.FC<{}> = () => {
             let TotalVolumeList: any = [];
             let yAxisData: any = [];
             if (result.length > 0) {
-                SortVolumeBranchList = result.sort(sortObjectArr('Volume', 1));
+                SortVolumeBranchList = FilterZeroOfArraay(result.sort(sortObjectArr('Volume', 1)), 0, 'Volume');
                 if (SortVolumeBranchList && SortVolumeBranchList.length > 0) {
                     SortVolumeBranchList.map((x: { Volume: any; BranchName: any; BranchID: Number }) => {
                         TotalVolumeList.push(x.Volume);
@@ -147,7 +147,7 @@ const VolumeBranch: React.FC<{}> = () => {
                 ]
             };
             myChart.setOption(option);
-            window.addEventListener('resize', () => { myChart.resize() });
+            window.addEventListener('resize', () => { myChart.resize({ height: window.innerHeight - 256 }) });
         }
     };
 
@@ -171,7 +171,7 @@ const VolumeBranch: React.FC<{}> = () => {
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card>
-                    <div id="VolumeBranch" style={{ width: '100%', height: 600 }}></div>
+                    <div id="VolumeBranch" style={{ width: '100%', height: window.innerHeight - 256 }}></div>
                 </Card>
             </Spin>
 

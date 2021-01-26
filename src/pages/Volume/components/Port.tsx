@@ -12,7 +12,7 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getPortChartData, } from '@/services/volume';
 //调用公式方法
-import { sortObjectArr, transIntOfArraay, calculateOfArraay,} from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay, calculateOfArraay, FilterZeroOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -59,13 +59,13 @@ const VolumePort: React.FC<{}> = () => {
         let PortTopTotalBulkList: any = [];
         let PortTopPortNameList: any = [];
         if (type == '收入') {
-            PortTopList = (result.sort(sortObjectArr('TotalAR', 2)).slice(0, 10)).sort(sortObjectArr('TotalAR', 1));
+            PortTopList = FilterZeroOfArraay((result.sort(sortObjectArr('TotalAR', 2)).slice(0, 10)).sort(sortObjectArr('TotalAR', 1)), 10000, 'TotalAR');
         } else if (type == '整箱') {
-            PortTopList = (result.sort(sortObjectArr('FLCVolume', 2)).slice(0, 10)).sort(sortObjectArr('FLCVolume', 1));
+            PortTopList = FilterZeroOfArraay((result.sort(sortObjectArr('FLCVolume', 2)).slice(0, 10)).sort(sortObjectArr('FLCVolume', 1)), 0, 'FLCVolume');
         } else if (type == '拼箱') {
-            PortTopList = (result.sort(sortObjectArr('LCLVolume', 2)).slice(0, 10)).sort(sortObjectArr('LCLVolume', 1));
+            PortTopList = FilterZeroOfArraay((result.sort(sortObjectArr('LCLVolume', 2)).slice(0, 10)).sort(sortObjectArr('LCLVolume', 1)), 0, 'LCLVolume');
         } else {
-            PortTopList = (result.sort(sortObjectArr('BulkVolume', 2)).slice(0, 10)).sort(sortObjectArr('BulkVolume', 1));
+            PortTopList = FilterZeroOfArraay((result.sort(sortObjectArr('BulkVolume', 2)).slice(0, 10)).sort(sortObjectArr('BulkVolume', 1)), 0, 'BulkVolume');
         }
         if (PortTopList.length > 0) {
             PortTopList.map((x: { TotalAR: any; FLCVolume: any; LCLVolume: any; BulkVolume: any; PortName: string; }) => {
@@ -167,7 +167,7 @@ const VolumePort: React.FC<{}> = () => {
                 ],
             };
             myChart.setOption(option);
-            window.addEventListener('resize', () => { myChart.resize() });
+            window.addEventListener('resize', () => { myChart.resize({ height: window.innerHeight - 295 }) });
         }
     };
 
@@ -209,7 +209,7 @@ const VolumePort: React.FC<{}> = () => {
                     </>
                 }
             >
-                <div id="VolumePort" style={{ width: '100%', height: 600 }}></div>
+                <div id="VolumePort" style={{ width: '100%', height: window.innerHeight - 295 }}></div>
             </Card>
         </Spin>
 

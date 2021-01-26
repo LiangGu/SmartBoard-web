@@ -121,6 +121,13 @@ export const calculateOfArraay = (list: Array<Number>, type: string, value: numb
 }
 
 /**
+ * 过滤数组中的的数据
+ */
+export const FilterZeroOfArraay = (list: any,value: Number,prop:any) =>{
+    return list.filter((item:any) => item[prop] > value);
+}
+
+/**
  * 对象数组排序
  * T <1、从小到大 2、从大到小>
  */

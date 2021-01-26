@@ -157,7 +157,7 @@ const ICProfitMonth: React.FC<{}> = () => {
                 ]
             };
             myChart.setOption(option);
-            window.addEventListener('resize', () => { myChart.resize() });
+            window.addEventListener('resize', () => { myChart.resize({ height: window.innerHeight - 216 }) });
         }
     };
 
@@ -181,7 +181,7 @@ const ICProfitMonth: React.FC<{}> = () => {
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card>
-                    <div id="ICProfitMonth" style={{ width: '100%', height: 600 }}></div>
+                    <div id="ICProfitMonth" style={{ width: '100%', height: window.innerHeight - 216 }}></div>
                 </Card>
             </Spin>
 
