@@ -30,7 +30,25 @@ const ICProfitBranch: React.FC<{}> = () => {
     //获取数据
     let fetchData = async (ParamsInfo: any, T: string) => {
         setloading(true);
-        const result = await getICProfitChartData(ParamsInfo);
+        // const result = await getICProfitChartData(ParamsInfo);
+
+        const result:any = [
+            {FinanceMonth: '香港船务', TotalAR: 6053.2 * 10000, TotalAP: 5611.33 * 10000, Profit: 441.87 * 10000},
+            {FinanceMonth: '上海伟运', TotalAR: 25244.18 * 10000, TotalAP: 24296.329999999998 * 10000, Profit: 947.88 * 10000},
+            {FinanceMonth: '泰国公司', TotalAR: 12054.950000000003 * 10000, TotalAP: 7825.809999999999 * 10000, Profit: 4229.16 * 10000},
+            {FinanceMonth: '马来西亚公司', TotalAR: 10602.67 * 10000, TotalAP: 7557.849999999999 * 10000, Profit: 3044.85 * 10000},
+            {FinanceMonth: '印尼公司', TotalAR: 5932.21 * 10000, TotalAP: 4188.14 * 10000, Profit: 1744.07 * 10000},
+            {FinanceMonth: '柬埔寨公司', TotalAR: 7743.99 * 10000, TotalAP: 7104.240000000001 * 10000, Profit: 639.7299999999998 * 10000},
+            {FinanceMonth: '缅甸公司', TotalAR: 1059.52 * 10000, TotalAP: 781.75 * 10000, Profit: 277.76 * 10000},
+            {FinanceMonth: '中越外运', TotalAR: 2948.8700000000003 * 10000, TotalAP: 2372.6400000000003 * 10000, Profit: 576.24 * 10000},
+            {FinanceMonth: '上海伟运工程', TotalAR: 1458.6100000000004 * 10000, TotalAP: 1226.85 * 10000, Profit: 231.75000000000003 * 10000},
+
+            {FinanceMonth: '大宗商品事业部', TotalAR: 180.82 * 10000, TotalAP: 176.3 * 10000, Profit: 4.52 * 10000},
+            {FinanceMonth: '空运事业部(伟运)', TotalAR: 55.13 * 10000, TotalAP: 49.06 * 10000, Profit: 6.07 * 10000},
+            {FinanceMonth: '电商事业部(伟运)', TotalAR: 23.72 * 10000, TotalAP: 23.62 * 10000, Profit: 0.1200000000000001 * 10000},
+            {FinanceMonth: '中越外运(E拼)', TotalAR: 14694.63 * 10000, TotalAP: 10960.1 * 10000, Profit: 3734.53 * 10000},
+        ];
+
         if (!result || getselectBranchID() == '') {
             return;
         }
@@ -71,7 +89,7 @@ const ICProfitBranch: React.FC<{}> = () => {
                 // 支出转换成负数
                 TotalAPList.push((x.TotalAP * -1 / 10000).toFixed(2));
                 ProfitList.push((x.Profit / 10000).toFixed(2));
-                yAxisData.push(`${x.FinanceMonth} 月`);
+                yAxisData.push(`${x.FinanceMonth}`);
             });
         }
 

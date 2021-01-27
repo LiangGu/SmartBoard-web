@@ -169,3 +169,15 @@ export const getYearList = () => {
     }
     return YearList;
 }
+
+/**
+ * 数组中的值相加
+ * @param arr 
+ */
+export const sumArray = (arr: Array<number>) => {
+    var s = 0;
+    for (let i = 0; i < arr.length; i++) {
+        s += Number(arr[i]);
+    }
+    return s;
+};

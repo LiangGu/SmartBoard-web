@@ -14,8 +14,8 @@ import 'echarts/lib/component/legend';
 //调用API
 import { getICProfitChartData, } from '@/services/icprofit';
 //调用公式方法
-import { sortObjectArr, transIntOfArraay, } from '@/utils/utils';
-import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
+import { sortObjectArr, transIntOfArraay,} from '@/utils/utils';
+import { getselectBranchID, getselectYear, getselectOceanTransportType,} from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
@@ -24,7 +24,6 @@ import ContextProps from '@/createContext';
 const ICProfitMonth: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
-
     //获取数据
     let fetchData = async (ParamsInfo: any) => {
         setloading(true);
