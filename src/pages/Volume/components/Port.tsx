@@ -167,7 +167,8 @@ const VolumePort: React.FC<{}> = () => {
                 ],
             };
             myChart.setOption(option);
-            window.addEventListener('resize', () => { myChart.resize() });
+            myChart.resize({ width: window.innerWidth });
+            window.addEventListener('resize', () => { myChart.resize({ width: window.innerWidth }) });
         }
     };
 
@@ -209,7 +210,7 @@ const VolumePort: React.FC<{}> = () => {
                     </>
                 }
             >
-                <div id="VolumePort" style={{ width: '100%', height: 600 }}></div>
+                <div id="VolumePort" style={{ width: '100%', height: 800 }}></div>
             </Card>
         </Spin>
 

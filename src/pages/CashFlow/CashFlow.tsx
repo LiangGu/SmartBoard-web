@@ -173,7 +173,7 @@ const CashFlow: React.FC<{}> = () => {
     <PageContainer>
       <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
         <Card>
-          <div id="CashFlowChart" style={{ width: '100%', height: 600 }}></div>
+          <div id="CashFlowChart" style={{ width: '100%', height: 800 }}></div>
         </Card>
       </Spin>
 

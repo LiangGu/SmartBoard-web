@@ -14,8 +14,8 @@ import 'echarts/lib/component/legend';
 //调用API
 import { getICProfitChartData, } from '@/services/icprofit';
 //调用公式方法
-import { sortObjectArr, transIntOfArraay,} from '@/utils/utils';
-import { getselectBranchID, getselectYear, getselectOceanTransportType,} from '@/utils/auths';
+import { sortObjectArr, transIntOfArraay, } from '@/utils/utils';
+import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
@@ -156,7 +156,8 @@ const ICProfitMonth: React.FC<{}> = () => {
                 ]
             };
             myChart.setOption(option);
-            window.addEventListener('resize', () => { myChart.resize() });
+            myChart.resize({ width: window.innerWidth });
+            window.addEventListener('resize', () => { myChart.resize({ width: window.innerWidth }) });
         }
     };
 
@@ -180,7 +181,7 @@ const ICProfitMonth: React.FC<{}> = () => {
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card>
-                    <div id="ICProfitMonth" style={{ width: '100%', height: 600 }}></div>
+                    <div id="ICProfitMonth" style={{ width: '100%', height: 800 }}></div>
                 </Card>
             </Spin>
 
