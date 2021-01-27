@@ -156,8 +156,8 @@ const ICProfitMonth: React.FC<{}> = () => {
                 ]
             };
             myChart.setOption(option);
-            myChart.resize({ width: window.innerWidth });
-            window.addEventListener('resize', () => { myChart.resize({ width: window.innerWidth }) });
+            myChart.resize({ width: window.innerWidth - 72 });
+            window.addEventListener('resize', () => { myChart.resize({ width: window.innerWidth - 72 }) });
         }
     };
 

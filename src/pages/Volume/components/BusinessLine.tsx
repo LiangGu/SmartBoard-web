@@ -184,8 +184,8 @@ const VolumeBusinessLine: React.FC<{}> = () => {
                 ]
             };
             Chart_Pie.setOption(Option_Pie);
-            Chart_Pie.resize({ width: window.innerWidth / 2 });
-            window.addEventListener('resize', () => { Chart_Pie.resize({ width: window.innerWidth / 2 }) });
+            Chart_Pie.resize({ width: (window.innerWidth - 72) / 2 });
+            window.addEventListener('resize', () => { Chart_Pie.resize({ width: (window.innerWidth - 72) / 2 }) });
         }
         if (Element_Bar) {
             Chart_Bar = echarts.init(Element_Bar as HTMLDivElement);
@@ -280,8 +280,8 @@ const VolumeBusinessLine: React.FC<{}> = () => {
                 ]
             };
             Chart_Bar.setOption(Option_Bar);
-            Chart_Bar.resize({ width: window.innerWidth / 2 });
-            window.addEventListener('resize', () => { Chart_Bar.resize({ width: window.innerWidth / 2 }) });
+            Chart_Bar.resize({ width: (window.innerWidth - 72) / 2 });
+            window.addEventListener('resize', () => { Chart_Bar.resize({ width: (window.innerWidth - 72) / 2 }) });
         }
     };
 

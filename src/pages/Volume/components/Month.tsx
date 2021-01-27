@@ -149,8 +149,8 @@ const VolumeMonth: React.FC<{}> = () => {
                 ]
             };
             Chart_RT.setOption(Option_RT);
-            Chart_RT.resize({ width: window.innerWidth });
-            window.addEventListener('resize', () => { Chart_RT.resize({ width: window.innerWidth }) });
+            Chart_RT.resize({ width: window.innerWidth - 72 });
+            window.addEventListener('resize', () => { Chart_RT.resize({ width: window.innerWidth - 72 }) });
         }
         if (Element_Income) {
             Chart_Income = echarts.init(Element_Income as HTMLDivElement);
@@ -218,8 +218,8 @@ const VolumeMonth: React.FC<{}> = () => {
                 ]
             };
             Chart_Income.setOption(Option_Income);
-            Chart_Income.resize({ width: window.innerWidth });
-            window.addEventListener('resize', () => { Chart_Income.resize({ width: window.innerWidth }) });
+            Chart_Income.resize({ width: window.innerWidth - 72 });
+            window.addEventListener('resize', () => { Chart_Income.resize({ width: window.innerWidth - 72 }) });
         }
     };
 

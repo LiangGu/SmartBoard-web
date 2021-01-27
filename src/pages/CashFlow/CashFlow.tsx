@@ -7,7 +7,6 @@ import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/line';
-import 'echarts/lib/chart/pie';
 // 引入提示框和标题组件
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
