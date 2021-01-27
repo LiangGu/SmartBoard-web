@@ -25,7 +25,7 @@ const Rank: React.FC<{}> = () => {
     const [type, setType] = useState('收入');
     const [top, setTop] = useState(10);
     const [result, setResult] = useState([]);
-    const [domHeight, setDomHeight] = useState(window.innerHeight - 252);
+    const [domHeight, setDomHeight] = useState(600);
 
     //获取数据
     let fetchData = async (ParamsInfo: any, Type: string, Top: Number , domHeight: Number) => {
@@ -216,15 +216,15 @@ const Rank: React.FC<{}> = () => {
         let DomHeight = domHeight;
         if(e && e.target.value){
             if(e.target.value == 10){
-                DomHeight = window.innerHeight - 252;
+                DomHeight = 600;
             }else if(e.target.value == 20){
-                DomHeight = window.innerHeight - 52;
+                DomHeight = 800;
             }else if(e.target.value == 30){
-                DomHeight = window.innerHeight + 248;
+                DomHeight = 1000;
             }else if(e.target.value == 40){
-                DomHeight = window.innerHeight + 448;
+                DomHeight = 1200;
             }else if(e.target.value == 50){
-                DomHeight = window.innerHeight + 648;
+                DomHeight = 1400;
             }
         }
         setDomHeight(DomHeight);

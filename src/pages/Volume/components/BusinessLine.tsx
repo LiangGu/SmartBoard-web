@@ -184,7 +184,7 @@ const VolumeBusinessLine: React.FC<{}> = () => {
                 ]
             };
             Chart_Pie.setOption(Option_Pie);
-            window.addEventListener('resize', () => { Chart_Pie.resize({ height: window.innerHeight - 312 }) });
+            window.addEventListener('resize', () => { Chart_Pie.resize() });
         }
         if (Element_Bar) {
             Chart_Bar = echarts.init(Element_Bar as HTMLDivElement);
@@ -279,7 +279,7 @@ const VolumeBusinessLine: React.FC<{}> = () => {
                 ]
             };
             Chart_Bar.setOption(Option_Bar);
-            window.addEventListener('resize', () => { Chart_Bar.resize({ height: window.innerHeight - 312 }) });
+            window.addEventListener('resize', () => { Chart_Bar.resize() });
         }
     };
 
@@ -333,10 +333,10 @@ const VolumeBusinessLine: React.FC<{}> = () => {
                     }>
                     <Row>
                         <Col span={12}>
-                            <div id="VolumeBusinessLinePie" style={{ width: '100%', height: window.innerHeight - 312 }}></div>
+                            <div id="VolumeBusinessLinePie" style={{ width: '100%', height: 500 }}></div>
                         </Col>
                         <Col span={12}>
-                            <div id="VolumeBusinessLineBar" style={{ width: '100%', height: window.innerHeight - 312 }}></div>
+                            <div id="VolumeBusinessLineBar" style={{ width: '100%', height: 500 }}></div>
                         </Col>
                     </Row>
                 </Card>

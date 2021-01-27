@@ -147,7 +147,7 @@ const VolumeBranch: React.FC<{}> = () => {
                 ]
             };
             myChart.setOption(option);
-            window.addEventListener('resize', () => { myChart.resize({ height: window.innerHeight - 256 }) });
+            window.addEventListener('resize', () => { myChart.resize() });
         }
     };
 
@@ -171,7 +171,7 @@ const VolumeBranch: React.FC<{}> = () => {
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card>
-                    <div id="VolumeBranch" style={{ width: '100%', height: window.innerHeight - 256 }}></div>
+                    <div id="VolumeBranch" style={{ width: '100%', height: 600 }}></div>
                 </Card>
             </Spin>
 

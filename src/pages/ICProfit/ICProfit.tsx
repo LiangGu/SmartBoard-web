@@ -17,21 +17,17 @@ const ICProfit: React.FC<{}> = () => {
 
   return (
     <PageContainer>
-      <Tabs defaultActiveKey={currentT} onChange={onTabChange} tabBarGutter={20}>
-        {/* {
-          SelectBranchID == '0' ?
+      {
+        SelectBranchID == '0' ?
+          <Tabs defaultActiveKey={currentT} onChange={onTabChange} tabBarGutter={20}>
             <TabPane tab="公司" key="1">
-                <Branch />
-            </TabPane> : null
-        } */}
-
-        {/* <TabPane tab="月份" key="2">
-            <Month />
-        </TabPane> */}
-      </Tabs>
-
-      <Month />
-
+              <Branch />
+            </TabPane>
+            <TabPane tab="月份" key="2">
+              <Month />
+            </TabPane>
+          </Tabs> : <Month />
+      }
     </PageContainer>
   );
 };
