@@ -256,7 +256,7 @@ const ICProfitBranch: React.FC<{}> = () => {
             </Spin>
 
             {/*重点代码*/}
-            <ContextProps.Provider value={8}>
+            <ContextProps.Provider value={2.1}>
                 <SearchButton />
             </ContextProps.Provider>
         </PageContainer>

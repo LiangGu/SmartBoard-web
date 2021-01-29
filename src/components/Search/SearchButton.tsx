@@ -1,12 +1,12 @@
 import Global from '@/global.d';
 import React, { useState, useContext, } from 'react';
 import { useModel } from 'umi';
-import { Button, Drawer, Checkbox, Row, Col, Radio, } from 'antd';
+import { Button, Drawer, Checkbox, Row, Col, Select, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from './index.less';
 //引入自定义方法
 import { getYearList, } from '@/utils/utils';
-import { 
+import {
     setSystemMes,
     getUserName,
     getUserID,
@@ -34,58 +34,75 @@ const SearchButton: React.FC<{}> = ({ }) => {
     const [DrawerVisible, setDrawerVisible] = useState(false);
     //多选框值
     // YearList                     :1
-    const [year, setYear] = useState(() =>{
+    const [year, setYear] = useState(() => {
         // 惰性赋值 any 类型,要不默认值不起作用
-        let selectYear:any = getselectYear();
+        let selectYear: any = getselectYear();
         return selectYear;
     });
 
     // MonthList                    :2
     const [checkedList2, setCheckedList2] = useState(() => {
-        let searchInfoMonthList:any = initialState?.searchInfo?.MonthList;
-        if(searchInfoMonthList){
+        let searchInfoMonthList: any = initialState?.searchInfo?.MonthList;
+        if (searchInfoMonthList) {
             return searchInfoMonthList;
-        }else{
+        } else {
             return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         }
     });
     const [indeterminate2, setIndeterminate2] = useState(false);
-    const [checkAll2, setCheckAll2] = useState(() =>{
+    const [checkAll2, setCheckAll2] = useState(() => {
         return initialState?.searchInfo?.MonthList ? initialState?.searchInfo?.MonthList?.length == MonthList.length : true;
     });
     // BizType1List                 :3
     const [checkedList3, setCheckedList3] = useState(() => {
-        let searchInfoBizType1List:any = initialState?.searchInfo?.BizType1List;
-        if(searchInfoBizType1List){
+        let searchInfoBizType1List: any = initialState?.searchInfo?.BizType1List;
+        if (searchInfoBizType1List) {
             return searchInfoBizType1List;
-        }else{
+        } else {
             return [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14];
-        } 
+        }
     });
     const [indeterminate3, setIndeterminate3] = useState(false);
-    const [checkAll3, setCheckAll3] = useState(() =>{
+    const [checkAll3, setCheckAll3] = useState(() => {
         return initialState?.searchInfo?.BizType1List ? initialState?.searchInfo?.BizType1List?.length == BizType1List.length : true;
     });
     // BizType2List                 :4
     const [checkedList4, setCheckedList4] = useState(() => {
-        let searchInfoBizType2List:any = initialState?.searchInfo?.BizType2List;
-        if(searchInfoBizType2List){
+        let searchInfoBizType2List: any = initialState?.searchInfo?.BizType2List;
+        if (searchInfoBizType2List) {
             return searchInfoBizType2List;
-        }else{
+        } else {
             return [1, 2, 3, 4, 5, 6];
-        } 
+        }
     });
     const [indeterminate4, setIndeterminate4] = useState(false);
-    const [checkAll4, setCheckAll4] = useState(() =>{
+    const [checkAll4, setCheckAll4] = useState(() => {
         return initialState?.searchInfo?.BizType2List ? initialState?.searchInfo?.BizType2List?.length == BizType2List.length : true;
     });
 
     // OceanTransportTypeList        :5
-    const [oceanTransportType, setOceanTransportType] = useState(() =>{
+    const [oceanTransportType, setOceanTransportType] = useState(() => {
         // 惰性赋值 any 类型,要不默认值不起作用
-        let selectOceanTransportType:any = getselectOceanTransportType();
+        let selectOceanTransportType: any = getselectOceanTransportType();
         return selectOceanTransportType;
     });
+
+    /**
+     * 下拉选择
+     * @param T
+     * @param list 
+     */
+    const onSelect = (e: any, T: Number,) => {
+        switch (T) {
+            case 1:
+                setYear(e.key);
+                break;
+            case 2:
+                setOceanTransportType(e.key);
+                break;
+            default: return;
+        }
+    }
 
     /**
      * 单选
@@ -165,14 +182,14 @@ const SearchButton: React.FC<{}> = ({ }) => {
             searchInfo,
         });
         // 重置 Session 中的数据
-        let userName:any = getUserName();
-        let userID:any = getUserID();
-        let branchID:any = getBranchID();
-        let branchCode:any = getBranchCode();
-        let token:any = getToken();
-        let funcCurrency:any = getFuncCurr();
-        let selectBranchID:any = getselectBranchID();
-        let selectBranchName:any = getselectBranchName();
+        let userName: any = getUserName();
+        let userID: any = getUserID();
+        let branchID: any = getBranchID();
+        let branchCode: any = getBranchCode();
+        let token: any = getToken();
+        let funcCurrency: any = getFuncCurr();
+        let selectBranchID: any = getselectBranchID();
+        let selectBranchName: any = getselectBranchName();
         let sysSaveData: Global.SessionSysSave = {
             userName: userName,
             userID: userID,
@@ -193,22 +210,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
         setDrawerVisible(false)
     }
 
-    /**
-     * 年份单选
-     * * @param T 
-     * @param e 
-     */
-    const onRadioChange = (T: Number, e: any) => {
-        switch (T) {
-            case 1:
-                setYear(e.target.value);
-                break;
-            case 2:
-                setOceanTransportType(e.target.value);
-                break;
-            default: return;
-        }
-    }
+    console.log(year, YearList, oceanTransportType, OceanTransportTypeList)
 
     return (
         <>
@@ -221,106 +223,58 @@ const SearchButton: React.FC<{}> = ({ }) => {
                 key={"right"}
                 width={300}
                 footer={
-                    <Button type="primary" icon={<SearchOutlined />} style={{width: "100%",fontSize:16,height:'unset'}} onClick={onSearch}>
+                    <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
                         确定
                     </Button>
                 }
             >
 
+                {/* 
+                    1.1、货量分析-公司
+                    1.2、货量分析-月份
+                    1.3、货量分析-港口
+                    2.1、收支利润-公司
+                    2.2、收支利润-月份
+                    3.1、现金流
+                    5.1、客户排名 
+                */}
+
+                {/* 年份 */}
                 {
-                    // 月份货量和收支毛利没有月份的搜索条件
-                    PropsState && PropsState == 1 || PropsState && PropsState == 5 ?
+                    [1.1, 1.2, 1.3, 2.1, 3.1, 5.1].includes(PropsState) ?
                         <>
                             <div className={styles.searchArea}>
                                 <Row className={styles.searchAreaLable}>
                                     <Col span={12} className={styles.searchAreaTitle}>年份</Col>
                                 </Row>
-                                <Radio.Group buttonStyle="solid" size="small" onChange={(e) => onRadioChange(1, e)} defaultValue={parseInt(year)}>
-                                    <Row className={styles.searchAreaContent}>
+                                <Row className={styles.searchAreaContent}>
+                                    <Select
+                                        style={{ width: "100%" }}
+                                        allowClear={false}
+                                        defaultValue={parseInt(year)}
+                                        onChange={(e) => onSelect(e, 1)}
+                                    >
                                         {
-                                            YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                            YearList && YearList.length > 0 ? YearList.map((x) => {
+                                                return <Select.Option key={x.Key} value={x.Value}>{x.Value}</Select.Option>
                                             }) : null
                                         }
-                                    </Row>
-                                </Radio.Group>
-                            </div>
-
-                            <div className={styles.searchArea}>
-                                <Row className={styles.searchAreaLable}>
-                                    <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
-                                    <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(2, e)} checked={checkAll3}>
-                                        全选
-                                    </Checkbox>
+                                    </Select>
                                 </Row>
-                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(2, list)}>
-                                    <Row className={styles.searchAreaContent}>
-                                        {
-                                            BizType1List && BizType1List.length > 0 ? BizType1List.map(x => {
-                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                            }) : null
-                                        }
-                                    </Row>
-                                </Checkbox.Group>
                             </div>
+                        </> : null
+                }
 
-                            <div className={styles.searchArea}>
-                                <Row className={styles.searchAreaLable}>
-                                    <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
-                                    <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll4}>
-                                        全选
-                                    </Checkbox>
-                                </Row>
-                                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(3, list)}>
-                                    <Row className={styles.searchAreaContent}>
-                                        {
-                                            BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
-                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                            }) : null
-                                        }
-                                    </Row>
-                                </Checkbox.Group>
-                            </div>
-
-                            <div className={styles.searchArea}>
-                                <Row className={styles.searchAreaLable}>
-                                    <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
-                                </Row>
-                                <Radio.Group buttonStyle="solid" size="small" onChange={(e) => onRadioChange(2, e)} defaultValue={parseInt(oceanTransportType)}>
-                                    <Row className={styles.searchAreaContent}>
-                                        {
-                                            OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map(x => {
-                                                return <Col span={6} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
-                                            }) : null
-                                        }
-                                    </Row>
-                                </Radio.Group>
-                            </div>
-                        </> :
-                    // 港口没有货物类型的搜索条件
-                    PropsState && PropsState == 2 ?
+                {/* 月份 */}
+                {
+                    [1.1, 1.3, 2.1, 5.1].includes(PropsState) ?
                         <>
-                            <div className={styles.searchArea}>
-                                <Row className={styles.searchAreaLable}>
-                                    <Col span={12} className={styles.searchAreaTitle}>年份</Col>
-                                </Row>
-                                <Radio.Group buttonStyle="solid" size="small" onChange={(e) => onRadioChange(1, e)} defaultValue={parseInt(year)}>
-                                    <Row className={styles.searchAreaContent}>
-                                        {
-                                            YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
-                                            }) : null
-                                        }
-                                    </Row>
-                                </Radio.Group>
-                            </div>
-
                             <div className={styles.searchArea}>
                                 <Row className={styles.searchAreaLable}>
                                     <Col span={12} className={styles.searchAreaTitle}>月份</Col>
                                     <Checkbox indeterminate={indeterminate2} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll2}>
                                         全选
-                                    </Checkbox>
+                                </Checkbox>
                                 </Row>
                                 <Checkbox.Group value={checkedList2} onChange={(list) => onChange(1, list)}>
                                     <Row className={styles.searchAreaContent}>
@@ -332,13 +286,19 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     </Row>
                                 </Checkbox.Group>
                             </div>
+                        </> : null
+                }
 
+                {/* 运输类型 */}
+                {
+                    [1.2, 1.3, 2.1, 2.2, 5.1].includes(PropsState) ?
+                        <>
                             <div className={styles.searchArea}>
                                 <Row className={styles.searchAreaLable}>
                                     <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
                                     <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(2, e)} checked={checkAll3}>
                                         全选
-                                    </Checkbox>
+                                </Checkbox>
                                 </Row>
                                 <Checkbox.Group value={checkedList3} onChange={(list) => onChange(2, list)}>
                                     <Row className={styles.searchAreaContent}>
@@ -350,13 +310,19 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     </Row>
                                 </Checkbox.Group>
                             </div>
+                        </> : null
+                }
 
+                {/* 贸易类型 */}
+                {
+                    [1.2, 1.3, 2.1, 2.2, 5.1].includes(PropsState) ?
+                        <>
                             <div className={styles.searchArea}>
                                 <Row className={styles.searchAreaLable}>
                                     <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
                                     <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll4}>
                                         全选
-                                    </Checkbox>
+                                </Checkbox>
                                 </Row>
                                 <Checkbox.Group value={checkedList4} onChange={(list) => onChange(3, list)}>
                                     <Row className={styles.searchAreaContent}>
@@ -368,110 +334,33 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     </Row>
                                 </Checkbox.Group>
                             </div>
-                        </>:
-                    // 现金流只有年份的搜索条件
-                    PropsState && PropsState == 4 ?
+                        </> : null
+                }
+
+                {/* 货物类型 */}
+                {
+                    [1.2, 2.1, 2.2, 5.1].includes(PropsState) ?
                         <>
-                            <div className={styles.searchArea}>
-                                <Row className={styles.searchAreaLable}>
-                                    <Col span={12} className={styles.searchAreaTitle}>年份</Col>
-                                </Row>
-                                <Radio.Group buttonStyle="solid" size="small" onChange={(e) => onRadioChange(1, e)} defaultValue={parseInt(year)}>
-                                    <Row className={styles.searchAreaContent}>
-                                        {
-                                            YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
-                                            }) : null
-                                        }
-                                    </Row>
-                                </Radio.Group>
-                            </div>
-                        </> :
-                        <>
-                            <div className={styles.searchArea}>
-                                <Row className={styles.searchAreaLable}>
-                                    <Col span={12} className={styles.searchAreaTitle}>年份</Col>
-                                </Row>
-                                <Radio.Group buttonStyle="solid" size="small" onChange={(e) => onRadioChange(1, e)} defaultValue={parseInt(year)}>
-                                    <Row className={styles.searchAreaContent}>
-                                        {
-                                            YearList && YearList.length > 0 ? YearList.map(x => {
-                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
-                                            }) : null
-                                        }
-                                    </Row>
-                                </Radio.Group>
-                            </div>
-
-                            <div className={styles.searchArea}>
-                                <Row className={styles.searchAreaLable}>
-                                    <Col span={12} className={styles.searchAreaTitle}>月份</Col>
-                                    <Checkbox indeterminate={indeterminate2} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll2}>
-                                        全选
-                                    </Checkbox>
-                                </Row>
-                                <Checkbox.Group value={checkedList2} onChange={(list) => onChange(1, list)}>
-                                    <Row className={styles.searchAreaContent}>
-                                        {
-                                            MonthList && MonthList.length > 0 ? MonthList.map(x => {
-                                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                            }) : null
-                                        }
-                                    </Row>
-                                </Checkbox.Group>
-                            </div>
-
-                            <div className={styles.searchArea}>
-                                <Row className={styles.searchAreaLable}>
-                                    <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
-                                    <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(2, e)} checked={checkAll3}>
-                                        全选
-                                    </Checkbox>
-                                </Row>
-                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(2, list)}>
-                                    <Row className={styles.searchAreaContent}>
-                                        {
-                                            BizType1List && BizType1List.length > 0 ? BizType1List.map(x => {
-                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                            }) : null
-                                        }
-                                    </Row>
-                                </Checkbox.Group>
-                            </div>
-
-                            <div className={styles.searchArea}>
-                                <Row className={styles.searchAreaLable}>
-                                    <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
-                                    <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll4}>
-                                        全选
-                                    </Checkbox>
-                                </Row>
-                                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(3, list)}>
-                                    <Row className={styles.searchAreaContent}>
-                                        {
-                                            BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
-                                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                            }) : null
-                                        }
-                                    </Row>
-                                </Checkbox.Group>
-                            </div>
-
                             <div className={styles.searchArea}>
                                 <Row className={styles.searchAreaLable}>
                                     <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
                                 </Row>
-                                <Radio.Group buttonStyle="solid" size="small" onChange={(e) => onRadioChange(2, e)} defaultValue={parseInt(oceanTransportType)}>
-                                    <Row className={styles.searchAreaContent}>
+                                <Row className={styles.searchAreaContent}>
+                                    <Select
+                                        style={{ width: "100%" }}
+                                        allowClear={false}
+                                        defaultValue={parseInt(oceanTransportType)}
+                                        onChange={(e) => onSelect(e, 2)}
+                                    >
                                         {
-                                            OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map(x => {
-                                                return <Col span={6} key={x.Key} style={{ marginBottom: 5, }}><Radio.Button style={{ width: "100%" , textAlign: "center"}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                            OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map((x) => {
+                                                return <Select.Option key={x.Key} value={x.Value}>{x.Value}</Select.Option>
                                             }) : null
                                         }
-                                    </Row>
-                                </Radio.Group>
+                                    </Select>
+                                </Row>
                             </div>
-                        </>
+                        </> : null
                 }
             </Drawer>
         </>

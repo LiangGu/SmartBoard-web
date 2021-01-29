@@ -37,5 +37,5 @@ export interface SessionSysSave {
   selectBranchID: string;
   selectBranchName: string;
   selectYear: string;
-  selectOceanTransportType: string;
+  selectOceanTransportType: number;
 }

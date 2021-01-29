@@ -77,4 +77,5 @@ export const BranchList = [
     { Key: 21, Value: "电商事业部(香港)" },
     { Key: 22, Value: "中越外运(E拼)" },
     { Key: 23, Value: "空运事业部(香港)" },
+    { Key: 24, Value: "空运事业部(深圳)" },
 ]

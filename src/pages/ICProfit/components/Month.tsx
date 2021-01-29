@@ -186,7 +186,7 @@ const ICProfitMonth: React.FC<{}> = () => {
             </Spin>
 
             {/*重点代码*/}
-            <ContextProps.Provider value={5}>
+            <ContextProps.Provider value={2.2}>
                 <SearchButton />
             </ContextProps.Provider>
         </PageContainer>

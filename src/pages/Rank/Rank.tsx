@@ -259,7 +259,7 @@ const Rank: React.FC<{}> = () => {
         </Spin>
 
         {/*重点代码*/}
-        <ContextProps.Provider value={3}>
+        <ContextProps.Provider value={5.1}>
             <SearchButton />
         </ContextProps.Provider>
     </>

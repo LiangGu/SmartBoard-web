@@ -274,7 +274,7 @@ const VolumeMonth: React.FC<{}> = () => {
         </Spin>
 
         {/*重点代码*/}
-        <ContextProps.Provider value={1}>
+        <ContextProps.Provider value={1.2}>
             <SearchButton />
         </ContextProps.Provider>
     </>
