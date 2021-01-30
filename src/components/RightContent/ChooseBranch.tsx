@@ -76,7 +76,7 @@ const ChooseBranch: React.FC<{}> = () => {
             funcCurrency: funcCurrency,
             // 保存到 Session 中,防止页面刷新数据丢失
             selectBranchID: e.target.value,
-            selectBranchName: BranchList.find( x => x.BranchID == e.target.value)?.Value || '',
+            selectBranchName: BranchList.find( (x: { BranchID: any; }) => x.BranchID == e.target.value)?.BranchName || '',
             selectYear: selectYear,
             selectBusinessesLine: selectBusinessesLine,
             selectBizType1List_Radio: selectBizType1List_Radio,
@@ -108,7 +108,7 @@ const ChooseBranch: React.FC<{}> = () => {
                 <Radio.Group buttonStyle="solid" onChange={onChange} defaultValue={parseInt(SelectBranchID)}>
                     <Row>
                         {
-                            BranchList && BranchList.length > 0 ? BranchList.map(x =>{
+                            BranchList && BranchList.length > 0 ? BranchList.map((x: { BranchID: number; BranchName: string; }) =>{
                                 return <Col span={24} key={x.BranchID} style={{marginBottom:10,}}><Radio.Button style={{width:"100%",fontSize:16}} key={x.BranchID} value={x.BranchID}>{x.BranchName}</Radio.Button></Col>
                             }) : null
                         }

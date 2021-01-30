@@ -55,15 +55,8 @@ const Login: React.FC<{}> = () => {
       resultOfLoginInfo = await login({ ...values });
       if (resultOfLoginInfo.Result == true && initialState) {
         message.success('登录成功！');
-        // 登录成功后再去后台取公司列表
+        //登录成功后再去后台取公司列表
         const resultOfBranchList = await getBranchList();
-        console.log(resultOfBranchList)
-
-
-
-
-
-
         //当前登录用户信息
         let currentUser: API.CurrentUser = resultOfLoginInfo.Content;
         let menuData: MenuDataItem[] = menu.menuData;
@@ -90,7 +83,7 @@ const Login: React.FC<{}> = () => {
           funcCurrency: currentUser.FuncCurrency,
           //将选择的年份和公司信息<会变化的数据>存在Session,防止用户刷新出现问题
           selectBranchID: resultOfLoginInfo.Content.BranchID == 1 ? 0 : resultOfLoginInfo.Content.BranchID,      //总部BranchID传0
-          selectBranchName: resultOfLoginInfo.Content.BranchID == 1 ? "香港外运(总部)" : resultOfBranchList.find(x => x.BranchID == resultOfLoginInfo.Content.BranchID)?.Value || '',      //总部公司名显示:香港外运(总部)
+          selectBranchName: resultOfLoginInfo.Content.BranchID == 1 ? "香港外运(总部)" : resultOfBranchList.find((x: { BranchID: any; }) => x.BranchID == resultOfLoginInfo.Content.BranchID)?.Value || '',      //总部公司名显示:香港外运(总部)
           selectYear: new Date().getFullYear().toString(),
           selectBusinessesLine: '5',          //默认货代
           selectBizType1List_Radio: '1',      //默认水运
