@@ -3,10 +3,9 @@ import React,{ useState, } from 'react';
 import { useModel } from 'umi';
 import { Drawer, Button, Radio, Row, Col, } from 'antd';
 import styles from './index.less';
-//引入基础数据
-import { BranchList } from '@/utils/baseData';
 import { 
     setSystemMes,
+    getBranchList,
     getUserName,
     getUserID,
     getBranchID,
@@ -23,6 +22,9 @@ import {
 } from '@/utils/auths';
 const ChooseBranch: React.FC<{}> = () => {
     const { initialState, setInitialState } = useModel('@@initialState');
+    const [BranchList,] = useState(() => {
+        return getBranchList();
+    });
     const [ DrawerVisible, setDrawerVisible] = useState(false);
     const [ SelectBranchID,] = useState(() =>{
         // 惰性赋值 any 类型,要不默认值不起作用
@@ -65,6 +67,7 @@ const ChooseBranch: React.FC<{}> = () => {
         let selectBizType1List_Radio:any = getselectBizType1List_Radio();
         let selectOceanTransportType:any = getselectOceanTransportType();
         let sysSaveData: Global.SessionSysSave = {
+            branchList: BranchList,
             userName: userName,
             userID: userID,
             branchID: branchID,
@@ -73,7 +76,7 @@ const ChooseBranch: React.FC<{}> = () => {
             funcCurrency: funcCurrency,
             // 保存到 Session 中,防止页面刷新数据丢失
             selectBranchID: e.target.value,
-            selectBranchName: BranchList.find( x => x.Key == e.target.value)?.Value || '',
+            selectBranchName: BranchList.find( x => x.BranchID == e.target.value)?.Value || '',
             selectYear: selectYear,
             selectBusinessesLine: selectBusinessesLine,
             selectBizType1List_Radio: selectBizType1List_Radio,
@@ -82,7 +85,7 @@ const ChooseBranch: React.FC<{}> = () => {
         setSystemMes(sysSaveData);
         setDrawerVisible(false)
     }
-    
+
     return (
         <div>
             <Button
@@ -106,7 +109,7 @@ const ChooseBranch: React.FC<{}> = () => {
                     <Row>
                         {
                             BranchList && BranchList.length > 0 ? BranchList.map(x =>{
-                                return <Col span={24} key={x.Key} style={{marginBottom:10,}}><Radio.Button style={{width:"100%",fontSize:16}} key={x.Key} value={x.Key}>{x.Value}</Radio.Button></Col>
+                                return <Col span={24} key={x.BranchID} style={{marginBottom:10,}}><Radio.Button style={{width:"100%",fontSize:16}} key={x.BranchID} value={x.BranchID}>{x.BranchName}</Radio.Button></Col>
                             }) : null
                         }
                     </Row>

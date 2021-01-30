@@ -131,7 +131,6 @@ const SearchButton: React.FC<{}> = ({ }) => {
      * @param list 
      */
     const onSelect = (e: any, T: Number,) => {
-        console.log(e,'--------------------下拉选择--------------------')
         switch (T) {
             case 1:
                 setYear(e);
@@ -247,7 +246,6 @@ const SearchButton: React.FC<{}> = ({ }) => {
      * 3、关闭 Drawer
      */
     const onSearch = () => {
-        console.log(businessesLine,bizType1List_Radio)
         //Step 1 <*如果页面的搜索条件不同,则下面的 searchInfo 可以根据 PropsState 来判断赋值>
         let searchInfo: object = {
             UpdateIndex: new Date().getTime(),

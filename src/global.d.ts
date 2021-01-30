@@ -27,6 +27,7 @@ export interface TableListParams {
 }
 
 export interface SessionSysSave {
+  branchList: Array<{BranchID: number, BranchName: string}>;
   userName: string;
   userID: string;
   branchID: string;

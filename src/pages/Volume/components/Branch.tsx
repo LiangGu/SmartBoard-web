@@ -302,7 +302,6 @@ const VolumeBranch: React.FC<{}> = () => {
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: getselectOceanTransportType(),
         };
-        console.log(ParamsInfo,getselectBusinessesLine(), getselectBizType1List_Radio())
         if (getselectBranchID() !== '') {
             fetchData(ParamsInfo, businessLine, title);
         }

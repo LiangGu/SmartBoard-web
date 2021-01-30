@@ -71,22 +71,22 @@ export const OceanTransportTypeList = [
 /**
  * BranchList
  */
-export const BranchList = [
-    { Key: 0, Value: "香港外运(总部)" },             //香港总部传 0 
-    { Key: 2, Value: "香港船务" },
-    { Key: 5, Value: "上海伟运货代" },
-    { Key: 6, Value: "泰国外运" },
-    { Key: 7, Value: "马来西亚外运" },
-    { Key: 8, Value: "印尼外运" },
-    { Key: 9, Value: "柬埔寨外运" },
-    { Key: 10, Value: "缅甸外运" },
-    { Key: 11, Value: "中越外运" },
-    { Key: 13, Value: "上海伟运工程" },
-    { Key: 17, Value: "大宗商品事业部" },
-    { Key: 19, Value: "空运事业部(伟运)" },
-    { Key: 20, Value: "电商事业部(伟运)" },
-    { Key: 21, Value: "电商事业部(香港)" },
-    { Key: 22, Value: "中越外运(E拼)" },
-    { Key: 23, Value: "空运事业部(香港)" },
-    { Key: 24, Value: "空运事业部(深圳)" },
-]
+// export const BranchList = [
+//     { Key: 0, Value: "香港外运(总部)" },             //香港总部传 0 
+//     { Key: 2, Value: "香港船务" },
+//     { Key: 5, Value: "上海伟运货代" },
+//     { Key: 6, Value: "泰国外运" },
+//     { Key: 7, Value: "马来西亚外运" },
+//     { Key: 8, Value: "印尼外运" },
+//     { Key: 9, Value: "柬埔寨外运" },
+//     { Key: 10, Value: "缅甸外运" },
+//     { Key: 11, Value: "中越外运" },
+//     { Key: 13, Value: "上海伟运工程" },
+//     { Key: 17, Value: "大宗商品事业部" },
+//     { Key: 19, Value: "空运事业部(伟运)" },
+//     { Key: 20, Value: "电商事业部(伟运)" },
+//     { Key: 21, Value: "电商事业部(香港)" },
+//     { Key: 22, Value: "中越外运(E拼)" },
+//     { Key: 23, Value: "空运事业部(香港)" },
+//     { Key: 24, Value: "空运事业部(深圳)" },
+// ]
