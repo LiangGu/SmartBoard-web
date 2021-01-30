@@ -92,7 +92,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
      * @param T
      * @param list 
      */
-    const onSelect = (e: any, T: Number,) => {
+    const onSelect = (value: any, e: any, T: Number,) => {
         switch (T) {
             case 1:
                 setYear(e.key);
@@ -210,8 +210,6 @@ const SearchButton: React.FC<{}> = ({ }) => {
         setDrawerVisible(false)
     }
 
-    console.log(year, YearList, oceanTransportType, OceanTransportTypeList)
-
     return (
         <>
             <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} />
@@ -251,8 +249,8 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Select
                                         style={{ width: "100%" }}
                                         allowClear={false}
-                                        defaultValue={parseInt(year)}
-                                        onChange={(e) => onSelect(e, 1)}
+                                        defaultValue={YearList.find(x=>x.Key == parseInt(year))?.Value}
+                                        onChange={(value,e) => onSelect(value, e, 1)}
                                     >
                                         {
                                             YearList && YearList.length > 0 ? YearList.map((x) => {
@@ -349,8 +347,8 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                     <Select
                                         style={{ width: "100%" }}
                                         allowClear={false}
-                                        defaultValue={parseInt(oceanTransportType)}
-                                        onChange={(e) => onSelect(e, 2)}
+                                        defaultValue={OceanTransportTypeList.find(x=>x.Key == parseInt(oceanTransportType))?.Value}
+                                        onChange={(value,e) => onSelect(value, e, 2)}
                                     >
                                         {
                                             OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map((x) => {

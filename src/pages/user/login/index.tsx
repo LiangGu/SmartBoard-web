@@ -92,7 +92,7 @@ const Login: React.FC<{}> = () => {
           selectBranchID: resultOfLoginInfo.Content.BranchID == 1 ? 0 : resultOfLoginInfo.Content.BranchID,      //总部BranchID传0
           selectBranchName: resultOfLoginInfo.Content.BranchID == 1 ? "香港外运(总部)" : BranchList.find(x => x.Key == resultOfLoginInfo.Content.BranchID)?.Value || '',      //总部公司名显示:香港外运(总部)
           selectYear: new Date().getFullYear().toString(),
-          selectOceanTransportType: 0,      //默认不限制
+          selectOceanTransportType: '0',      //默认不限制
         }
         setSystemMes(sysSaveData);
         replaceGoto();
