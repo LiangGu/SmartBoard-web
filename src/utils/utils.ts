@@ -1,3 +1,5 @@
+import e from "express";
+
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
@@ -123,8 +125,8 @@ export const calculateOfArraay = (list: Array<Number>, type: string, value: numb
 /**
  * 过滤数组中的的数据
  */
-export const FilterZeroOfArraay = (list: any,value: Number,prop:any) =>{
-    return list.filter((item:any) => item[prop] > value);
+export const FilterZeroOfArraay = (list: any, value: Number, prop: any) => {
+    return list.filter((item: any) => item[prop] > value);
 }
 
 /**
@@ -155,6 +157,18 @@ export const getCurDay = () => {
 }
 
 /**
+ * 数组中的值相加
+ * @param arr 
+ */
+export const sumArray = (arr: Array<number>) => {
+    var s = 0;
+    for (let i = 0; i < arr.length; i++) {
+        s += Number(arr[i]);
+    }
+    return s;
+};
+
+/**
  * 动态获取系统上线到今年的年份List
  */
 export const getYearList = () => {
@@ -171,13 +185,161 @@ export const getYearList = () => {
 }
 
 /**
- * 数组中的值相加
- * @param arr 
+ * 根据业务线动态获取运输类型数据
  */
-export const sumArray = (arr: Array<number>) => {
-    var s = 0;
-    for (let i = 0; i < arr.length; i++) {
-        s += Number(arr[i]);
+export function GetBizType1List_RadioList(BusinessesLine: any) {
+    let BizType1List_RadioList: Array<{ Key: number, Value: string }> = [];
+    switch (parseInt(BusinessesLine)) {
+        case 1:
+            BizType1List_RadioList = [
+                { Key: 1, Value: "水运" },
+                { Key: 2, Value: "空运" },
+                { Key: 3, Value: "陆运" },
+                { Key: 4, Value: "铁路" },
+            ];
+            break;
+        case 2:
+            BizType1List_RadioList = [
+                { Key: 12, Value: "空海跨境" },
+                { Key: 3, Value: "陆运" },
+                { Key: 6, Value: "仓储" },
+                { Key: 13, Value: "增值服务" },
+                { Key: 14, Value: "货运站" },
+            ];
+            break;
+        case 3:
+            BizType1List_RadioList = [
+                { Key: 12, Value: "空海跨境" },
+            ];
+            break;
+        case 4:
+            BizType1List_RadioList = [
+                { Key: 10, Value: "散货船" },
+                { Key: 11, Value: "总代" },
+            ];
+            break;
+        case 5:
+            BizType1List_RadioList = [
+                { Key: 1, Value: "水运" },
+                { Key: 2, Value: "空运" },
+                { Key: 3, Value: "陆运" },
+                { Key: 4, Value: "铁路" },
+                { Key: 5, Value: "多式联运" },
+            ];
+            break;
+        default: break;
     }
-    return s;
-};
+    return BizType1List_RadioList;
+}
+
+/**
+ * 根据业务线和运输类型动态获取获取类型
+ * 注:货物类型不会根据贸易类型有所不同,通过传参数获取到不同的货物类型数据
+ * BusinessesLine:1.工程 2.合同 3.电商 4.船代 5.货代
+ * BizType1:1.水运 2.空运 3.陆运 4.铁路 5.多式联运 6.仓储 10.散货船 11.总代 12.空海跨境 13.增值服务 14.货运站 (传0取全部)
+ */
+export function GetOceanTransportTypeList(BusinessesLine: any, BizType1: any,) {
+    let OceanTransportTypeList: Array<{ Key: number, Value: string }> = [];
+    if (parseInt(BizType1) == 0) {
+        OceanTransportTypeList = [
+            { Key: 0, Value: "不限" },                      //传 0 取全部
+            { Key: 1, Value: "整箱" },
+            { Key: 2, Value: "拼箱" },
+            { Key: 3, Value: "散货" },
+            { Key: 6, Value: "整车" },
+            { Key: 7, Value: "零担" },
+        ];
+    } else {
+        if (parseInt(BusinessesLine) == 1) {
+            if (parseInt(BizType1) == 1) {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 2, Value: "拼箱" },
+                    { Key: 3, Value: "散货" },
+                ];
+            } else if (parseInt(BizType1) == 2) {
+                OceanTransportTypeList = [
+                    { Key: 3, Value: "散货" },
+                ];
+            } else if (parseInt(BizType1) == 3) {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 6, Value: "整车" },
+                    { Key: 7, Value: "零担" },
+                ];
+            } else {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 2, Value: "拼箱" },
+                ];
+            }
+        } else if (parseInt(BusinessesLine) == 2) {
+            if (parseInt(BizType1) == 12) {
+                OceanTransportTypeList = [
+                    
+                ];
+            } else if (parseInt(BizType1) == 3) {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 6, Value: "整车" },
+                    { Key: 7, Value: "零担" },
+                ];
+            } else if (parseInt(BizType1) == 6) {
+                OceanTransportTypeList = [];
+            } else if (parseInt(BizType1) == 13) {
+                OceanTransportTypeList = [];
+            } else {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 2, Value: "拼箱" },
+                ];
+            }
+        } else if (parseInt(BusinessesLine) == 3) {
+            if (parseInt(BizType1) == 12) {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 2, Value: "拼箱" },
+                    { Key: 3, Value: "散货" },
+                ];
+            }
+        } else if (parseInt(BusinessesLine) == 4) {
+            if (parseInt(BizType1) == 10) {
+                OceanTransportTypeList = [
+                    { Key: 3, Value: "散货" },
+                ];
+            } else {
+                OceanTransportTypeList = [];
+            }
+        } else {
+            if (parseInt(BizType1) == 1) {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 2, Value: "拼箱" },
+                    { Key: 3, Value: "散货" },
+                ];
+            } else if (parseInt(BizType1) == 2) {
+                OceanTransportTypeList = [
+                    { Key: 3, Value: "散货" },
+                ];
+            } else if (parseInt(BizType1) == 3) {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 6, Value: "整车" },
+                    { Key: 7, Value: "零担" },
+                ];
+            } else if (parseInt(BizType1) == 4) {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 2, Value: "拼箱" },
+                ];
+            } else {
+                OceanTransportTypeList = [
+                    { Key: 1, Value: "整箱" },
+                    { Key: 2, Value: "拼箱" },
+                    { Key: 3, Value: "散货" },
+                ];
+            }
+        }
+    }
+    return OceanTransportTypeList;
+}

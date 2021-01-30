@@ -17,9 +17,20 @@ export const MonthList = [
 ]
 
 /**
- * BizType1List
+ * BusinessesLineList
  */
-export const BizType1List = [
+export const BusinessesLineList = [
+    { Key: 1, Value: "工程" },
+    { Key: 2, Value: "合同" },
+    // { Key: 3, Value: "电商" },
+    { Key: 4, Value: "船代" },
+    { Key: 5, Value: "货代" },
+]
+
+/**
+ * BizType1List_MultiSelect
+ */
+export const BizType1List_MultiSelect = [
     { Key: 1, Value: "水运" },
     { Key: 2, Value: "空运" },
     { Key: 3, Value: "陆运" },

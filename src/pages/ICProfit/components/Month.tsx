@@ -168,7 +168,7 @@ const ICProfitMonth: React.FC<{}> = () => {
         let ParamsInfo: object = {
             BranchID: getselectBranchID(),
             Year: getselectYear(),
-            TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
+            TransTypes: initialState?.searchInfo?.BizType1List_MultiSelect || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: getselectOceanTransportType(),
         };

@@ -16,7 +16,7 @@ import 'echarts/lib/component/legend';
 import { getICProfitChartData, } from '@/services/icprofit';
 //调用公式方法
 import { sortObjectArr, transIntOfArraay, } from '@/utils/utils';
-import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
+import { getselectBranchID, getselectYear, getselectOceanTransportType, getselectBusinessesLine, getselectBizType1List_Radio} from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
@@ -298,10 +298,11 @@ const VolumeBranch: React.FC<{}> = () => {
         let ParamsInfo: object = {
             BranchID: getselectBranchID(),
             Year: getselectYear(),
-            TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
+            TransTypes: initialState?.searchInfo?.BizType1List_MultiSelect || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: getselectOceanTransportType(),
         };
+        console.log(ParamsInfo,getselectBusinessesLine(), getselectBizType1List_Radio())
         if (getselectBranchID() !== '') {
             fetchData(ParamsInfo, businessLine, title);
         }
@@ -318,7 +319,7 @@ const VolumeBranch: React.FC<{}> = () => {
         let ParamsInfo: object = {
             BranchID: getselectBranchID(),
             Year: getselectYear(),
-            TransTypes: initialState?.searchInfo?.BizType1List || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
+            TransTypes: initialState?.searchInfo?.BizType1List_MultiSelect || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: getselectOceanTransportType(),
         };
@@ -397,9 +398,9 @@ const VolumeBranch: React.FC<{}> = () => {
             </Spin>
 
             {/*重点代码*/}
-            {/* <ContextProps.Provider value={1.1}>
+            <ContextProps.Provider value={1.1}>
                 <SearchButton />
-            </ContextProps.Provider> */}
+            </ContextProps.Provider>
         </PageContainer>
     )
 };

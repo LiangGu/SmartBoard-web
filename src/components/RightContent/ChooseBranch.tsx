@@ -17,6 +17,8 @@ import {
     getselectBranchID,
     getselectBranchName,
     getselectYear,
+    getselectBusinessesLine,
+    getselectBizType1List_Radio,
     getselectOceanTransportType,
 } from '@/utils/auths';
 const ChooseBranch: React.FC<{}> = () => {
@@ -59,6 +61,8 @@ const ChooseBranch: React.FC<{}> = () => {
         let token:any = getToken();
         let funcCurrency:any = getFuncCurr();
         let selectYear:any = getselectYear();
+        let selectBusinessesLine:any = getselectBusinessesLine();
+        let selectBizType1List_Radio:any = getselectBizType1List_Radio();
         let selectOceanTransportType:any = getselectOceanTransportType();
         let sysSaveData: Global.SessionSysSave = {
             userName: userName,
@@ -71,6 +75,8 @@ const ChooseBranch: React.FC<{}> = () => {
             selectBranchID: e.target.value,
             selectBranchName: BranchList.find( x => x.Key == e.target.value)?.Value || '',
             selectYear: selectYear,
+            selectBusinessesLine: selectBusinessesLine,
+            selectBizType1List_Radio: selectBizType1List_Radio,
             selectOceanTransportType: selectOceanTransportType,
         }
         setSystemMes(sysSaveData);

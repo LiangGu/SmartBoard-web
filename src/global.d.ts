@@ -37,5 +37,7 @@ export interface SessionSysSave {
   selectBranchID: string;
   selectBranchName: string;
   selectYear: string;
+  selectBusinessesLine: string;
+  selectBizType1List_Radio: string;
   selectOceanTransportType: string;
 }

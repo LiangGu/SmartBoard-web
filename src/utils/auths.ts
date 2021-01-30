@@ -13,6 +13,8 @@ export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
         sessionStorage.setItem("SELECT_BRANCH_ID", sysMes.selectBranchID);
         sessionStorage.setItem("SELECT_BRANCH_NAME", sysMes.selectBranchName);
         sessionStorage.setItem("SELECT_YEAR", sysMes.selectYear);
+        sessionStorage.setItem("SELECT_BUSINESSESLINE", sysMes.selectBusinessesLine);
+        sessionStorage.setItem("SELECT_BIZTYPE1LIST_RADIO", sysMes.selectBizType1List_Radio);
         sessionStorage.setItem("SELECT_OCEAN_TRANSPORT_TYPE", sysMes.selectOceanTransportType);
     }else{
         sessionStorage.setItem("USER_NAME", '');
@@ -25,6 +27,8 @@ export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
         sessionStorage.setItem("SELECT_BRANCH_ID", '');
         sessionStorage.setItem("SELECT_BRANCH_NAME", '');
         sessionStorage.setItem("SELECT_YEAR", '');
+        sessionStorage.setItem("SELECT_BUSINESSESLINE", '');
+        sessionStorage.setItem("SELECT_BIZTYPE1LIST_RADIO", '');
         sessionStorage.setItem("SELECT_OCEAN_TRANSPORT_TYPE", '');
     }
 }
@@ -63,6 +67,14 @@ export function getselectBranchName() {
 
 export function getselectYear() {
     return sessionStorage.getItem("SELECT_YEAR");
+}
+
+export function getselectBusinessesLine() {
+    return sessionStorage.getItem("SELECT_BUSINESSESLINE");
+}
+
+export function getselectBizType1List_Radio() {
+    return sessionStorage.getItem("SELECT_BIZTYPE1LIST_RADIO");
 }
 
 export function getselectOceanTransportType() {
