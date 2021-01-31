@@ -229,7 +229,6 @@ const Debt: React.FC<{}> = () => {
             Option_Crosswise_Pie = {
                 title: {
                     text: '累计占比',
-                    left: 'center',
                 },
                 tooltip: {
                     trigger: 'item',
@@ -251,8 +250,6 @@ const Debt: React.FC<{}> = () => {
                     containLabel: true,
                 },
                 legend: {
-                    orient: 'vertical',
-                    left: 'left',
                     textStyle: {
                         color: 'black',
                         fontSize: 16,

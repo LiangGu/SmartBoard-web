@@ -73,6 +73,10 @@ const VolumeMonth: React.FC<{}> = () => {
                     },
                 },
                 legend: {
+                    textStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
                     data: getLineStackLegendData(SelectYearVolumeData, 1),
                 },
                 toolbox: {

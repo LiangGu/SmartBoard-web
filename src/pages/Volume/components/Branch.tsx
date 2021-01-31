@@ -101,7 +101,6 @@ const VolumeBranch: React.FC<{}> = () => {
             Option_Pie = {
                 title: {
                     text: `累计占比(${getselectYear()})`,
-                    left: 'center',
                 },
                 tooltip: {
                     trigger: 'item',
@@ -123,8 +122,6 @@ const VolumeBranch: React.FC<{}> = () => {
                     containLabel: true,
                 },
                 legend: {
-                    orient: 'vertical',
-                    left: 'left',
                     textStyle: {
                         color: 'black',
                         fontSize: 16,
@@ -160,7 +157,6 @@ const VolumeBranch: React.FC<{}> = () => {
             Option_Bar = {
                 title: {
                     text: '累计同比',
-                    left: 'center',
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -193,8 +189,6 @@ const VolumeBranch: React.FC<{}> = () => {
                     boundaryGap: [0, 0.01],
                 },
                 legend: {
-                    orient: 'vertical',
-                    left: 'left',
                     textStyle: {
                         color: 'black',
                         fontSize: 16,
