@@ -15,7 +15,7 @@ import 'echarts/lib/component/legend';
 //调用API
 import { getBranchChartData, } from '@/services/volume';
 //调用公式方法
-import { transIntOfArraay, } from '@/utils/utils';
+import { transIntOfArraay, FilterZeroOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectBusinessesLine, getselectBizType1List_Radio, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -87,7 +87,7 @@ const VolumeBranch: React.FC<{}> = () => {
         }
         //赋值饼图 + 公司名信息
         if (SelectYearDataPie.length > 0) {
-            SelectYearDataPie.map((x: { Volume: number; BranchName: string; }) => {
+            FilterZeroOfArraay(SelectYearDataPie,0,'Volume').map((x: { Volume: number; BranchName: string; }) => {
                 PieLegendData.push(x.BranchName);
                 PieSeriesData.push({
                     value: x.Volume,
@@ -99,12 +99,12 @@ const VolumeBranch: React.FC<{}> = () => {
         }
         //赋值柱状图当前选择的年和前一年
         if (SelectYearDataBar.length > 0) {
-            SelectYearDataBar.map((x: { Volume: number; }) => {
+            FilterZeroOfArraay(SelectYearDataBar,0,'Volume').map((x: { Volume: number; }) => {
                 BarSeriesData_SelectYear.push(x.Volume);
             });
         }
         if (LastYearDataBar.length > 0) {
-            LastYearDataBar.map((x: { Volume: number; }) => {
+            FilterZeroOfArraay(LastYearDataBar,0,'Volume').map((x: { Volume: number; }) => {
                 BarSeriesData_LastYear.push(x.Volume);
             });
         }

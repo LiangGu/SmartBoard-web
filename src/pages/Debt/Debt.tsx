@@ -260,7 +260,7 @@ const Debt: React.FC<{}> = () => {
                     data: ["小于30天", "31-45天", "46-60天", "61-90天", "91-180天", "大于180天"],
                 },
                 //*用来设置每个区域颜色
-                color: ["#FFE1E1", "#FFC3C3", "#FF8F8F", "#B60000", "#5A0000", "#000000"],
+                color: ["#FFCBCB", "#FF9696", "#FF2D2D", "#F80000", "#C30000", "#8F0000"],
                 series: [
                     {
                         type: 'pie',
@@ -400,10 +400,10 @@ const Debt: React.FC<{}> = () => {
                 <Card style={{ marginBottom: 10 }}>
                     <Row>
                         <Col span={12}>
-                            <div id="DebtChartCrosswiseBar" style={{ width: '100%', height: 500 }}></div>
+                            <div id="DebtChartCrosswiseBar" style={{ width: '100%', height: 800 }}></div>
                         </Col>
                         <Col span={12}>
-                            <div id="DebtChartCrosswisePie" style={{ width: '100%', height: 500 }}></div>
+                            <div id="DebtChartCrosswisePie" style={{ width: '100%', height: 800 }}></div>
                         </Col>
                     </Row>
                 </Card>
@@ -424,7 +424,7 @@ const Debt: React.FC<{}> = () => {
                         </>
                     }
                 >
-                    <div id="DebtChartLengthways" style={{ width: '100%', height: 500 }}></div>
+                    <div id="DebtChartLengthways" style={{ width: '100%', height: 800 }}></div>
                 </Card>
             </Spin>
         </PageContainer>
