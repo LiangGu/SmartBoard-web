@@ -73,6 +73,7 @@ const VolumeMonth: React.FC<{}> = () => {
                     },
                 },
                 legend: {
+                    bottom: 'bottom',
                     textStyle: {
                         color: 'black',
                         fontSize: 16,

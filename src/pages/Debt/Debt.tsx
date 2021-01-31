@@ -250,6 +250,7 @@ const Debt: React.FC<{}> = () => {
                     containLabel: true,
                 },
                 legend: {
+                    bottom: 'bottom',
                     textStyle: {
                         color: 'black',
                         fontSize: 16,

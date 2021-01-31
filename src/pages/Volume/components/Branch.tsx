@@ -122,6 +122,7 @@ const VolumeBranch: React.FC<{}> = () => {
                     containLabel: true,
                 },
                 legend: {
+                    bottom: 'bottom',
                     textStyle: {
                         color: 'black',
                         fontSize: 16,
@@ -189,6 +190,7 @@ const VolumeBranch: React.FC<{}> = () => {
                     boundaryGap: [0, 0.01],
                 },
                 legend: {
+                    bottom: 'bottom',
                     textStyle: {
                         color: 'black',
                         fontSize: 16,
