@@ -11,9 +11,9 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 //调用API
-import { getVolumeChartData, getProfitChartData, } from '@/services/volume';
+import { getVolumeChartData,} from '@/services/volume';
 //调用公式方法
-import { transIntOfArraay, getTotalValue, getLineStackSeriesData, getLineStackLegendData, } from '@/utils/utils';
+import { getLineStackSeriesData, getLineStackLegendData, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectBusinessesLine, getselectBizType1List_Radio, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -23,16 +23,12 @@ import ContextProps from '@/createContext';
 const VolumeMonth: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
-    const [totalRT, settotalRT] = useState(0);
-    const [totalIncome, settotalIncome] = useState(0);
 
     //获取数据
     let fetchData = async (ParamsInfo: any) => {
         setloading(true);
         //货量
         const resultVolume = await getVolumeChartData(ParamsInfo);
-        //收支利润<钱>
-        // const resultMoney = await getProfitChartData(ParamsInfo);
         if (!resultVolume || getselectBranchID() == '') {
             return;
         }
@@ -42,21 +38,6 @@ const VolumeMonth: React.FC<{}> = () => {
             if (resultVolume.length > 0) {
                 SelectYearVolumeData = resultVolume.filter((x: { Year: any; }) => x.Year == ParamsInfo.Year);
             }
-            // let VolumeList: any = [];
-            // let IncomeList: any = [];
-            //计算合计要用到下面2个数据集
-            // if (SelectYearVolumeData.length > 0) {
-            //     SelectYearVolumeData.map((x: { Volume: Number;}) => {
-            //         VolumeList.push(x.Volume);
-            //     });
-            // }
-            // if (resultMoney.length > 0) {
-            //     resultMoney.map((x: { AmountAR: any;}) => {
-            //         IncomeList.push(parseFloat((x.AmountAR / 10000).toFixed(2)));
-            //     });
-            // }
-            // settotalRT(getTotalValue(transIntOfArraay(VolumeList)));
-            // settotalIncome(getTotalValue(transIntOfArraay(IncomeList)));
 
             let LegendData = [];
             let SeriesData = [];
@@ -72,18 +53,12 @@ const VolumeMonth: React.FC<{}> = () => {
 
     //初始化图表
     let Chart_RT: any;
-    let Chart_Income: any;
     let initChart = (SelectYearVolumeData: any,) => {
         let Element_RT = document.getElementById('RTMonth');
-        let Element_Income = document.getElementById('IncomeMonth');
         if (Chart_RT != null && Chart_RT != "" && Chart_RT != undefined) {
             Chart_RT.dispose();
         }
-        if (Chart_Income != null && Chart_Income != "" && Chart_Income != undefined) {
-            Chart_Income.dispose();
-        }
         let Option_RT: any;
-        let Option_Income: any;
 
         if (Element_RT) {
             Chart_RT = echarts.init(Element_RT as HTMLDivElement);
@@ -135,56 +110,6 @@ const VolumeMonth: React.FC<{}> = () => {
             Chart_RT.resize({ width: window.innerWidth - 72 });
             window.addEventListener('resize', () => { Chart_RT.resize({ width: window.innerWidth - 72 }) });
         }
-        // if (Element_Income) {
-        //     Chart_Income = echarts.init(Element_Income as HTMLDivElement);
-        //     Option_Income = {
-        //         title: {
-        //             text: '月度收入',
-        //         },
-        //         tooltip: {
-        //             trigger: 'axis',
-        //             axisPointer: {
-        //                 type: 'shadow',
-        //             },
-        //         },
-        //         legend: {
-        //             data: getLineStackLegendData(VolumeData, 2),
-        //         },
-        //         toolbox: {
-        //             feature: {
-        //                 dataView: { show: true, readOnly: false },
-        //                 magicType: { show: true, type: ['line', 'bar'] },
-        //                 restore: { show: true },
-        //                 saveAsImage: { show: true },
-        //             },
-        //         },
-        //         grid: {
-        //             left: '5%',
-        //             right: '5%',
-        //             top: '10%',
-        //             bottom: '10%',
-        //             containLabel: true,
-        //         },
-        //         xAxis: [
-        //             {
-        //                 type: 'category',
-        //                 axisLabel: {
-        //                     show: true,
-        //                     color: 'black',
-        //                     fontSize: 16,
-        //                 },
-        //                 data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-        //             },
-        //         ],
-        //         yAxis: {
-        //             type: 'value'
-        //         },
-        //         series: getLineStackSeriesData(MoneyDate, 2),
-        //     };
-        //     Chart_Income.setOption(Option_Income, true);
-        //     Chart_Income.resize({ width: window.innerWidth - 72 });
-        //     window.addEventListener('resize', () => { Chart_Income.resize({ width: window.innerWidth - 72 }) });
-        // }
     };
 
     /**
@@ -207,37 +132,10 @@ const VolumeMonth: React.FC<{}> = () => {
 
     return <>
         <Spin tip="数据正在加载中,请稍等..." spinning={loading} >
-            <Card style={{ marginBottom: 10 }}
-                extra={
-                    <>
-                        {/* <span style={{ fontSize: 16, marginRight: 10 }}>
-                            总货量: {totalRT}
-                        </span>
-                        <span style={{ fontSize: 16 }}>
-                            平均货量: {totalRT ? (totalRT / 12).toFixed(2) : 0}
-                        </span> */}
-                    </>
-                }
-            >
+            <Card style={{ marginBottom: 10 }}>
                 <div id="RTMonth" style={{ width: '100%', height: 800 }}></div>
             </Card>
         </Spin>
-        {/* <Spin tip="数据正在加载中,请稍等..." spinning={loading} >
-            <Card
-                extra={
-                    <>
-                        <span style={{ fontSize: 16, marginRight: 10 }}>
-                            总收入: {totalIncome}
-                        </span>
-                        <span style={{ fontSize: 16 }}>
-                            平均收入: {totalIncome ? (totalIncome / 12).toFixed(2) : 0}
-                        </span>
-                    </>
-                }
-            >
-                <div id="IncomeMonth" style={{ width: '100%', height: 500 }}></div>
-            </Card>
-        </Spin> */}
 
         {/*重点代码*/}
         <ContextProps.Provider value={1.2}>

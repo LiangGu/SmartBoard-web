@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Spin, } from 'antd';
@@ -15,7 +15,7 @@ import 'echarts/lib/component/legend';
 import { getICProfitMonthData, } from '@/services/icprofit';
 //调用公式方法
 import { sortObjectArr, transIntOfArraay, } from '@/utils/utils';
-import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
+import { getselectBranchID, getselectYear, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Tooltip, } from 'antd';
-// import styles from '../index.less';
+import { Card, Spin, Row, Col, } from 'antd';
 //  引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
@@ -21,22 +20,10 @@ import { getselectBranchID, getselectYear, getselectBusinessesLine, getselectBiz
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
 import ContextProps from '@/createContext';
-// 引入图标
-// import img_Container from '@/assets/businessLine/container.svg';
-// import img_Bulk from '@/assets/businessLine/bulk.svg';
-// import img_Airplane from '@/assets/businessLine/airplane.svg';
-// import img_Truck from '@/assets/businessLine/truck.svg';
-// import img_Ship from '@/assets/businessLine/ship.svg';
-// import img_Project from '@/assets/businessLine/project.svg';
-// import img_Contract from '@/assets/businessLine/contract.svg';
-// import img_Ecommerce from '@/assets/businessLine/ecommerce.svg';
 
 const VolumeBranch: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
-    const [businessLine, setBusinessLine] = useState(1);
-    const [title, setTitle] = useState('水路货代 - 集装箱量');
-    const [unit, setUnit] = useState('单位:TEU');
 
     //获取数据
     let fetchData = async (ParamsInfo: any) => {
@@ -291,40 +278,11 @@ const VolumeBranch: React.FC<{}> = () => {
         }
     }, [initialState]);
 
-    /**
-     * 点击切换业务线
-     */
-    // const onChangeBusinessLine = (Type: number, Title: string, Unit: string) => {
-    //     setBusinessLine(Type);
-    //     setTitle(Title);
-    //     setUnit(Unit);
-    //     // 切换业务线获取数据
-    //     let ParamsInfo: object = {
-    //         BranchID: getselectBranchID(),
-    //         Year: getselectYear(),
-    //         Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    //         BizLines: [getselectBusinessesLine()],
-    //         TransTypes: [getselectBizType1List_Radio()],
-    //         TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-    //         CargoTypes: getselectOceanTransportType() == 'null' ? [] : [getselectOceanTransportType()],
-    //     };
-    //     if (getselectBranchID() !== '') {
-    //         fetchData(ParamsInfo, Type, Title);
-    //     }
-    // }
-
     return (
         <PageContainer>
 
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
-                <Card
-                    // title={`${title} (` + `${unit} )`}
-                    style={{ marginBottom: 10 }}
-                    extra={
-                        <>
-
-                        </>
-                    }>
+                <Card style={{ marginBottom: 10 }}>
                     <Row>
                         <Col span={12}>
                             <div id="VolumeBusinessLinePie" style={{ width: '100%', height: 800 }}></div>
@@ -335,53 +293,6 @@ const VolumeBranch: React.FC<{}> = () => {
                     </Row>
                 </Card>
             </Spin>
-
-            {/* <Row>
-                <Col span={24}>
-                    <div className={styles.BusinessLineContainer}>
-                        <Tooltip placement="top" title={'水路货代 - 集装箱'}>
-                            <div className={styles.ImgContainer} onClick={() => onChangeBusinessLine(1, '水路货代 - 集装箱量', '单位:TEU')} >
-                                <img src={img_Container} style={{ backgroundColor: businessLine == 1 ? 'white' : '#D4D4D4' }} />
-                            </div>
-                        </Tooltip>
-                        <Tooltip placement="top" title={'水路货代 - 散杂货'}>
-                            <div className={styles.ImgContainer} onClick={() => onChangeBusinessLine(2, '水路货代 - 散杂货量', '单位:万计费吨')}>
-                                <img src={img_Bulk} style={{ backgroundColor: businessLine == 2 ? 'white' : '#D4D4D4' }} />
-                            </div>
-                        </Tooltip>
-                        <Tooltip placement="top" title={'航空货代'}>
-                            <div className={styles.ImgContainer} onClick={() => onChangeBusinessLine(3, '航空货代', '单位:万公斤')}>
-                                <img src={img_Airplane} style={{ backgroundColor: businessLine == 3 ? 'white' : '#D4D4D4' }} />
-                            </div>
-                        </Tooltip>
-                        <Tooltip placement="top" title={'公路货代'}>
-                            <div className={styles.ImgContainer} onClick={()=>onChangeBusinessLine(4,'公路货代','单位:计费吨')}>
-                                <img src={img_Truck} style={{backgroundColor: businessLine == 4 ? 'white' : '#D4D4D4'}} />
-                            </div>
-                        </Tooltip>
-                        <Tooltip placement="top" title={'集装箱船代 - 艘次与箱'}>
-                            <div className={styles.ImgContainer} onClick={()=>onChangeBusinessLine(5,'集装箱船代 - 艘次与箱量','单位:艘次')}>
-                                <img src={img_Ship} style={{backgroundColor: businessLine == 5 ? 'white' : '#D4D4D4'}} />
-                            </div>
-                        </Tooltip>
-                        <Tooltip placement="top" title={'项目物流 - 工程物流'}>
-                            <div className={styles.ImgContainer} onClick={() => onChangeBusinessLine(6, '项目物流 - 工程物流操作量', '单位:万计费吨')}>
-                                <img src={img_Project} style={{ backgroundColor: businessLine == 6 ? 'white' : '#D4D4D4' }} />
-                            </div>
-                        </Tooltip>
-                        <Tooltip placement="top" title={'合同物流'}>
-                            <div className={styles.ImgContainer} onClick={() => onChangeBusinessLine(7, '合同物流操作量', '单位:万计费吨')}>
-                                <img src={img_Contract} style={{ backgroundColor: businessLine == 7 ? 'white' : '#D4D4D4' }} />
-                            </div>
-                        </Tooltip>
-                        <Tooltip placement="top" title={'电子商务 - 电商物流操作'}>
-                            <div className={styles.ImgContainer} onClick={()=>onChangeBusinessLine(8,'电子商务 - 电商物流操作量','单位:票')}>
-                                <img src={img_Ecommerce} style={{backgroundColor: businessLine == 8 ? 'white' : '#D4D4D4'}} />
-                            </div>
-                        </Tooltip>
-                    </div>
-                </Col>
-            </Row> */}
 
             {/*重点代码*/}
             <ContextProps.Provider value={1.1}>
