@@ -33,11 +33,6 @@ import ContextProps from '@/createContext';
 
 const VolumeBranch: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
-    const [year,] = useState(() => {
-        // 惰性赋值 any 类型,要不默认值不起作用
-        let selectYear: any = getselectYear();
-        return selectYear;
-    });
     const [loading, setloading] = useState(false);
     const [businessLine, setBusinessLine] = useState(1);
     const [title, setTitle] = useState('水路货代 - 集装箱量');
@@ -52,7 +47,7 @@ const VolumeBranch: React.FC<{}> = () => {
         }
         if (result) {
             //将值传给初始化图表的函数
-            initChart(result);
+            initChart(result, ParamsInfo);
             setloading(false);
         }
     }
@@ -60,7 +55,7 @@ const VolumeBranch: React.FC<{}> = () => {
     //初始化图表
     let Chart_Pie: any;
     let Chart_Bar: any;
-    let initChart = (result: any) => {
+    let initChart = (result: any, ParamsInfo: any) => {
         let Element_Pie = document.getElementById('VolumeBusinessLinePie');
         let Element_Bar = document.getElementById('VolumeBusinessLineBar');
         if (Chart_Pie != null && Chart_Pie != "" && Chart_Pie != undefined) {
@@ -72,21 +67,27 @@ const VolumeBranch: React.FC<{}> = () => {
         let Option_Pie: any;
         let Option_Bar: any;
 
-        let SelectYearData: any = [];
-        let LastYearData: any = [];
+        //饼图数据
+        let SelectYearDataPie: any = [];
         let PieLegendData: any = [];
         let PieSeriesData: any = [];
+        //柱状图数据
+        let SelectYearDataBar: any = [];
+        let LastYearDataBar: any = [];
         let BarxAxisData: any = [];
         let BarSeriesData_SelectYear: any = [];
         let BarSeriesData_LastYear: any = [];
 
-        if(result.length > 0){
-            SelectYearData = result.filter((x: { FinanceYear: any; }) => x.FinanceYear == year);
-            LastYearData = result.filter((x: { FinanceYear: any; }) => x.FinanceYear !== year);
+        if (result.length > 0) {
+            //柱状图
+            SelectYearDataBar = result.filter((x: { FinanceYear: any; }) => x.FinanceYear == ParamsInfo.Year);
+            LastYearDataBar = result.filter((x: { FinanceYear: any; }) => x.FinanceYear == ParamsInfo.Year - 1);
+            //饼图
+            SelectYearDataPie = result.filter((x: { FinanceYear: any; }) => x.FinanceYear == ParamsInfo.Year);
         }
         //赋值饼图 + 公司名信息
-        if (SelectYearData.length > 0) {
-            SelectYearData.map((x: { Volume: number; BranchName: string;}) => {
+        if (SelectYearDataPie.length > 0) {
+            SelectYearDataPie.map((x: { Volume: number; BranchName: string; }) => {
                 PieLegendData.push(x.BranchName);
                 PieSeriesData.push({
                     value: x.Volume,
@@ -97,13 +98,13 @@ const VolumeBranch: React.FC<{}> = () => {
             });
         }
         //赋值柱状图当前选择的年和前一年
-        if (SelectYearData.length > 0) {
-            SelectYearData.map((x: { Volume: number;}) => {
+        if (SelectYearDataBar.length > 0) {
+            SelectYearDataBar.map((x: { Volume: number; }) => {
                 BarSeriesData_SelectYear.push(x.Volume);
             });
         }
-        if (LastYearData.length > 0) {
-            LastYearData.map((x: { Volume: number;}) => {
+        if (LastYearDataBar.length > 0) {
+            LastYearDataBar.map((x: { Volume: number; }) => {
                 BarSeriesData_LastYear.push(x.Volume);
             });
         }
@@ -112,7 +113,7 @@ const VolumeBranch: React.FC<{}> = () => {
             Chart_Pie = echarts.init(Element_Pie as HTMLDivElement);
             Option_Pie = {
                 title: {
-                    text: '累计占比',
+                    text: `累计占比(${getselectYear()})`,
                     left: 'center',
                 },
                 tooltip: {
@@ -126,6 +127,13 @@ const VolumeBranch: React.FC<{}> = () => {
                         restore: { show: true },
                         saveAsImage: { show: true },
                     },
+                },
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
+                    containLabel: true,
                 },
                 legend: {
                     orient: 'vertical',
@@ -156,7 +164,7 @@ const VolumeBranch: React.FC<{}> = () => {
                     },
                 ]
             };
-            Chart_Pie.setOption(Option_Pie);
+            Chart_Pie.setOption(Option_Pie, true);
             Chart_Pie.resize({ width: (window.innerWidth - 72) / 2 });
             window.addEventListener('resize', () => { Chart_Pie.resize({ width: (window.innerWidth - 72) / 2 }) });
         }
@@ -182,9 +190,10 @@ const VolumeBranch: React.FC<{}> = () => {
                     },
                 },
                 grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
                     containLabel: true,
                 },
                 xAxis: {
@@ -203,7 +212,7 @@ const VolumeBranch: React.FC<{}> = () => {
                         color: 'black',
                         fontSize: 16,
                     },
-                    data: [`${year - 1}`,`${year}`],
+                    data: [`${ParamsInfo.Year - 1}`, `${ParamsInfo.Year}`],
                 },
                 yAxis: {
                     type: 'category',
@@ -222,7 +231,7 @@ const VolumeBranch: React.FC<{}> = () => {
                 series: [
                     {
                         type: 'bar',
-                        name: `${year - 1}`,
+                        name: `${ParamsInfo.Year - 1}`,
                         label: {
                             show: true,
                             position: 'right',
@@ -240,7 +249,7 @@ const VolumeBranch: React.FC<{}> = () => {
                     },
                     {
                         type: 'bar',
-                        name:  `${year}`,
+                        name: `${ParamsInfo.Year}`,
                         label: {
                             show: true,
                             position: 'right',
@@ -258,7 +267,7 @@ const VolumeBranch: React.FC<{}> = () => {
                     },
                 ]
             };
-            Chart_Bar.setOption(Option_Bar);
+            Chart_Bar.setOption(Option_Bar, true);
             Chart_Bar.resize({ width: (window.innerWidth - 72) / 2 });
             window.addEventListener('resize', () => { Chart_Bar.resize({ width: (window.innerWidth - 72) / 2 }) });
         }
@@ -275,7 +284,7 @@ const VolumeBranch: React.FC<{}> = () => {
             BizLines: [getselectBusinessesLine()],
             TransTypes: [getselectBizType1List_Radio()],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: [getselectOceanTransportType()],
+            CargoTypes: getselectOceanTransportType() == 'null' ? [] : [getselectOceanTransportType()],
         };
         if (getselectBranchID() !== '') {
             fetchData(ParamsInfo);
@@ -297,7 +306,7 @@ const VolumeBranch: React.FC<{}> = () => {
     //         BizLines: [getselectBusinessesLine()],
     //         TransTypes: [getselectBizType1List_Radio()],
     //         TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-    //         CargoTypes: [getselectOceanTransportType()],
+    //         CargoTypes: getselectOceanTransportType() == 'null' ? [] : [getselectOceanTransportType()],
     //     };
     //     if (getselectBranchID() !== '') {
     //         fetchData(ParamsInfo, Type, Title);
@@ -309,7 +318,7 @@ const VolumeBranch: React.FC<{}> = () => {
 
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card
-                    title={`${title} (` + `${unit} )`}
+                    // title={`${title} (` + `${unit} )`}
                     style={{ marginBottom: 10 }}
                     extra={
                         <>

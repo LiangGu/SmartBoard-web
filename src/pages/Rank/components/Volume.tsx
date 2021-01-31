@@ -105,9 +105,10 @@ const RankVolume: React.FC<{}> = () => {
                     },
                 },
                 grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
                     containLabel: true,
                 },
                 xAxis: {
@@ -166,7 +167,7 @@ const RankVolume: React.FC<{}> = () => {
                     }
                 ],
             };
-            myChart.setOption(option);
+            myChart.setOption(option, true);
             myChart.resize({ height: domHeight });
             window.addEventListener('resize', () => { myChart.resize() });
         }
@@ -182,7 +183,7 @@ const RankVolume: React.FC<{}> = () => {
             Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             TransTypes: [getselectBizType1List_Radio()],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: [getselectOceanTransportType()],
+            CargoTypes: getselectOceanTransportType() == 'null' ? [] : [getselectOceanTransportType()],
             BizLines: [getselectBusinessesLine()],
         };
         if (getselectBranchID() !== '') {

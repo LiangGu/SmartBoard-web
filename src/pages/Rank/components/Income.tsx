@@ -12,7 +12,7 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getRankIncomeData, } from '@/services/rank';
 //调用公式方法
-import { sortObjectArr, transIntOfArraay, FilterZeroOfArraay,} from '@/utils/utils';
+import { sortObjectArr, transIntOfArraay, FilterZeroOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -27,7 +27,7 @@ const RankIncome: React.FC<{}> = () => {
     const [domHeight, setDomHeight] = useState(800);
 
     //获取数据
-    let fetchData = async (ParamsInfo: any, Top: Number , domHeight: Number) => {
+    let fetchData = async (ParamsInfo: any, Top: Number, domHeight: Number) => {
         setloading(true);
         const result = await getRankIncomeData(ParamsInfo);
         if (!result || getselectBranchID() == '') {
@@ -38,7 +38,7 @@ const RankIncome: React.FC<{}> = () => {
                 setResult(result);
             }
             //将值传给初始化图表的函数
-            initChart(result, Top , domHeight);
+            initChart(result, Top, domHeight);
             setloading(false);
         };
     }
@@ -55,7 +55,7 @@ const RankIncome: React.FC<{}> = () => {
         let RankTopList: any = [];
         let RankTopTotalIncomeList: any = [];
         let RankTopCTNameList: any = [];
-        RankTopList = FilterZeroOfArraay((result.sort(sortObjectArr('AmountAR', 2)).slice(0, top)).sort(sortObjectArr('AmountAR', 1)),0,'AmountAR');
+        RankTopList = FilterZeroOfArraay((result.sort(sortObjectArr('AmountAR', 2)).slice(0, top)).sort(sortObjectArr('AmountAR', 1)), 0, 'AmountAR');
         if (RankTopList.length > 0) {
             RankTopList.map((x: { AmountAR: any; CustomerName: string; }) => {
                 RankTopTotalIncomeList.push((x.AmountAR / 10000).toFixed(2));
@@ -84,9 +84,10 @@ const RankIncome: React.FC<{}> = () => {
                     },
                 },
                 grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
                     containLabel: true,
                 },
                 xAxis: {
@@ -145,8 +146,8 @@ const RankIncome: React.FC<{}> = () => {
                     }
                 ],
             };
-            myChart.setOption(option);
-            myChart.resize({height: domHeight});
+            myChart.setOption(option, true);
+            myChart.resize({ height: domHeight });
             window.addEventListener('resize', () => { myChart.resize() });
         }
     };
@@ -175,21 +176,21 @@ const RankIncome: React.FC<{}> = () => {
     const onChangeTop = (e: any) => {
         setTop(e.target.value);
         let DomHeight = domHeight;
-        if(e && e.target.value){
-            if(e.target.value == 10){
+        if (e && e.target.value) {
+            if (e.target.value == 10) {
                 DomHeight = 800;
-            }else if(e.target.value == 20){
+            } else if (e.target.value == 20) {
                 DomHeight = 1000;
-            }else if(e.target.value == 30){
+            } else if (e.target.value == 30) {
                 DomHeight = 1200;
-            }else if(e.target.value == 40){
+            } else if (e.target.value == 40) {
                 DomHeight = 1400;
-            }else if(e.target.value == 50){
+            } else if (e.target.value == 50) {
                 DomHeight = 1600;
             }
         }
         setDomHeight(DomHeight);
-        initChart(result, e.target.value , DomHeight);
+        initChart(result, e.target.value, DomHeight);
     }
 
     return <>

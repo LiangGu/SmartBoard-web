@@ -95,6 +95,13 @@ const ICProfitBranch: React.FC<{}> = () => {
                         saveAsImage: { show: true },
                     },
                 },
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
+                    containLabel: true,
+                },
                 legend: {
                     textStyle: {
                         color: 'black',
@@ -181,19 +188,12 @@ const ICProfitBranch: React.FC<{}> = () => {
                             position: 'left',
                             color: 'black',
                             fontSize: 16,
-                            formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
-                            },
                         },
                         data: transIntOfArraay(TotalAPList),
                     }
                 ]
             };
-            myChart.setOption(option);
+            myChart.setOption(option, true);
             myChart.resize({ width: window.innerWidth - 72 });
             window.addEventListener('resize', () => { myChart.resize({ width: window.innerWidth - 72 }) });
         }
@@ -206,6 +206,7 @@ const ICProfitBranch: React.FC<{}> = () => {
         let ParamsInfo: object = {
             BranchID: getselectBranchID(),
             Year: getselectYear(),
+            Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             BizLines: initialState?.searchInfo?.BusinessesLineList || [1, 2, 3, 4, 5],
             TransTypes: initialState?.searchInfo?.BizType1List_MultiSelect || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],

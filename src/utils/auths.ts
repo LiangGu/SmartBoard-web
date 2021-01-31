@@ -41,7 +41,10 @@ function getList(sessionStorage: any, str: string){
     let string = sessionStorage.getItem(str), list = [];
     sessionStorage[str] = string;           //存入
     string = sessionStorage[str];           //读取
-    list = JSON.parse(string);              //重新转换为对象
+    //*退出登录会执行:setSystemMes(undefined) 所以在这边要判断下
+    if(string){
+        list = JSON.parse(string);          //重新转换为对象
+    }
     return list;
 }
 

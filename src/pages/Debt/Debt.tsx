@@ -171,6 +171,13 @@ const Debt: React.FC<{}> = () => {
                         saveAsImage: { show: true },
                     },
                 },
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
+                    containLabel: true,
+                },
                 xAxis: {
                     axisLabel: {
                         show: true,
@@ -213,7 +220,7 @@ const Debt: React.FC<{}> = () => {
                     },
                 ]
             };
-            Chart_Crosswise_Bar.setOption(Option_Crosswise_Bar);
+            Chart_Crosswise_Bar.setOption(Option_Crosswise_Bar, true);
             window.addEventListener('resize', () => { Chart_Crosswise_Bar.resize() });
         }
         //应收账款-比例
@@ -235,6 +242,13 @@ const Debt: React.FC<{}> = () => {
                         restore: { show: true },
                         saveAsImage: { show: true },
                     },
+                },
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
+                    containLabel: true,
                 },
                 legend: {
                     orient: 'vertical',
@@ -267,7 +281,7 @@ const Debt: React.FC<{}> = () => {
                     },
                 ]
             };
-            Chart_Crosswise_Pie.setOption(Option_Crosswise_Pie);
+            Chart_Crosswise_Pie.setOption(Option_Crosswise_Pie, true);
             window.addEventListener('resize', () => { Chart_Crosswise_Pie.resize() });
         }
 
@@ -293,9 +307,10 @@ const Debt: React.FC<{}> = () => {
                     },
                 },
                 grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
                     containLabel: true,
                 },
                 xAxis: {
@@ -354,7 +369,7 @@ const Debt: React.FC<{}> = () => {
                     }
                 ],
             };
-            Chart_Lengthways.setOption(Option_Lengthways);
+            Chart_Lengthways.setOption(Option_Lengthways, true);
             window.addEventListener('resize', () => { Chart_Lengthways.resize() });
         }
     };

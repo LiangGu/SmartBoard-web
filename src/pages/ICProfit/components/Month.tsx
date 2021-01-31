@@ -38,11 +38,11 @@ const ICProfitMonth: React.FC<{}> = () => {
             let ProfitList: any = [];
             if (result.length > 0) {
                 // 根据 FinanceMonth 排序
-                SortICProfitList = result.sort(sortObjectArr('FinanceMonth', 1));
+                SortICProfitList = result.sort(sortObjectArr('Month', 1));
                 if (SortICProfitList && SortICProfitList.length > 0) {
-                    SortICProfitList.map((x: { TotalAR: any; TotalAP: any; Profit: any }) => {
-                        TotalARList.push((x.TotalAR / 10000).toFixed(2));
-                        TotalAPList.push((x.TotalAP / 10000).toFixed(2));
+                    SortICProfitList.map((x: { AmountAR: any; AmountAP: any; Profit: any }) => {
+                        TotalARList.push((x.AmountAR / 10000).toFixed(2));
+                        TotalAPList.push((x.AmountAP / 10000).toFixed(2));
                         ProfitList.push((x.Profit / 10000).toFixed(2));
                     });
                 }
@@ -80,6 +80,13 @@ const ICProfitMonth: React.FC<{}> = () => {
                         restore: { show: true },
                         saveAsImage: { show: true },
                     },
+                },
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
+                    containLabel: true,
                 },
                 legend: {
                     textStyle: {
@@ -155,7 +162,7 @@ const ICProfitMonth: React.FC<{}> = () => {
                     },
                 ]
             };
-            myChart.setOption(option);
+            myChart.setOption(option, true);
             myChart.resize({ width: window.innerWidth - 72 });
             window.addEventListener('resize', () => { myChart.resize({ width: window.innerWidth - 72 }) });
         }

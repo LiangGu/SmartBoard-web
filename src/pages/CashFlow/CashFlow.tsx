@@ -95,6 +95,13 @@ const CashFlow: React.FC<{}> = () => {
             saveAsImage: { show: true },
           },
         },
+        grid: {
+          left: '5%',
+          right: '5%',
+          top: '10%',
+          bottom: '10%',
+          containLabel: true,
+        },
         xAxis: {
           type: 'category',
           boundaryGap: false,
@@ -150,7 +157,7 @@ const CashFlow: React.FC<{}> = () => {
           }
         ],
       };
-      myChart.setOption(option);
+      myChart.setOption(option, true);
       window.addEventListener('resize', () => { myChart.resize() });
     }
   };

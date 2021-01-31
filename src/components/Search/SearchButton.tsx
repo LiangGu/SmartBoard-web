@@ -180,11 +180,11 @@ const SearchButton: React.FC<{}> = ({ }) => {
                  * 步骤2
                  */
                 //动态获取货物类型数组
-                setOceanTransportTypeList(GetOceanTransportTypeList(e, bizType1List_Radio));
+                setOceanTransportTypeList(GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key));
                 //赋值货物类型
-                setOceanTransportType(GetOceanTransportTypeList(e, bizType1List_Radio)[0]?.Key || null);
+                setOceanTransportType(GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Key || null);
                 //赋值货物类型显示值
-                setValue('oceanTransportType',GetOceanTransportTypeList(e, bizType1List_Radio)[0]?.Value || '');
+                setValue('oceanTransportType',GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Value || '');
 
                 break;
             case 3:

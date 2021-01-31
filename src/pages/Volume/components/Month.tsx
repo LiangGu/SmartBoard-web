@@ -11,10 +11,10 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 //调用API
-import { getVolumeChartData, getProfitChartData,} from '@/services/volume';
+import { getVolumeChartData, getProfitChartData, } from '@/services/volume';
 //调用公式方法
-import { transIntOfArraay, getTotalValue, getLineStackSeriesData, getLineStackLegendData,} from '@/utils/utils';
-import { getselectBranchID, getselectYear, getselectBusinessesLine ,getselectBizType1List_Radio, getselectOceanTransportType, } from '@/utils/auths';
+import { transIntOfArraay, getTotalValue, getLineStackSeriesData, getLineStackLegendData, } from '@/utils/utils';
+import { getselectBranchID, getselectYear, getselectBusinessesLine, getselectBizType1List_Radio, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
@@ -22,11 +22,6 @@ import ContextProps from '@/createContext';
 
 const VolumeMonth: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
-    const [year,] = useState(() => {
-        // 惰性赋值 any 类型,要不默认值不起作用
-        let selectYear: any = getselectYear();
-        return selectYear;
-    });
     const [loading, setloading] = useState(false);
     const [totalRT, settotalRT] = useState(0);
     const [totalIncome, settotalIncome] = useState(0);
@@ -37,34 +32,40 @@ const VolumeMonth: React.FC<{}> = () => {
         //货量
         const resultVolume = await getVolumeChartData(ParamsInfo);
         //收支利润<钱>
-        const resultMoney = await getProfitChartData(ParamsInfo);
-        if (!resultVolume || !resultMoney || getselectBranchID() == '') {
+        // const resultMoney = await getProfitChartData(ParamsInfo);
+        if (!resultVolume || getselectBranchID() == '') {
             return;
         }
-        if (resultVolume || resultMoney) {
+        if (resultVolume) {
             //当前选择年的货量数据
             let SelectYearVolumeData: any = [];
-            if(resultVolume.length > 0){
-                SelectYearVolumeData = resultVolume.filter((x: { FinanceYear: any; }) => x.FinanceYear == year);
+            if (resultVolume.length > 0) {
+                SelectYearVolumeData = resultVolume.filter((x: { Year: any; }) => x.Year == ParamsInfo.Year);
             }
-
-            let VolumeList: any = [];
-            let IncomeList: any = [];
+            // let VolumeList: any = [];
+            // let IncomeList: any = [];
             //计算合计要用到下面2个数据集
-            if (SelectYearVolumeData.length > 0) {
-                SelectYearVolumeData.map((x: { Volume: Number;}) => {
-                    VolumeList.push(x.Volume);
-                });
+            // if (SelectYearVolumeData.length > 0) {
+            //     SelectYearVolumeData.map((x: { Volume: Number;}) => {
+            //         VolumeList.push(x.Volume);
+            //     });
+            // }
+            // if (resultMoney.length > 0) {
+            //     resultMoney.map((x: { AmountAR: any;}) => {
+            //         IncomeList.push(parseFloat((x.AmountAR / 10000).toFixed(2)));
+            //     });
+            // }
+            // settotalRT(getTotalValue(transIntOfArraay(VolumeList)));
+            // settotalIncome(getTotalValue(transIntOfArraay(IncomeList)));
+
+            let LegendData = [];
+            let SeriesData = [];
+            if (SelectYearVolumeData && SelectYearVolumeData.length > 0) {
+                LegendData = getLineStackLegendData(SelectYearVolumeData, 1);
+                SeriesData = getLineStackSeriesData(SelectYearVolumeData, 1);
             }
-            if (resultMoney.length > 0) {
-                resultMoney.map((x: { AmountAR: any;}) => {
-                    IncomeList.push(parseFloat((x.AmountAR / 10000).toFixed(2)));
-                });
-            }
-            settotalRT(getTotalValue(transIntOfArraay(VolumeList)));
-            settotalIncome(getTotalValue(transIntOfArraay(IncomeList)))
             //将值传给初始化图表的函数
-            initChart(SelectYearVolumeData, resultMoney);
+            initChart(SelectYearVolumeData);
             setloading(false);
         }
     }
@@ -72,7 +73,7 @@ const VolumeMonth: React.FC<{}> = () => {
     //初始化图表
     let Chart_RT: any;
     let Chart_Income: any;
-    let initChart = (VolumeData: any, MoneyDate: any,) => {
+    let initChart = (SelectYearVolumeData: any,) => {
         let Element_RT = document.getElementById('RTMonth');
         let Element_Income = document.getElementById('IncomeMonth');
         if (Chart_RT != null && Chart_RT != "" && Chart_RT != undefined) {
@@ -97,7 +98,7 @@ const VolumeMonth: React.FC<{}> = () => {
                     },
                 },
                 legend: {
-                    data: getLineStackLegendData(VolumeData,1),
+                    data: getLineStackLegendData(SelectYearVolumeData, 1),
                 },
                 toolbox: {
                     feature: {
@@ -106,6 +107,13 @@ const VolumeMonth: React.FC<{}> = () => {
                         restore: { show: true },
                         saveAsImage: { show: true },
                     },
+                },
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
+                    containLabel: true,
                 },
                 xAxis: [
                     {
@@ -121,9 +129,9 @@ const VolumeMonth: React.FC<{}> = () => {
                 yAxis: {
                     type: 'value'
                 },
-                series: getLineStackSeriesData(VolumeData,1),
+                series: getLineStackSeriesData(SelectYearVolumeData, 1),
             };
-            Chart_RT.setOption(Option_RT);
+            Chart_RT.setOption(Option_RT, true);
             Chart_RT.resize({ width: window.innerWidth - 72 });
             window.addEventListener('resize', () => { Chart_RT.resize({ width: window.innerWidth - 72 }) });
         }
@@ -140,7 +148,7 @@ const VolumeMonth: React.FC<{}> = () => {
         //             },
         //         },
         //         legend: {
-        //             data: getLineStackLegendData(VolumeData,2),
+        //             data: getLineStackLegendData(VolumeData, 2),
         //         },
         //         toolbox: {
         //             feature: {
@@ -149,6 +157,13 @@ const VolumeMonth: React.FC<{}> = () => {
         //                 restore: { show: true },
         //                 saveAsImage: { show: true },
         //             },
+        //         },
+        //         grid: {
+        //             left: '5%',
+        //             right: '5%',
+        //             top: '10%',
+        //             bottom: '10%',
+        //             containLabel: true,
         //         },
         //         xAxis: [
         //             {
@@ -164,9 +179,9 @@ const VolumeMonth: React.FC<{}> = () => {
         //         yAxis: {
         //             type: 'value'
         //         },
-        //         series: getLineStackSeriesData(MoneyDate,2),
+        //         series: getLineStackSeriesData(MoneyDate, 2),
         //     };
-        //     Chart_Income.setOption(Option_Income);
+        //     Chart_Income.setOption(Option_Income, true);
         //     Chart_Income.resize({ width: window.innerWidth - 72 });
         //     window.addEventListener('resize', () => { Chart_Income.resize({ width: window.innerWidth - 72 }) });
         // }
@@ -183,7 +198,7 @@ const VolumeMonth: React.FC<{}> = () => {
             BizLines: [getselectBusinessesLine()],
             TransTypes: [getselectBizType1List_Radio()],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: [getselectOceanTransportType()],
+            CargoTypes: getselectOceanTransportType() == 'null' ? [] : [getselectOceanTransportType()],
         };
         if (getselectBranchID() !== '') {
             fetchData(ParamsInfo);
@@ -195,19 +210,19 @@ const VolumeMonth: React.FC<{}> = () => {
             <Card style={{ marginBottom: 10 }}
                 extra={
                     <>
-                        <span style={{ fontSize: 16, marginRight: 10 }}>
+                        {/* <span style={{ fontSize: 16, marginRight: 10 }}>
                             总货量: {totalRT}
                         </span>
                         <span style={{ fontSize: 16 }}>
                             平均货量: {totalRT ? (totalRT / 12).toFixed(2) : 0}
-                        </span>
+                        </span> */}
                     </>
                 }
             >
-                <div id="RTMonth" style={{ width: '100%', height: 500 }}></div>
+                <div id="RTMonth" style={{ width: '100%', height: 800 }}></div>
             </Card>
         </Spin>
-        <Spin tip="数据正在加载中,请稍等..." spinning={loading} >
+        {/* <Spin tip="数据正在加载中,请稍等..." spinning={loading} >
             <Card
                 extra={
                     <>
@@ -222,7 +237,7 @@ const VolumeMonth: React.FC<{}> = () => {
             >
                 <div id="IncomeMonth" style={{ width: '100%', height: 500 }}></div>
             </Card>
-        </Spin>
+        </Spin> */}
 
         {/*重点代码*/}
         <ContextProps.Provider value={1.2}>

@@ -75,66 +75,28 @@ export const getMinValue = (list: Array<any>) => {
 }
 
 /**
- * 格式化折线图堆叠图需要的数据
- * @param list 
- * @param T: 1.货量分析-月份-货量 2.货量分析-月份-钱
- */
-export const formatLineStackData = (list: any, T: number) => {
-    console.log(list,T)
-    let FormatLineStackData: any = [];
-    let SeriesData: any = [];
-    if (T == 1) {
-        for (let a = 0; a < list.length; a++) {
-            for (let b = list.length - 1; b > a; b--) {
-                if(list[a].BranchID == list[b].BranchID){
-                    FormatLineStackData.push({
-                        BranchName: list[a].BranchName,
-                        // SeriesData: [list[a].Volume,list[b].Volume]
-                        // SeriesData: SeriesData.push(list[a].Volume,list[b].Volume)
-                    });
-                }
-            }
-        }
-    } else {
-        for (let a = 0; a < list.length; a++) {
-            for (let b = list.length - 1; b > a; b--) {
-                if(list[a].BranchID == list[b].BranchID){
-                    FormatLineStackData.push({
-                        BranchName: list[a].BranchName,
-                        SeriesData: [list[a].AmountAR / 10000,list[b].AmountAR / 10000]
-                    });
-                }
-            }
-        }
-    }
-    console.log(FormatLineStackData)
-    return FormatLineStackData;
-}
-
-/**
  * 折线图堆叠 series 数据处理
  * @param list 
  * @param T: 1.货量分析-月份-货量 2.货量分析-月份-钱
  */
 export const getLineStackSeriesData = (list: any, T: number) => {
-    let NewList = formatLineStackData(list, T);
     let LineStackSeriesData: any = [];
     if(T == 1){
-        NewList.map((x: { SeriesData: any; BranchName: string;}) => {
+        list.map((x: { VolMonth: any; BranchName: string;}) => {
             LineStackSeriesData.push({
                 name: x.BranchName,
                 type: 'line',
-                stack: '总量',
-                data: x.SeriesData,
+                // stack: '总量',
+                data: x.VolMonth,
             });
         });
     }else{
-        NewList.map((x: { SeriesData: any; BranchName: string;}) => {
+        list.map((x: { VolMonth: any; BranchName: string;}) => {
             LineStackSeriesData.push({
                 name: x.BranchName,
                 type: 'line',
-                stack: '总量',
-                data: x.SeriesData,
+                // stack: '总量',
+                data: x.VolMonth,
             });
         });
     }
@@ -147,14 +109,13 @@ export const getLineStackSeriesData = (list: any, T: number) => {
  * @param T: 1.货量分析-月份-货量 2.货量分析-月份-钱
  */
 export const getLineStackLegendData = (list: any, T: number) => {
-    let NewList = formatLineStackData(list, T);
     let LineStackLegendData: any = [];
     if(T == 1){
-        NewList.map((x: { BranchName: string;}) => {
+        list.map((x: { BranchName: string;}) => {
             LineStackLegendData.push(x.BranchName);
         });
     }else{
-        NewList.map((x: { BranchName: string;}) => {
+        list.map((x: { BranchName: string;}) => {
             LineStackLegendData.push(x.BranchName);
         });
     }
