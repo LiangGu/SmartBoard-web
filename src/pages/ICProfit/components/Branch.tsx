@@ -12,7 +12,7 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 //调用API
-import { getICProfitChartData, } from '@/services/icprofit';
+import { getICProfitBranchData, } from '@/services/icprofit';
 //调用公式方法
 import { sortObjectArr, transIntOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
@@ -30,25 +30,7 @@ const ICProfitBranch: React.FC<{}> = () => {
     //获取数据
     let fetchData = async (ParamsInfo: any, T: string) => {
         setloading(true);
-        // const result = await getICProfitChartData(ParamsInfo);
-
-        const result: any = [
-            { FinanceMonth: '香港船务', TotalAR: 6053.2 * 10000, TotalAP: 5611.33 * 10000, Profit: 441.87 * 10000 },
-            { FinanceMonth: '上海伟运', TotalAR: 25244.18 * 10000, TotalAP: 24296.329999999998 * 10000, Profit: 947.88 * 10000 },
-            { FinanceMonth: '泰国公司', TotalAR: 12054.950000000003 * 10000, TotalAP: 7825.809999999999 * 10000, Profit: 4229.16 * 10000 },
-            { FinanceMonth: '马来西亚公司', TotalAR: 10602.67 * 10000, TotalAP: 7557.849999999999 * 10000, Profit: 3044.85 * 10000 },
-            { FinanceMonth: '印尼公司', TotalAR: 5932.21 * 10000, TotalAP: 4188.14 * 10000, Profit: 1744.07 * 10000 },
-            { FinanceMonth: '柬埔寨公司', TotalAR: 7743.99 * 10000, TotalAP: 7104.240000000001 * 10000, Profit: 639.7299999999998 * 10000 },
-            { FinanceMonth: '缅甸公司', TotalAR: 1059.52 * 10000, TotalAP: 781.75 * 10000, Profit: 277.76 * 10000 },
-            { FinanceMonth: '中越外运', TotalAR: 2948.8700000000003 * 10000, TotalAP: 2372.6400000000003 * 10000, Profit: 576.24 * 10000 },
-            { FinanceMonth: '上海伟运工程', TotalAR: 1458.6100000000004 * 10000, TotalAP: 1226.85 * 10000, Profit: 231.75000000000003 * 10000 },
-
-            { FinanceMonth: '大宗商品事业部', TotalAR: 180.82 * 10000, TotalAP: 176.3 * 10000, Profit: 4.52 * 10000 },
-            { FinanceMonth: '空运事业部(伟运)', TotalAR: 55.13 * 10000, TotalAP: 49.06 * 10000, Profit: 6.07 * 10000 },
-            { FinanceMonth: '电商事业部(伟运)', TotalAR: 23.72 * 10000, TotalAP: 23.62 * 10000, Profit: 0.1200000000000001 * 10000 },
-            { FinanceMonth: '中越外运(E拼)', TotalAR: 14694.63 * 10000, TotalAP: 10960.1 * 10000, Profit: 3734.53 * 10000 },
-        ];
-
+        const result = await getICProfitBranchData(ParamsInfo);
         if (!result || getselectBranchID() == '') {
             return;
         }
@@ -79,17 +61,17 @@ const ICProfitBranch: React.FC<{}> = () => {
         let yAxisData: any = [];
 
         if (type == '收入') {
-            SortICProfitList = result.sort(sortObjectArr('TotalAR', 1));
+            SortICProfitList = result.sort(sortObjectArr('AmountAR', 1));
         } else {
             SortICProfitList = result.sort(sortObjectArr('Profit', 1));
         }
         if (SortICProfitList && SortICProfitList.length > 0) {
-            SortICProfitList.map((x: { TotalAR: any; TotalAP: any; Profit: any; FinanceMonth: any }) => {
-                TotalARList.push((x.TotalAR / 10000).toFixed(2));
+            SortICProfitList.map((x: { AmountAR: any; AmountAP: any; Profit: any; BranchName: any }) => {
+                TotalARList.push((x.AmountAR / 10000).toFixed(2));
                 // 支出转换成负数
-                TotalAPList.push((x.TotalAP * -1 / 10000).toFixed(2));
+                TotalAPList.push((x.AmountAP * -1 / 10000).toFixed(2));
                 ProfitList.push((x.Profit / 10000).toFixed(2));
-                yAxisData.push(`${x.FinanceMonth}`);
+                yAxisData.push(`${x.BranchName}`);
             });
         }
 
@@ -119,6 +101,9 @@ const ICProfitBranch: React.FC<{}> = () => {
                         fontSize: 16,
                     },
                     data: ['收入', '支出', '毛利'],
+                    selected: {
+                        '支出': false,
+                    },
                 },
                 xAxis: [
                     {
@@ -221,9 +206,10 @@ const ICProfitBranch: React.FC<{}> = () => {
         let ParamsInfo: object = {
             BranchID: getselectBranchID(),
             Year: getselectYear(),
+            BizLines: initialState?.searchInfo?.BusinessesLineList || [1, 2, 3, 4, 5],
             TransTypes: initialState?.searchInfo?.BizType1List_MultiSelect || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: getselectOceanTransportType(),
+            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList_MultiSelect || [1, 2, 3, 6, 7],
         };
         if (getselectBranchID() !== '') {
             fetchData(ParamsInfo, type);

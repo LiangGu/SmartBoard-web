@@ -13,12 +13,24 @@ export async function getBranchChartData(params?: any) {
 }
 
 /**
- * 获取月份图表数据
+ * 获取月份货量图表数据
  * By:Iverson.Tian
  * Date:2020-12-08
  */
-export async function getMonthChartData(params?: any) {
-  return request(`/api/Board/GetVolumeByMonty`, {
+export async function getVolumeChartData(params?: any) {
+  return request(`/api/Board/GetVolumeByMonth`, {
+    method: 'POST',
+    data: params
+  });
+}
+
+/**
+ * 获取月份利润图表数据
+ * By:Iverson.Tian
+ * Date:2020-12-08
+ */
+export async function getProfitChartData(params?: any) {
+  return request(`/api/Board/GetFeeByMonth`, {
     method: 'POST',
     data: params
   });
@@ -30,7 +42,7 @@ export async function getMonthChartData(params?: any) {
  * Date:2020-12-20
  */
 export async function getPortChartData(params?: any) {
-  return request(`/api/Board/GetVolumeByPort`, {
+  return request(`/api/Board/GetVolByPort`, {
     method: 'POST',
     data: params,
   });

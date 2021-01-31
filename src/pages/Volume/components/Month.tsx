@@ -11,10 +11,10 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 //调用API
-import { getMonthChartData, } from '@/services/volume';
+import { getVolumeChartData, getProfitChartData,} from '@/services/volume';
 //调用公式方法
-import { transIntOfArraay, getTotalValue, calculateOfArraay, } from '@/utils/utils';
-import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
+import { transIntOfArraay, getTotalValue, getLineStackSeriesData, getLineStackLegendData,} from '@/utils/utils';
+import { getselectBranchID, getselectYear, getselectBusinessesLine ,getselectBizType1List_Radio, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
 //重点代码<React hooks之useContext父子组件传值>
@@ -22,6 +22,11 @@ import ContextProps from '@/createContext';
 
 const VolumeMonth: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
+    const [year,] = useState(() => {
+        // 惰性赋值 any 类型,要不默认值不起作用
+        let selectYear: any = getselectYear();
+        return selectYear;
+    });
     const [loading, setloading] = useState(false);
     const [totalRT, settotalRT] = useState(0);
     const [totalIncome, settotalIncome] = useState(0);
@@ -29,23 +34,37 @@ const VolumeMonth: React.FC<{}> = () => {
     //获取数据
     let fetchData = async (ParamsInfo: any) => {
         setloading(true);
-        const result = await getMonthChartData(ParamsInfo);
-        if (!result || getselectBranchID() == '') {
+        //货量
+        const resultVolume = await getVolumeChartData(ParamsInfo);
+        //收支利润<钱>
+        const resultMoney = await getProfitChartData(ParamsInfo);
+        if (!resultVolume || !resultMoney || getselectBranchID() == '') {
             return;
         }
-        if (result) {
+        if (resultVolume || resultMoney) {
+            //当前选择年的货量数据
+            let SelectYearVolumeData: any = [];
+            if(resultVolume.length > 0){
+                SelectYearVolumeData = resultVolume.filter((x: { FinanceYear: any; }) => x.FinanceYear == year);
+            }
+
             let VolumeList: any = [];
-            let TotalARList: any = [];
-            if (result.length > 0) {
-                result.map((x: { Volume: Number; TotalAR: any; }) => {
+            let IncomeList: any = [];
+            //计算合计要用到下面2个数据集
+            if (SelectYearVolumeData.length > 0) {
+                SelectYearVolumeData.map((x: { Volume: Number;}) => {
                     VolumeList.push(x.Volume);
-                    TotalARList.push(parseFloat((x.TotalAR / 10000).toFixed(2)));
+                });
+            }
+            if (resultMoney.length > 0) {
+                resultMoney.map((x: { AmountAR: any;}) => {
+                    IncomeList.push(parseFloat((x.AmountAR / 10000).toFixed(2)));
                 });
             }
             settotalRT(getTotalValue(transIntOfArraay(VolumeList)));
-            settotalIncome(getTotalValue(transIntOfArraay(TotalARList)))
+            settotalIncome(getTotalValue(transIntOfArraay(IncomeList)))
             //将值传给初始化图表的函数
-            initChart(VolumeList, TotalARList);
+            initChart(SelectYearVolumeData, resultMoney);
             setloading(false);
         }
     }
@@ -53,7 +72,7 @@ const VolumeMonth: React.FC<{}> = () => {
     //初始化图表
     let Chart_RT: any;
     let Chart_Income: any;
-    let initChart = (VolumeData: any, IncomeDate: any,) => {
+    let initChart = (VolumeData: any, MoneyDate: any,) => {
         let Element_RT = document.getElementById('RTMonth');
         let Element_Income = document.getElementById('IncomeMonth');
         if (Chart_RT != null && Chart_RT != "" && Chart_RT != undefined) {
@@ -64,24 +83,6 @@ const VolumeMonth: React.FC<{}> = () => {
         }
         let Option_RT: any;
         let Option_Income: any;
-
-        //赋值月度货量图表中的单位
-        let UnitName = '';
-        if (Number(getselectOceanTransportType()) == 1) {
-            UnitName = '单位: TEU';
-        } else if (Number(getselectOceanTransportType()) == 2) {
-            UnitName = '单位: CBM';
-        } else if (Number(getselectOceanTransportType()) == 3) {
-            UnitName = '单位: TON';
-            //后台散货存的是 KGS
-            VolumeData = calculateOfArraay(VolumeData, '/', 1000);
-        } else if (Number(getselectOceanTransportType()) == 6) {
-            UnitName = '单位: 批次';
-        } else if (Number(getselectOceanTransportType()) == 7) {
-            UnitName = '单位: KGS';
-        } else {
-            UnitName = '单位: RT';
-        }
 
         if (Element_RT) {
             Chart_RT = echarts.init(Element_RT as HTMLDivElement);
@@ -95,6 +96,9 @@ const VolumeMonth: React.FC<{}> = () => {
                         type: 'shadow',
                     },
                 },
+                legend: {
+                    data: getLineStackLegendData(VolumeData,1),
+                },
                 toolbox: {
                     feature: {
                         dataView: { show: true, readOnly: false },
@@ -115,112 +119,57 @@ const VolumeMonth: React.FC<{}> = () => {
                     },
                 ],
                 yAxis: {
-                    name: UnitName,
-                    nameTextStyle: {
-                        color: 'black',
-                        fontSize: 16,
-                    },
-                    axisLabel: {
-                        show: true,
-                        color: 'black',
-                        fontSize: 16,
-                    },
+                    type: 'value'
                 },
-                series: [
-                    {
-                        type: 'bar',
-                        name: UnitName,
-                        color: '#C23531',
-                        label: {
-                            show: true,
-                            position: 'top',
-                            color: 'black',
-                            fontSize: 16,
-                            formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
-                            },
-                        },
-                        data: transIntOfArraay(VolumeData),
-                    },
-                ]
+                series: getLineStackSeriesData(VolumeData,1),
             };
             Chart_RT.setOption(Option_RT);
             Chart_RT.resize({ width: window.innerWidth - 72 });
             window.addEventListener('resize', () => { Chart_RT.resize({ width: window.innerWidth - 72 }) });
         }
-        if (Element_Income) {
-            Chart_Income = echarts.init(Element_Income as HTMLDivElement);
-            Option_Income = {
-                title: {
-                    text: '月度收入',
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
-                },
-                toolbox: {
-                    feature: {
-                        dataView: { show: true, readOnly: false },
-                        magicType: { show: true, type: ['line', 'bar'] },
-                        restore: { show: true },
-                        saveAsImage: { show: true },
-                    },
-                },
-                xAxis: [
-                    {
-                        type: 'category',
-                        axisLabel: {
-                            show: true,
-                            color: 'black',
-                            fontSize: 16,
-                        },
-                        data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-                    },
-                ],
-                yAxis: {
-                    name: '单位: CNY(万)',
-                    nameTextStyle: {
-                        color: 'black',
-                        fontSize: 16,
-                    },
-                    axisLabel: {
-                        show: true,
-                        color: 'black',
-                        fontSize: 16,
-                    },
-                },
-                series: [
-                    {
-                        type: 'bar',
-                        name: '单位: CNY(万)',
-                        color: 'green',
-                        label: {
-                            show: true,
-                            position: 'top',
-                            color: 'black',
-                            fontSize: 16,
-                            formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
-                            },
-                        },
-                        data: transIntOfArraay(IncomeDate),
-                    },
-                ]
-            };
-            Chart_Income.setOption(Option_Income);
-            Chart_Income.resize({ width: window.innerWidth - 72 });
-            window.addEventListener('resize', () => { Chart_Income.resize({ width: window.innerWidth - 72 }) });
-        }
+        // if (Element_Income) {
+        //     Chart_Income = echarts.init(Element_Income as HTMLDivElement);
+        //     Option_Income = {
+        //         title: {
+        //             text: '月度收入',
+        //         },
+        //         tooltip: {
+        //             trigger: 'axis',
+        //             axisPointer: {
+        //                 type: 'shadow',
+        //             },
+        //         },
+        //         legend: {
+        //             data: getLineStackLegendData(VolumeData,2),
+        //         },
+        //         toolbox: {
+        //             feature: {
+        //                 dataView: { show: true, readOnly: false },
+        //                 magicType: { show: true, type: ['line', 'bar'] },
+        //                 restore: { show: true },
+        //                 saveAsImage: { show: true },
+        //             },
+        //         },
+        //         xAxis: [
+        //             {
+        //                 type: 'category',
+        //                 axisLabel: {
+        //                     show: true,
+        //                     color: 'black',
+        //                     fontSize: 16,
+        //                 },
+        //                 data: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+        //             },
+        //         ],
+        //         yAxis: {
+        //             type: 'value'
+        //         },
+        //         series: getLineStackSeriesData(MoneyDate,2),
+        //     };
+        //     Chart_Income.setOption(Option_Income);
+        //     Chart_Income.resize({ width: window.innerWidth - 72 });
+        //     window.addEventListener('resize', () => { Chart_Income.resize({ width: window.innerWidth - 72 }) });
+        // }
     };
 
     /**
@@ -230,9 +179,11 @@ const VolumeMonth: React.FC<{}> = () => {
         let ParamsInfo: object = {
             BranchID: getselectBranchID(),
             Year: getselectYear(),
-            TransTypes: initialState?.searchInfo?.BizType1List_MultiSelect || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
+            Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            BizLines: [getselectBusinessesLine()],
+            TransTypes: [getselectBizType1List_Radio()],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: getselectOceanTransportType(),
+            CargoTypes: [getselectOceanTransportType()],
         };
         if (getselectBranchID() !== '') {
             fetchData(ParamsInfo);

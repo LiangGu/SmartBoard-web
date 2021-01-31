@@ -64,8 +64,10 @@ declare namespace API {
   export interface SearchInfo {
     UpdateIndex?: string,
     MonthList?: Array<Number>,
+    BusinessesLineList?: Array<Number>,
     BizType1List_MultiSelect?: Array<Number>,
     BizType2List?: Array<Number>,
+    OceanTransportTypeList_MultiSelect?: Array<Number>,
   }
 
   export interface Tag {

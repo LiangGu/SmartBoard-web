@@ -22,7 +22,7 @@ export const MonthList = [
 export const BusinessesLineList = [
     { Key: 1, Value: "工程" },
     { Key: 2, Value: "合同" },
-    // { Key: 3, Value: "电商" },
+    { Key: 3, Value: "电商" },
     { Key: 4, Value: "船代" },
     { Key: 5, Value: "货代" },
 ]
@@ -57,10 +57,10 @@ export const BizType2List = [
 ]
 
 /**
- * OceanTransportTypeList
+ * OceanTransportTypeList_MultiSelect
  */
-export const OceanTransportTypeList = [
-    { Key: 0, Value: "不限" },                      //传 0 取全部
+export const OceanTransportTypeList_MultiSelect = [
+    // { Key: 0, Value: "不限" },                      //传 0 取全部
     { Key: 1, Value: "整箱" },
     { Key: 2, Value: "拼箱" },
     { Key: 3, Value: "散货" },

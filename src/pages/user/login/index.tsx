@@ -64,8 +64,10 @@ const Login: React.FC<{}> = () => {
         let searchInfo: object = Object.assign({}, {
           UpdateIndex: new Date().getTime(),
           MonthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          BusinessesLineList: [1, 2, 3, 4, 5],
           BizType1List_MultiSelect: [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
           BizType2List: [1, 2, 3, 4, 5, 6],
+          OceanTransportTypeList_MultiSelect: [1, 2, 3, 6, 7],
         });
         setInitialState({
           ...initialState,

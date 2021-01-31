@@ -12,7 +12,7 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 //调用API
-import { getICProfitChartData, } from '@/services/icprofit';
+import { getICProfitMonthData, } from '@/services/icprofit';
 //调用公式方法
 import { sortObjectArr, transIntOfArraay, } from '@/utils/utils';
 import { getselectBranchID, getselectYear, getselectOceanTransportType, } from '@/utils/auths';
@@ -27,7 +27,7 @@ const ICProfitMonth: React.FC<{}> = () => {
     //获取数据
     let fetchData = async (ParamsInfo: any) => {
         setloading(true);
-        const result = await getICProfitChartData(ParamsInfo);
+        const result = await getICProfitMonthData(ParamsInfo);
         if (!result || getselectBranchID() == '') {
             return;
         }
@@ -168,9 +168,10 @@ const ICProfitMonth: React.FC<{}> = () => {
         let ParamsInfo: object = {
             BranchID: getselectBranchID(),
             Year: getselectYear(),
+            BizLines: initialState?.searchInfo?.BusinessesLineList || [1, 2, 3, 4, 5],
             TransTypes: initialState?.searchInfo?.BizType1List_MultiSelect || [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: getselectOceanTransportType(),
+            CargoTypes: initialState?.searchInfo?.OceanTransportTypeList_MultiSelect || [1, 2, 3, 6, 7],
         };
         if (getselectBranchID() !== '') {
             fetchData(ParamsInfo);
