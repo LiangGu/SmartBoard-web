@@ -69,7 +69,7 @@ const VolumeMonth: React.FC<{}> = () => {
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
-                        type: 'shadow',
+                        type: 'line',
                     },
                 },
                 legend: {
