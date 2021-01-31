@@ -394,7 +394,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
 
                 {/* 月份<多选> */}
                 {
-                    [1.1, 1.3, 2.1, 2.2, 5.1, 5.2,].includes(PropsState) ?
+                    [1.1, 1.3, 2.1, 5.1, 5.2,].includes(PropsState) ?
                         <>
                             <div className={styles.searchArea}>
                                 <Row className={styles.searchAreaLable}>
