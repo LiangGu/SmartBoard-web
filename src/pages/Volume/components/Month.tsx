@@ -11,9 +11,10 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 //调用API
-import { getVolumeChartData,} from '@/services/volume';
+import { getVolumeChartData, } from '@/services/volume';
 //调用公式方法
 import { getLineStackSeriesData, getLineStackLegendData, } from '@/utils/utils';
+import { OceanTransportTypeList_MultiSelect, } from '@/utils/baseData';
 import { getselectBranchID, getselectYear, getselectBusinessesLine, getselectBizType1List_Radio, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -23,6 +24,8 @@ import ContextProps from '@/createContext';
 const VolumeMonth: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
+
+    const [title, setTitle] = useState('');
 
     //获取数据
     let fetchData = async (ParamsInfo: any) => {
@@ -38,33 +41,34 @@ const VolumeMonth: React.FC<{}> = () => {
             if (resultVolume.length > 0) {
                 SelectYearVolumeData = resultVolume.filter((x: { Year: any; }) => x.Year == ParamsInfo.Year);
             }
-
-            let LegendData = [];
-            let SeriesData = [];
-            if (SelectYearVolumeData && SelectYearVolumeData.length > 0) {
-                LegendData = getLineStackLegendData(SelectYearVolumeData, 1);
-                SeriesData = getLineStackSeriesData(SelectYearVolumeData, 1);
-            }
+            let titleName = '';
+            titleName = OceanTransportTypeList_MultiSelect.find((x: { Key: any; }) => x.Key == parseInt(ParamsInfo.CargoTypes[0]))?.Value || '';
+            setTitle(titleName);
             //将值传给初始化图表的函数
-            initChart(SelectYearVolumeData);
+            initChart(SelectYearVolumeData, titleName);
             setloading(false);
         }
     }
 
     //初始化图表
     let Chart_RT: any;
-    let initChart = (SelectYearVolumeData: any,) => {
+    let initChart = (SelectYearVolumeData: any, titleName: string) => {
         let Element_RT = document.getElementById('RTMonth');
         if (Chart_RT != null && Chart_RT != "" && Chart_RT != undefined) {
             Chart_RT.dispose();
         }
         let Option_RT: any;
+        //单位
+        let yAxisName = '';
+        if (SelectYearVolumeData.length > 0) {
+            yAxisName = SelectYearVolumeData[0].VolUnit;
+        }
 
         if (Element_RT) {
             Chart_RT = echarts.init(Element_RT as HTMLDivElement);
             Option_RT = {
                 title: {
-                    text: '月度货量',
+                    text: `月度${titleName}货量`,
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -107,6 +111,17 @@ const VolumeMonth: React.FC<{}> = () => {
                     },
                 ],
                 yAxis: {
+                    name: `单位: ${yAxisName}`,
+                    scale: true,
+                    axisLabel: {
+                        show: true,
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    nameTextStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
                     type: 'value'
                 },
                 series: getLineStackSeriesData(SelectYearVolumeData, 1),

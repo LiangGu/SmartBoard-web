@@ -15,6 +15,7 @@ import 'echarts/lib/component/legend';
 import { getBranchChartData, } from '@/services/volume';
 //调用公式方法
 import { transIntOfArraay, FilterZeroOfArraay, } from '@/utils/utils';
+import { OceanTransportTypeList_MultiSelect, } from '@/utils/baseData';
 import { getselectBranchID, getselectYear, getselectBusinessesLine, getselectBizType1List_Radio, getselectOceanTransportType, } from '@/utils/auths';
 //引入自定义组件
 import SearchButton from '@/components/Search/SearchButton';
@@ -25,6 +26,8 @@ const VolumeBranch: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
 
+    const [title, setTitle] = useState('');
+
     //获取数据
     let fetchData = async (ParamsInfo: any) => {
         setloading(true);
@@ -33,8 +36,11 @@ const VolumeBranch: React.FC<{}> = () => {
             return;
         }
         if (result) {
+            let titleName = '';
+            titleName = OceanTransportTypeList_MultiSelect.find((x: { Key: any; }) => x.Key == parseInt(ParamsInfo.CargoTypes[0]))?.Value || '';
+            setTitle(titleName);
             //将值传给初始化图表的函数
-            initChart(result, ParamsInfo);
+            initChart(result, ParamsInfo, titleName);
             setloading(false);
         }
     }
@@ -42,7 +48,7 @@ const VolumeBranch: React.FC<{}> = () => {
     //初始化图表
     let Chart_Pie: any;
     let Chart_Bar: any;
-    let initChart = (result: any, ParamsInfo: any) => {
+    let initChart = (result: any, ParamsInfo: any, titleName: string) => {
         let Element_Pie = document.getElementById('VolumeBusinessLinePie');
         let Element_Bar = document.getElementById('VolumeBusinessLineBar');
         if (Chart_Pie != null && Chart_Pie != "" && Chart_Pie != undefined) {
@@ -74,7 +80,7 @@ const VolumeBranch: React.FC<{}> = () => {
         }
         //赋值饼图 + 公司名信息
         if (SelectYearDataPie.length > 0) {
-            FilterZeroOfArraay(SelectYearDataPie,0,'Volume').map((x: { Volume: number; BranchName: string; }) => {
+            FilterZeroOfArraay(SelectYearDataPie, 0, 'Volume').map((x: { Volume: number; BranchName: string; }) => {
                 PieLegendData.push(x.BranchName);
                 PieSeriesData.push({
                     value: x.Volume,
@@ -86,21 +92,28 @@ const VolumeBranch: React.FC<{}> = () => {
         }
         //赋值柱状图当前选择的年和前一年
         if (SelectYearDataBar.length > 0) {
-            FilterZeroOfArraay(SelectYearDataBar,0,'Volume').map((x: { Volume: number; }) => {
+            FilterZeroOfArraay(SelectYearDataBar, 0, 'Volume').map((x: { Volume: number; }) => {
                 BarSeriesData_SelectYear.push(x.Volume);
             });
         }
         if (LastYearDataBar.length > 0) {
-            FilterZeroOfArraay(LastYearDataBar,0,'Volume').map((x: { Volume: number; }) => {
+            FilterZeroOfArraay(LastYearDataBar, 0, 'Volume').map((x: { Volume: number; }) => {
                 BarSeriesData_LastYear.push(x.Volume);
             });
+        }
+
+        //单位
+        let yAxisName = '';
+        if (result.length > 0) {
+            yAxisName = result[0].VolUnit;
         }
 
         if (Element_Pie) {
             Chart_Pie = echarts.init(Element_Pie as HTMLDivElement);
             Option_Pie = {
                 title: {
-                    text: `累计占比(${getselectYear()})`,
+                    text: `累计${titleName}占比(${getselectYear()})`,
+                    subtext: `单位: ${yAxisName}`,
                 },
                 tooltip: {
                     trigger: 'item',
@@ -157,7 +170,7 @@ const VolumeBranch: React.FC<{}> = () => {
             Chart_Bar = echarts.init(Element_Bar as HTMLDivElement);
             Option_Bar = {
                 title: {
-                    text: '累计同比',
+                    text: `累计${titleName}同比`,
                 },
                 tooltip: {
                     trigger: 'axis',
@@ -199,6 +212,7 @@ const VolumeBranch: React.FC<{}> = () => {
                 },
                 yAxis: {
                     type: 'category',
+                    name: `单位: ${yAxisName}`,
                     scale: true,
                     axisLabel: {
                         show: true,
