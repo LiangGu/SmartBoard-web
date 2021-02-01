@@ -25,10 +25,10 @@ const Volume: React.FC<{}> = () => {
                 <Branch />
             </TabPane> : null
         }
-        <TabPane tab="月份" key="3">
+        <TabPane tab="月份" key="2">
             <Month />
         </TabPane>
-        <TabPane tab="港口" key="4">
+        <TabPane tab="港口" key="3">
             <Port />
         </TabPane>
       </Tabs>

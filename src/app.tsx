@@ -1,7 +1,7 @@
 import React from 'react';
 import { BasicLayoutProps, Settings as LayoutSettings, MenuDataItem, } from '@ant-design/pro-layout';
 import { notification } from 'antd';
-import { history, RequestConfig,} from 'umi';
+import { history, RequestConfig, } from 'umi';
 import RightContent from '@/components/RightContent';
 import { RequestOptionsInit, ResponseError } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
@@ -27,7 +27,7 @@ export async function getInitialState(): Promise<{
   menuData?: MenuDataItem[];
   token?: string;
 }> {
-  return{
+  return {
     settings: defaultSettings,
   }
 }
@@ -38,7 +38,7 @@ const IconMap = {
   UserOutlined: <UserOutlined />,
   TableOutlined: <TableOutlined />,
   HomeOutlined: <HomeOutlined />,
-  BarChartOutlined :<BarChartOutlined />,
+  BarChartOutlined: <BarChartOutlined />,
   MoneyCollectOutlined: <MoneyCollectOutlined />,
   LineChartOutlined: <LineChartOutlined />,
   TransactionOutlined: <TransactionOutlined />,
@@ -46,7 +46,7 @@ const IconMap = {
   // Home: <img src={require('../src/assets/menuIcon/home.svg')} style={{width: '1em', height: '1em',marginBottom: 5}}/>
 };
 
-const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>(
+const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] => (
   menus.map(({ icon, routes, ...item }) => {
     return {
       ...item,
@@ -59,17 +59,17 @@ const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>(
 //layout
 export const layout = ({
   initialState,
-}:{
-    initialState: { 
-      settings?: LayoutSettings;
-      currentUser?: API.CurrentUser;
-      searchInfo?: API.SearchInfo;
-      menuData?: MenuDataItem[];
-      token?: string | null;
-    };
-  }): BasicLayoutProps => {
-  let menuData:MenuDataItem[] = menu.menuData;
-  if(initialState?.menuData){
+}: {
+  initialState: {
+    settings?: LayoutSettings;
+    currentUser?: API.CurrentUser;
+    searchInfo?: API.SearchInfo;
+    menuData?: MenuDataItem[];
+    token?: string | null;
+  };
+}): BasicLayoutProps => {
+  let menuData: MenuDataItem[] = menu.menuData;
+  if (initialState?.menuData) {
     menuData = [];
     extend(menuData, initialState.menuData);
   }
@@ -88,7 +88,7 @@ export const layout = ({
         history.push('/user/login');
       }
     },
-    
+
     menuHeaderRender: false,
     logo: logo,
     ...initialState?.settings,
@@ -115,12 +115,12 @@ const codeMessage = {
   502: '网关错误.',
   503: '服务不可用,服务器暂时过载或维护.',
   504: '网关超时.',
-  'U001':'密码错误',
-  'U002':'用户没有登录权限',
-  'U003':'你的账号已被冻结',
-  'U004':'用户名不存在',
-  'U005':'您输入的原始密码有误',
-  'U006':'用户信息异常',
+  'U001': '密码错误',
+  'U002': '用户没有登录权限',
+  'U003': '你的账号已被冻结',
+  'U004': '用户名不存在',
+  'U005': '您输入的原始密码有误',
+  'U006': '用户信息异常',
 };
 
 /**
@@ -145,9 +145,9 @@ const errorHandler = (error: ResponseError) => {
   throw error;
 };
 
-const jwtInterceptors = (  url: string, options: RequestOptionsInit ) => {
+const jwtInterceptors = (url: string, options: RequestOptionsInit) => {
   // 判断是否有 token
-  const token:string|null = getToken();
+  const token: string | null = getToken();
   if (token) {
     return {
       url,
@@ -160,45 +160,45 @@ const jwtInterceptors = (  url: string, options: RequestOptionsInit ) => {
         },
       },
     };
-  }else{
+  } else {
     history.push('/user/login');
   }
   return {
     url: `${url}`,
-    options: { ...options , interceptors: true},
-  };    
+    options: { ...options, interceptors: true },
+  };
 }
 
-const headersInterceptors = (  url: string, options: RequestOptionsInit ) => {
-  let opts:RequestOptionsInit = {...options};
-  let acpt:string = 'application/json';
-  let contT:string = 'application/json; charset=utf-8';
+const headersInterceptors = (url: string, options: RequestOptionsInit) => {
+  let opts: RequestOptionsInit = { ...options };
+  let acpt: string = 'application/json';
+  let contT: string = 'application/json; charset=utf-8';
   if (opts.method === 'POST' || opts.method === 'PUT') {
     opts.headers = {
       Accept: acpt,
       'Content-Type': contT,
-      UserID: getUserID()??'',
+      UserID: getUserID() ?? '',
       ...opts.headers,
     };
     // opts.requestType = "json";
   }
-  
+
   return {
     url: `${url}`,
-    options: { ...opts , interceptors: true},
-  };    
+    options: { ...opts, interceptors: true },
+  };
 }
 
 const responseInterceptors = (response: Response, options: RequestOptionsInit) => {
-  const {ok, status} = response
+  const { ok, status } = response
   if (!ok) {
     // message.error(msg);
-    if (status === 500) {}
+    if (status === 500) { }
     if (status === 401) {
       localStorage.clear();
       history.push('/user/login');
     }
-    if (status === 403) {}
+    if (status === 403) { }
   }
   return response;
 }
@@ -207,7 +207,7 @@ export const request: RequestConfig = {
   // timeout: 100000000,
   credentials: 'include', //默认请求是否带上Cookie
   errorConfig: {
-    adaptor: (resData:any) => {
+    adaptor: (resData: any) => {
       return {
         ...resData,
         success: resData.Result,
@@ -217,6 +217,6 @@ export const request: RequestConfig = {
   },
   middlewares: [],
   errorHandler,
-  requestInterceptors: [jwtInterceptors,headersInterceptors],
+  requestInterceptors: [jwtInterceptors, headersInterceptors],
   responseInterceptors: [responseInterceptors],
 };

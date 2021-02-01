@@ -26,8 +26,6 @@ const VolumeBranch: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
 
-    const [title, setTitle] = useState('');
-
     //获取数据
     let fetchData = async (ParamsInfo: any) => {
         setloading(true);
@@ -38,7 +36,6 @@ const VolumeBranch: React.FC<{}> = () => {
         if (result) {
             let titleName = '';
             titleName = OceanTransportTypeList_MultiSelect.find((x: { Key: any; }) => x.Key == parseInt(ParamsInfo.CargoTypes[0]))?.Value || '';
-            setTitle(titleName);
             //将值传给初始化图表的函数
             initChart(result, ParamsInfo, titleName);
             setloading(false);

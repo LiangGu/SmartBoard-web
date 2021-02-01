@@ -50,10 +50,18 @@ const ChooseBranch: React.FC<{}> = () => {
      * 点击选择公司
      */
     const onChange = (e:any) => {
-        let searchInfo: object = Object.assign({initialState},{UpdateIndex: new Date().getTime()});
+        //*修改 UpdateIndex
+        let searchInfo: object = {
+            UpdateIndex: new Date().getTime(),
+            MonthList: initialState?.searchInfo?.MonthList,
+            BusinessesLineList: initialState?.searchInfo?.BusinessesLineList,
+            BizType1List_MultiSelect: initialState?.searchInfo?.BizType1List_MultiSelect,
+            BizType2List: initialState?.searchInfo?.BizType2List,
+            OceanTransportTypeList_MultiSelect: initialState?.searchInfo?.OceanTransportTypeList_MultiSelect,
+        };
         setInitialState({
             ...initialState,
-            ...searchInfo,
+            searchInfo,
         });
         // 重置 Session 中的数据
         let userName:any = getUserName();
