@@ -421,7 +421,7 @@ const RankVolume: React.FC<{}> = () => {
             BranchID: getselectBranchID(),
             Year: year,
             Months: checkedList1,
-            TransTypes: [getselectBizType1List_Radio()],
+            TransTypes: [bizType1List_Radio],
             TradeTypes: checkedList4,
             CargoTypes: oceanTransportType == 'null' ? [] : [oceanTransportType],
             BizLines: [businessesLine],

@@ -24,7 +24,6 @@ import {
 import {
     getselectBranchID,
     getselectYear,
-    getselectBusinessesLine,
 } from '@/utils/auths';
 //引入基础数据
 import {
