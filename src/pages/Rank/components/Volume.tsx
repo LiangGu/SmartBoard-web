@@ -1,6 +1,9 @@
 import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
-import { Card, Radio, Spin, } from 'antd';
+import { Card, Radio, Spin, Button, Drawer, Checkbox, Row, Col, Select,} from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import styles from '@/components/Search/index.less';
+import { useForm, Controller, } from 'react-hook-form';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
@@ -12,20 +15,37 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getRankVolumeData, } from '@/services/rank';
 //调用公式方法
-import { sortObjectArr, transIntOfArraay, FilterZeroOfArraay, } from '@/utils/utils';
-import { OceanTransportTypeList_MultiSelect, } from '@/utils/baseData';
-import { getselectBranchID, getselectYear, getselectBusinessesLine, getselectBizType1List_Radio, getselectOceanTransportType, } from '@/utils/auths';
-//引入自定义组件
-import SearchButton from '@/components/Search/SearchButton';
-//重点代码<React hooks之useContext父子组件传值>
-import ContextProps from '@/createContext';
+import {
+    sortObjectArr,
+    transIntOfArraay,
+    FilterZeroOfArraay,
+    getYearList,
+    GetBizType1List_RadioList,
+    GetOceanTransportTypeList,
+} from '@/utils/utils';
+import {
+    getselectBranchID,
+    getselectYear,
+    getselectBusinessesLine,
+    getselectBizType1List_Radio,
+    getselectOceanTransportType,
+} from '@/utils/auths';
+//引入基础数据
+import {
+    MonthList,
+    BusinessesLineList,
+    BizType2List,
+    OceanTransportTypeList_MultiSelect,
+} from '@/utils/baseData';
 
 const RankVolume: React.FC<{}> = () => {
+    const { setValue, control, } = useForm();
     const { initialState, } = useModel('@@initialState');
-    const [oceanTransportType,] = useState(() => {
+    // OceanTransportTypeList<*要在下在方用到 oceanTransportType 所以将其定义在最上方>
+    const [oceanTransportType, setOceanTransportType] = useState(() => {
         // 惰性赋值 any 类型,要不默认值不起作用
-        let oceanTransportType: any = getselectOceanTransportType();
-        return oceanTransportType;
+        let selectOceanTransportType: any = getselectOceanTransportType();
+        return selectOceanTransportType;
     });
     const [titleName, setTitleName] = useState(() => {
         // 惰性赋值 any 类型,要不默认值不起作用
@@ -36,7 +56,82 @@ const RankVolume: React.FC<{}> = () => {
     const [top, setTop] = useState(10);
     const [result, setResult] = useState([]);
     const [domHeight, setDomHeight] = useState(800);
+    const [DrawerVisible, setDrawerVisible] = useState(false);
 
+    //数据集
+    const [YearList,] = useState(() => {
+        return getYearList();
+    });
+    //根据业务线动态获取运输类型数据
+    const [BizType1List_RadioList, setBizType1List_RadioList,] = useState(() => {
+        return GetBizType1List_RadioList(getselectBusinessesLine());
+    });
+    //根据业务线和运输类型动态获取获取类型
+    const [OceanTransportTypeList, setOceanTransportTypeList,] = useState(() => {
+        return GetOceanTransportTypeList(getselectBusinessesLine(), getselectBizType1List_Radio());
+    });
+
+    /**
+     *  单选
+     * */
+    // YearList                     :1
+    const [year, setYear] = useState(() => {
+        // 惰性赋值 any 类型,要不默认值不起作用
+        let selectYear: any = getselectYear();
+        return selectYear;
+    });
+
+    // BusinessesLineList
+    const [businessesLine, setBusinessesLine] = useState(() => {
+        // 惰性赋值 any 类型,要不默认值不起作用
+        let selectBusinessesLine: any = getselectBusinessesLine();
+        return selectBusinessesLine;
+    });
+
+    // BizType1List_Radio
+    const [bizType1List_Radio, setBizType1List_Radio] = useState(() => {
+        // 惰性赋值 any 类型,要不默认值不起作用
+        let selectBizType1List_Radio: any = getselectBizType1List_Radio();
+        return selectBizType1List_Radio;
+    });
+
+    // // OceanTransportTypeList
+    // const [oceanTransportType, setOceanTransportType] = useState(() => {
+    //     // 惰性赋值 any 类型,要不默认值不起作用
+    //     let selectOceanTransportType: any = getselectOceanTransportType();
+    //     return selectOceanTransportType;
+    // });
+
+
+    /**
+     *  多选
+     * */ 
+    // MonthList                    :1
+    const [checkedList1, setCheckedList1] = useState(() => {
+        let searchInfoMonthList: any = initialState?.searchInfo?.MonthList;
+        if (searchInfoMonthList) {
+            return searchInfoMonthList;
+        } else {
+            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        }
+    });
+    const [indeterminate1, setIndeterminate1] = useState(false);
+    const [checkAll1, setCheckAll1] = useState(() => {
+        return initialState?.searchInfo?.MonthList ? initialState?.searchInfo?.MonthList?.length == MonthList.length : true;
+    });
+    // BizType2List                 :4
+    const [checkedList4, setCheckedList4] = useState(() => {
+        let searchInfoBizType2List: any = initialState?.searchInfo?.BizType2List;
+        if (searchInfoBizType2List) {
+            return searchInfoBizType2List;
+        } else {
+            return [1, 2, 3, 4, 5, 6];
+        }
+    });
+    const [indeterminate4, setIndeterminate4] = useState(false);
+    const [checkAll4, setCheckAll4] = useState(() => {
+        return initialState?.searchInfo?.BizType2List ? initialState?.searchInfo?.BizType2List?.length == BizType2List.length : true;
+    });
 
     //获取数据
     let fetchData = async (ParamsInfo: any, Top: Number, domHeight: Number, titleName: string) => {
@@ -189,7 +284,7 @@ const RankVolume: React.FC<{}> = () => {
         if (getselectBranchID() !== '') {
             fetchData(ParamsInfo, top, domHeight, titleName);
         }
-    }, [initialState]);
+    }, []);
 
     /**
      * 点击切换统计图表类型
@@ -214,6 +309,130 @@ const RankVolume: React.FC<{}> = () => {
         initChart(result, e.target.value, DomHeight, titleName);
     }
 
+    /**
+     * 下拉选择
+     * @param T:1.年份 2.业务线 3.运输类型 4.货物类型
+     * @param list 
+     */
+    const onSelect = (e: any, T: Number,) => {
+        switch (T) {
+            case 1:
+                setYear(e);
+                break;
+            case 2:
+                setBusinessesLine(e);
+
+                /**
+                 * 步骤1
+                 */
+                //动态获取运输类型数组
+                setBizType1List_RadioList(GetBizType1List_RadioList(e));
+                //赋值运输类型
+                setBizType1List_Radio(GetBizType1List_RadioList(e)[0]?.Key || null);
+                //赋值运输类型显示值
+                setValue('bizType1List_Radio',GetBizType1List_RadioList(e)[0]?.Value || '');
+
+                /**
+                 * 步骤2
+                 */
+                //动态获取货物类型数组
+                setOceanTransportTypeList(GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key));
+                //赋值货物类型
+                setOceanTransportType(GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Key || null);
+                //赋值货物类型显示值
+                setValue('oceanTransportType',GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Value || '');
+
+                break;
+            case 3:
+                setBizType1List_Radio(e);
+
+                /**
+                 * 步骤1
+                 */
+                //动态获取货物类型数组
+                setOceanTransportTypeList(GetOceanTransportTypeList(businessesLine, e));
+                //赋值货物类型
+                setOceanTransportType(GetOceanTransportTypeList(businessesLine, e)[0]?.Key || null);
+                //赋值货物类型显示值
+                setValue('oceanTransportType',GetOceanTransportTypeList(businessesLine, e)[0]?.Value || '');
+
+                break;
+            case 4:
+                setOceanTransportType(e);
+                break;
+            default: return;
+        }
+    }
+
+    /**
+     * 单选
+     * @param T
+     * @param list 
+     */
+    const onChange = (T: Number, list: any) => {
+        switch (T) {
+            case 1:
+                setCheckedList1(list);
+                setIndeterminate1(!!list.length && list.length < MonthList.length);
+                setCheckAll1(list.length === MonthList.length);
+                break;
+            case 4:
+                setCheckedList4(list);
+                setIndeterminate4(!!list.length && list.length < BizType2List.length);
+                setCheckAll4(list.length === BizType2List.length);
+                break;
+            default: return;
+        }
+    }
+
+    /**
+     * 全选
+     * @param T 
+     * @param e 
+     */
+    const onCheckAllChange = (T: Number, e: any) => {
+        switch (T) {
+            case 1:
+                setCheckedList1(e.target.checked ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] : []);
+                setIndeterminate1(false);
+                setCheckAll1(e.target.checked);
+                break;
+            case 4:
+                setCheckedList4(e.target.checked ? [1, 2, 3, 4, 5, 6] : []);
+                setIndeterminate4(false);
+                setCheckAll4(e.target.checked);
+                break;
+            default: return;
+        }
+    }
+
+    /**
+     * 关闭 Drawer
+     */
+    const onClose = () => {
+        setDrawerVisible(false);
+    }
+
+    /**
+     * 确定搜索条件
+     */
+    const onSearch = () => {
+        let ParamsInfo: object = {
+            BranchID: getselectBranchID(),
+            Year: year,
+            Months: checkedList1,
+            TransTypes: [getselectBizType1List_Radio()],
+            TradeTypes: checkedList4,
+            CargoTypes: oceanTransportType == 'null' ? [] : [oceanTransportType],
+            BizLines: [businessesLine],
+        };
+        if (getselectBranchID() !== '') {
+            fetchData(ParamsInfo, top, domHeight, titleName);
+        }
+        //关闭 Drawer
+        setDrawerVisible(false);
+    }
+
     return <>
         <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
             <Card
@@ -234,10 +453,146 @@ const RankVolume: React.FC<{}> = () => {
 
         </Spin>
 
-        {/*重点代码*/}
-        <ContextProps.Provider value={5.2}>
-            <SearchButton />
-        </ContextProps.Provider>
+        <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} />
+        <Drawer
+                placement={"right"}
+                closable={false}
+                onClose={onClose}
+                visible={DrawerVisible}
+                key={"right"}
+                width={300}
+                footer={
+                    <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
+                        确定
+                    </Button>
+                }
+            >
+                <div className={styles.searchArea}>
+                    <Row className={styles.searchAreaLable}>
+                        <Col span={12} className={styles.searchAreaTitle}>年份</Col>
+                    </Row>
+                    <Row className={styles.searchAreaContent}>
+                        <Select
+                            style={{ width: "100%" }}
+                            defaultValue={parseInt(year)}
+                            onChange={(e) => onSelect(e, 1)}
+                        >
+                            {
+                                YearList && YearList.length > 0 ? YearList.map((x) => {
+                                    return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                                }) : null
+                            }
+                        </Select>
+                    </Row>
+                </div>
+                <div className={styles.searchArea}>
+                    <Row className={styles.searchAreaLable}>
+                        <Col span={12} className={styles.searchAreaTitle}>月份</Col>
+                        <Checkbox indeterminate={indeterminate1} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll1}>
+                            全选
+                    </Checkbox>
+                    </Row>
+                    <Checkbox.Group value={checkedList1} onChange={(list) => onChange(1, list)}>
+                        <Row className={styles.searchAreaContent}>
+                            {
+                                MonthList && MonthList.length > 0 ? MonthList.map(x => {
+                                    return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                }) : null
+                            }
+                        </Row>
+                    </Checkbox.Group>
+                </div>
+                <div className={styles.searchArea}>
+                    <Row className={styles.searchAreaLable}>
+                        <Col span={12} className={styles.searchAreaTitle}>业务线</Col>
+                    </Row>
+                    <Row className={styles.searchAreaContent}>
+                        <Select
+                            style={{ width: "100%" }}
+                            defaultValue={parseInt(businessesLine)}
+                            onChange={(e) => onSelect(e, 2)}
+                        >
+                            {
+                                BusinessesLineList && BusinessesLineList.length > 0 ? BusinessesLineList.map((x) => {
+                                    return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                                }) : null
+                            }
+                        </Select>
+                    </Row>
+                </div>
+                <div className={styles.searchArea}>
+                    <Row className={styles.searchAreaLable}>
+                        <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
+                    </Row>
+                    <Row className={styles.searchAreaContent}>
+                        <form style={{ width: "100%" }}>
+                            <Controller
+                                defaultValue={parseInt(bizType1List_Radio)}
+                                name="bizType1List_Radio"
+                                control={control}
+                                render={() => (
+                                    <Select
+                                        style={{ width: "100%" }}
+                                        value={parseInt(bizType1List_Radio)}
+                                        onChange={(e) => onSelect(e, 3)}
+                                    >
+                                        {
+                                            BizType1List_RadioList && BizType1List_RadioList.length > 0 ? BizType1List_RadioList.map((x) => {
+                                                return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                                            }) : null
+                                        }
+                                    </Select> 
+                                )}
+                            />
+                        </form>
+                    </Row>
+                </div>
+                <div className={styles.searchArea}>
+                    <Row className={styles.searchAreaLable}>
+                        <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
+                        <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(4, e)} checked={checkAll4}>
+                            全选
+                    </Checkbox>
+                    </Row>
+                    <Checkbox.Group value={checkedList4} onChange={(list) => onChange(4, list)}>
+                        <Row className={styles.searchAreaContent}>
+                            {
+                                BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
+                                    return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                }) : null
+                            }
+                        </Row>
+                    </Checkbox.Group>
+                </div>
+                <div className={styles.searchArea}>
+                    <Row className={styles.searchAreaLable}>
+                        <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
+                    </Row>
+                    <Row className={styles.searchAreaContent}>
+                        <form style={{ width: "100%" }}>
+                            <Controller
+                                defaultValue={parseInt(oceanTransportType)}
+                                name="oceanTransportType"
+                                control={control}
+                                render={() => (
+                                    <Select
+                                        style={{ width: "100%" }}
+                                        value={parseInt(oceanTransportType)}
+                                        onChange={(e) => onSelect(e, 4)}
+                                    >
+                                        {
+                                            OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map((x) => {
+                                                return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                                            }) : null
+                                        }
+                                    </Select> 
+                                )}
+                            />
+                        </form>
+                    </Row>
+                </div>
+        </Drawer>
+
     </>
 };
 
