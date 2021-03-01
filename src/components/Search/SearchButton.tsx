@@ -6,7 +6,11 @@ import { SearchOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import { useForm, Controller, } from 'react-hook-form';
 //引入自定义方法
-import { getYearList, GetBizType1List_RadioList, GetOceanTransportTypeList,} from '@/utils/utils';
+import { 
+    getYearList,
+    GetBizType1List_RadioList,
+    GetOceanTransportTypeList,
+} from '@/utils/utils';
 import {
     setSystemMes,
     getBranchList,
@@ -25,7 +29,13 @@ import {
     getselectOceanTransportType,
 } from '@/utils/auths';
 //引入基础数据
-import { MonthList, BusinessesLineList, BizType1List_MultiSelect, BizType2List, OceanTransportTypeList_MultiSelect, } from '@/utils/baseData';
+import {
+    MonthList,
+    BusinessesLineList,
+    BizType1List_MultiSelect,
+    BizType2List,
+    OceanTransportTypeList_MultiSelect,
+} from '@/utils/baseData';
 
 import ContextProps from '@/createContext';
 
@@ -284,7 +294,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
      * 关闭 Drawer
      */
     const onClose = () => {
-        setDrawerVisible(false)
+        setDrawerVisible(false);
     }
 
     /**
@@ -336,7 +346,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
         //Step 2 <页面中 useEffect 根据 initialState 判断动态搜索>
 
         //Step 3
-        setDrawerVisible(false)
+        setDrawerVisible(false);
     }
 
     return (
