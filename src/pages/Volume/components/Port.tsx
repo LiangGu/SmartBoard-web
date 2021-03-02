@@ -30,6 +30,7 @@ import {
     OceanTransportTypeList_MultiSelect,
 } from '@/utils/baseData';
 import {
+    getBranchList,
     getselectBranchID,
     getselectYear,
     getselectBusinessesLine,
@@ -59,11 +60,15 @@ const VolumePort: React.FC<{}> = () => {
     const [OceanTransportTypeList, setOceanTransportTypeList,] = useState(() => {
         return GetOceanTransportTypeList(getselectBusinessesLine(), getselectBizType1List_Radio());
     });
+    const [BranchList,] = useState(() => {
+        return getBranchList();
+    });
+
 
     /**
      *  单选
      * */
-    // YearList                     :1
+    // YearList
     const [year, setYear] = useState(() => {
         // 惰性赋值 any 类型,要不默认值不起作用
         let selectYear: any = getselectYear();
@@ -89,6 +94,13 @@ const VolumePort: React.FC<{}> = () => {
         // 惰性赋值 any 类型,要不默认值不起作用
         let selectOceanTransportType: any = getselectOceanTransportType();
         return selectOceanTransportType;
+    });
+
+    // BranchList
+    const [branch, setBranch] = useState(() => {
+        // 惰性赋值 any 类型,要不默认值不起作用
+        let selectBranch: any = getselectBranchID();
+        return selectBranch;
     });
 
     /**
@@ -125,7 +137,7 @@ const VolumePort: React.FC<{}> = () => {
     let fetchData = async (ParamsInfo: any, Top: Number, domHeight: Number) => {
         setloading(true);
         const result = await getPortChartData(ParamsInfo);
-        if (!result || getselectBranchID() == '') {
+        if (!result) {
             return;
         }
         if (result) {
@@ -259,14 +271,12 @@ const VolumePort: React.FC<{}> = () => {
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: getselectOceanTransportType() == 'null' ? [] : [getselectOceanTransportType()],
         };
-        if (getselectBranchID() !== '') {
-            fetchData(ParamsInfo, top, domHeight);
-        }
+        fetchData(ParamsInfo, top, domHeight);
     }, []);
 
     /**
      * 下拉选择
-     * @param T:1.年份 2.业务线 3.运输类型 4.货物类型
+     * @param T:1.年份 2.业务线 3.运输类型 4.货物类型 5.公司
      * @param list 
      */
     const onSelect = (e: any, T: Number,) => {
@@ -314,6 +324,9 @@ const VolumePort: React.FC<{}> = () => {
                 break;
             case 4:
                 setOceanTransportType(e);
+                break;
+            case 5:
+                setBranch(e);
                 break;
             default: return;
         }
@@ -373,7 +386,7 @@ const VolumePort: React.FC<{}> = () => {
      */
     const onSearch = () => {
         let ParamsInfo: object = {
-            BranchID: getselectBranchID(),
+            BranchID: branch,
             Year: year,
             Months: checkedList1,
             BizLines: [businessesLine],
@@ -381,9 +394,7 @@ const VolumePort: React.FC<{}> = () => {
             TradeTypes: checkedList4,
             CargoTypes: oceanTransportType == 'null' ? [] : [oceanTransportType],
         };
-        if (getselectBranchID() !== '') {
-            fetchData(ParamsInfo, top, domHeight);
-        }
+        fetchData(ParamsInfo, top, domHeight);
         //关闭 Drawer
         setDrawerVisible(false);
     }
@@ -444,6 +455,24 @@ const VolumePort: React.FC<{}> = () => {
                     </Button>
             }
         >
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>公司</Col>
+                </Row>
+                <Row className={styles.searchAreaContent}>
+                    <Select
+                        style={{ width: "100%" }}
+                        defaultValue={parseInt(branch)}
+                        onChange={(e) => onSelect(e, 5)}
+                    >
+                        {
+                            BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
+                                return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
+                            }) : null
+                        }
+                    </Select>
+                </Row>
+            </div>
             <div className={styles.searchArea}>
                 <Row className={styles.searchAreaLable}>
                     <Col span={12} className={styles.searchAreaTitle}>年份</Col>

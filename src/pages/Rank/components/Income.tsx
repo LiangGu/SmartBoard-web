@@ -21,6 +21,7 @@ import {
     getYearList,
 } from '@/utils/utils';
 import {
+    getBranchList,
     getselectBranchID,
     getselectYear,
 } from '@/utils/auths';
@@ -45,6 +46,9 @@ const RankIncome: React.FC<{}> = () => {
     const [YearList,] = useState(() => {
         return getYearList();
     });
+    const [BranchList,] = useState(() => {
+        return getBranchList();
+    });
 
     /**
      *  单选
@@ -56,6 +60,12 @@ const RankIncome: React.FC<{}> = () => {
         return selectYear;
     });
 
+    // BranchList
+    const [branch, setBranch] = useState(() => {
+        // 惰性赋值 any 类型,要不默认值不起作用
+        let selectBranch: any = getselectBranchID();
+        return selectBranch;
+    });
 
     /**
      *  多选
@@ -131,7 +141,7 @@ const RankIncome: React.FC<{}> = () => {
     let fetchData = async (ParamsInfo: any, Top: Number, domHeight: Number) => {
         setloading(true);
         const result = await getRankIncomeData(ParamsInfo);
-        if (!result || getselectBranchID() == '') {
+        if (!result) {
             return;
         }
         if (result) {
@@ -266,9 +276,7 @@ const RankIncome: React.FC<{}> = () => {
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: initialState?.searchInfo?.OceanTransportTypeList_MultiSelect || [1, 2, 3, 6, 7],
         };
-        if (getselectBranchID() !== '') {
-            fetchData(ParamsInfo, top, domHeight);
-        }
+        fetchData(ParamsInfo, top, domHeight);
     }, []);
 
     /**
@@ -296,13 +304,16 @@ const RankIncome: React.FC<{}> = () => {
 
     /**
      * 下拉选择
-     * @param T:1.年份 2.业务线 3.运输类型 4.货物类型
+     * @param T:1.年份 2.业务线 3.运输类型 4.货物类型 5.公司
      * @param list 
      */
     const onSelect = (e: any, T: Number,) => {
         switch (T) {
             case 1:
                 setYear(e);
+                break;
+            case 5:
+                setBranch(e);
                 break;
             default: return;
         }
@@ -392,7 +403,7 @@ const RankIncome: React.FC<{}> = () => {
      */
     const onSearch = () => {
         let ParamsInfo: object = {
-            BranchID: getselectBranchID(),
+            BranchID: branch,
             Year: year,
             Months: checkedList1,
             BizLines: checkedList2,
@@ -400,9 +411,7 @@ const RankIncome: React.FC<{}> = () => {
             TradeTypes: checkedList4,
             CargoTypes: checkedList5,
         };
-        if (getselectBranchID() !== '') {
-            fetchData(ParamsInfo, top, domHeight);
-        }
+        fetchData(ParamsInfo, top, domHeight);
         //关闭 Drawer
         setDrawerVisible(false);
     }
@@ -441,6 +450,24 @@ const RankIncome: React.FC<{}> = () => {
                     </Button>
                 }
             >
+                <div className={styles.searchArea}>
+                    <Row className={styles.searchAreaLable}>
+                        <Col span={12} className={styles.searchAreaTitle}>公司</Col>
+                    </Row>
+                    <Row className={styles.searchAreaContent}>
+                        <Select
+                            style={{ width: "100%" }}
+                            defaultValue={parseInt(branch)}
+                            onChange={(e) => onSelect(e, 5)}
+                        >
+                            {
+                                BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
+                                    return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
+                                }) : null
+                            }
+                        </Select>
+                    </Row>
+                </div>
                 <div className={styles.searchArea}>
                     <Row className={styles.searchAreaLable}>
                         <Col span={12} className={styles.searchAreaTitle}>年份</Col>

@@ -95,13 +95,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   return (
     <div className={styles.right}>
         {/* 总部人员登录可以选择公司 */}
-        {
+        {/* {
           branchID == '1'?
           <>
             <ChooseBranch/>
-            {/* <p>{branchName}</p> */}
           </> : null
-        }
+        } */}
         <HeaderDropdown overlay={menuHeaderDropdown}>
           <span className={`${styles.action} ${styles.account}`}>
             <span className={`${styles.name} anticon`}>{displayName}</span>

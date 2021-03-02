@@ -1,7 +1,9 @@
 import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Radio, } from 'antd';
+import { Card, Spin, Row, Col, Radio, Button, Drawer, Checkbox, Select } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
@@ -14,20 +16,44 @@ import 'echarts/lib/component/tooltip';
 //调用API
 import { getDebtChartData, } from '@/services/debt';
 //调用公式方法
-import { getTotalValue, sortObjectArr, transIntOfArraay, FilterZeroOfArraay, } from '@/utils/utils';
-import { getselectBranchID, } from '@/utils/auths';
+import {
+    getTotalValue,
+    sortObjectArr,
+    transIntOfArraay,
+    FilterZeroOfArraay,
+} from '@/utils/utils';
+import {
+    getBranchList,
+    getselectBranchID,
+} from '@/utils/auths';
 
 const Debt: React.FC<{}> = () => {
     const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
     const [type, setType] = useState('总金额');
     const [result, setResult] = useState([]);
+    const [DrawerVisible, setDrawerVisible] = useState(false);
+
+    //数据集
+    const [BranchList,] = useState(() => {
+        return getBranchList();
+    });
+
+    /**
+     *  单选
+     * */
+    // BranchList
+    const [branch, setBranch] = useState(() => {
+        // 惰性赋值 any 类型,要不默认值不起作用
+        let selectBranch: any = getselectBranchID();
+        return selectBranch;
+    });
 
     //获取数据
     let fetchData = async (ParamsInfo: any, T: string) => {
         setloading(true);
         const result = await getDebtChartData(ParamsInfo);
-        if (!result || getselectBranchID() == '') {
+        if (!result) {
             return;
         }
         if (result) {
@@ -77,12 +103,12 @@ const Debt: React.FC<{}> = () => {
             ReMoney180List.push(x.ReMoney180 / 10000);
             ReMoney181List.push(x.ReMoney181 / 10000);
         });
-        ReMoney30List = getTotalValue(ReMoney30List).toFixed(2);
-        ReMoney45List = getTotalValue(ReMoney45List).toFixed(2);
-        ReMoney60List = getTotalValue(ReMoney60List).toFixed(2);
-        ReMoney90List = getTotalValue(ReMoney90List).toFixed(2);
-        ReMoney180List = getTotalValue(ReMoney180List).toFixed(2);
-        ReMoney181List = getTotalValue(ReMoney181List).toFixed(2);
+        ReMoney30List = ReMoney30List.length > 0 ? getTotalValue(ReMoney30List).toFixed(2) : 0;
+        ReMoney45List = ReMoney45List.length > 0 ? getTotalValue(ReMoney45List).toFixed(2) : 0;
+        ReMoney60List = ReMoney60List.length > 0 ? getTotalValue(ReMoney60List).toFixed(2) : 0;
+        ReMoney90List = ReMoney90List.length > 0 ? getTotalValue(ReMoney90List).toFixed(2) : 0;
+        ReMoney180List = ReMoney180List.length > 0 ? getTotalValue(ReMoney180List).toFixed(2) : 0;
+        ReMoney181List = ReMoney181List.length > 0 ? getTotalValue(ReMoney181List).toFixed(2) : 0;
         let DebtList: any = [ReMoney30List, ReMoney45List, ReMoney60List, ReMoney90List, ReMoney180List, ReMoney181List];
 
         PieSeriesData = [
@@ -379,10 +405,8 @@ const Debt: React.FC<{}> = () => {
         let ParamsInfo: object = {
             BranchID: getselectBranchID(),
         };
-        if (getselectBranchID() !== '') {
-            fetchData(ParamsInfo, type);
-        }
-    }, [initialState]);
+        fetchData(ParamsInfo, type);
+    }, []);
 
     /**
      * 点击切换统计图表类型
@@ -390,6 +414,39 @@ const Debt: React.FC<{}> = () => {
     const onChangeType = (e: any) => {
         setType(e.target.value);
         initChart(result, e.target.value);
+    }
+
+    /**
+     * 下拉选择
+     * @param T:1.年份 2.业务线 3.运输类型 4.货物类型 5.公司
+     * @param list 
+     */
+    const onSelect = (e: any, T: Number,) => {
+        switch (T) {
+            case 5:
+                setBranch(e);
+                break;
+            default: return;
+        }
+    }
+
+    /**
+     * 关闭 Drawer
+     */
+    const onClose = () => {
+        setDrawerVisible(false);
+    }
+
+    /**
+     * 确定搜索条件
+     */
+    const onSearch = () => {
+        let ParamsInfo: object = {
+            BranchID: branch,
+        };
+        fetchData(ParamsInfo, type);
+        //关闭 Drawer
+        setDrawerVisible(false);
     }
 
     return (
@@ -425,6 +482,41 @@ const Debt: React.FC<{}> = () => {
                     <div id="DebtChartLengthways" style={{ width: '100%', height: 800 }}></div>
                 </Card>
             </Spin>
+
+            <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} />
+            <Drawer
+                placement={"right"}
+                closable={false}
+                onClose={onClose}
+                visible={DrawerVisible}
+                key={"right"}
+                width={300}
+                footer={
+                    <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
+                        确定
+                    </Button>
+                }
+            >
+                <div className={styles.searchArea}>
+                    <Row className={styles.searchAreaLable}>
+                        <Col span={12} className={styles.searchAreaTitle}>公司</Col>
+                    </Row>
+                    <Row className={styles.searchAreaContent}>
+                        <Select
+                            style={{ width: "100%" }}
+                            defaultValue={parseInt(branch)}
+                            onChange={(e) => onSelect(e, 5)}
+                        >
+                            {
+                                BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
+                                    return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
+                                }) : null
+                            }
+                        </Select>
+                    </Row>
+                </div>
+            </Drawer>
+
         </PageContainer>
     )
 };

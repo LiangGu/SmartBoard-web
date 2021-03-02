@@ -31,7 +31,6 @@ import {
     OceanTransportTypeList_MultiSelect,
 } from '@/utils/baseData';
 import {
-    getselectBranchID,
     getselectYear,
     getselectBusinessesLine,
     getselectBizType1List_Radio,
@@ -123,7 +122,7 @@ const VolumeBranch: React.FC<{}> = () => {
     let fetchData = async (ParamsInfo: any) => {
         setloading(true);
         const result = await getBranchChartData(ParamsInfo);
-        if (!result || getselectBranchID() == '') {
+        if (!result) {
             return;
         }
         if (result) {
@@ -365,7 +364,7 @@ const VolumeBranch: React.FC<{}> = () => {
      */
     useEffect(() => {
         let ParamsInfo: object = {
-            BranchID: getselectBranchID(),
+            BranchID: 0,
             Year: getselectYear(),
             Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             BizLines: [getselectBusinessesLine()],
@@ -373,9 +372,7 @@ const VolumeBranch: React.FC<{}> = () => {
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
             CargoTypes: getselectOceanTransportType() == 'null' ? [] : [getselectOceanTransportType()],
         };
-        if (getselectBranchID() !== '') {
-            fetchData(ParamsInfo);
-        }
+        fetchData(ParamsInfo);
     }, []);
 
     /**
@@ -487,7 +484,7 @@ const VolumeBranch: React.FC<{}> = () => {
      */
     const onSearch = () => {
         let ParamsInfo: object = {
-            BranchID: getselectBranchID(),
+            BranchID: 0,
             Year: year,
             Months: checkedList1,
             BizLines: [businessesLine],
@@ -495,9 +492,7 @@ const VolumeBranch: React.FC<{}> = () => {
             TradeTypes: checkedList4,
             CargoTypes: oceanTransportType == 'null' ? [] : [oceanTransportType],
         };
-        if (getselectBranchID() !== '') {
-            fetchData(ParamsInfo);
-        }
+        fetchData(ParamsInfo);
         //关闭 Drawer
         setDrawerVisible(false);
     }

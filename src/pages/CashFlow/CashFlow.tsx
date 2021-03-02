@@ -1,7 +1,9 @@
 import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, } from 'antd';
+import { Card, Spin, Row, Col, Button, Drawer, Select } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import styles from '@/components/Search/index.less';
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
@@ -14,21 +16,49 @@ import 'echarts/lib/component/toolbox';
 import 'echarts/lib/component/dataZoom';
 //调用API
 import { getCashFlowChartData, } from '@/services/cashflow';
-import { getselectBranchID, getselectYear, } from '@/utils/auths';
-//引入自定义组件
-import SearchButton from '@/components/Search/SearchButton';
-//重点代码<React hooks之useContext父子组件传值>
-import ContextProps from '@/createContext';
+//调用公式方法
+import { getYearList, } from '@/utils/utils';
+import {
+  getBranchList,
+  getselectBranchID,
+  getselectYear,
+} from '@/utils/auths';
 
 const CashFlow: React.FC<{}> = () => {
   const { initialState, } = useModel('@@initialState');
   const [loading, setloading] = useState(false);
+  const [DrawerVisible, setDrawerVisible] = useState(false);
+
+  //数据集
+  const [YearList,] = useState(() => {
+    return getYearList();
+  });
+  const [BranchList,] = useState(() => {
+    return getBranchList();
+  });
+
+  /**
+   *  单选
+   * */
+  // YearList
+  const [year, setYear] = useState(() => {
+    // 惰性赋值 any 类型,要不默认值不起作用
+    let selectYear: any = getselectYear();
+    return selectYear;
+  });
+
+  // BranchList
+  const [branch, setBranch] = useState(() => {
+    // 惰性赋值 any 类型,要不默认值不起作用
+    let selectBranch: any = getselectBranchID();
+    return selectBranch;
+  });
 
   //获取数据
   let fetchData = async (ParamsInfo: any) => {
     setloading(true);
     const result = await getCashFlowChartData(ParamsInfo);
-    if (!result || getselectBranchID() == '') {
+    if (!result) {
       return;
     }
     if (result) {
@@ -170,10 +200,45 @@ const CashFlow: React.FC<{}> = () => {
       BranchID: getselectBranchID(),
       Year: getselectYear(),
     };
-    if (getselectBranchID() !== '') {
-      fetchData(ParamsInfo);
+    fetchData(ParamsInfo);
+  }, []);
+
+  /**
+   * 下拉选择
+   * @param T:1.年份 2.业务线 3.运输类型 4.货物类型 5.公司
+   * @param list 
+   */
+  const onSelect = (e: any, T: Number,) => {
+    switch (T) {
+      case 1:
+        setYear(e);
+        break;
+      case 5:
+        setBranch(e);
+        break;
+      default: return;
     }
-  }, [initialState]);
+  }
+
+  /**
+   * 关闭 Drawer
+   */
+  const onClose = () => {
+    setDrawerVisible(false);
+  }
+
+  /**
+   * 确定搜索条件
+   */
+  const onSearch = () => {
+    let ParamsInfo: object = {
+      BranchID: branch,
+      Year: year,
+    };
+    fetchData(ParamsInfo);
+    //关闭 Drawer
+    setDrawerVisible(false);
+  }
 
   return (
     <PageContainer>
@@ -183,10 +248,58 @@ const CashFlow: React.FC<{}> = () => {
         </Card>
       </Spin>
 
-      {/*重点代码*/}
-      <ContextProps.Provider value={3.1}>
-        <SearchButton />
-      </ContextProps.Provider>
+      <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} />
+      <Drawer
+        placement={"right"}
+        closable={false}
+        onClose={onClose}
+        visible={DrawerVisible}
+        key={"right"}
+        width={300}
+        footer={
+          <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
+            确定
+          </Button>
+        }
+      >
+        <div className={styles.searchArea}>
+          <Row className={styles.searchAreaLable}>
+            <Col span={12} className={styles.searchAreaTitle}>公司</Col>
+          </Row>
+          <Row className={styles.searchAreaContent}>
+            <Select
+              style={{ width: "100%" }}
+              defaultValue={parseInt(branch)}
+              onChange={(e) => onSelect(e, 5)}
+            >
+              {
+                BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
+                  return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
+                }) : null
+              }
+            </Select>
+          </Row>
+        </div>
+        <div className={styles.searchArea}>
+          <Row className={styles.searchAreaLable}>
+            <Col span={12} className={styles.searchAreaTitle}>年份</Col>
+          </Row>
+          <Row className={styles.searchAreaContent}>
+            <Select
+              style={{ width: "100%" }}
+              defaultValue={parseInt(year)}
+              onChange={(e) => onSelect(e, 1)}
+            >
+              {
+                YearList && YearList.length > 0 ? YearList.map((x) => {
+                  return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                }) : null
+              }
+            </Select>
+          </Row>
+        </div>
+      </Drawer>
+
     </PageContainer>
   )
 };
