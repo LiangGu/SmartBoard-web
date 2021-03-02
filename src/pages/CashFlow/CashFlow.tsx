@@ -193,7 +193,7 @@ const CashFlow: React.FC<{}> = () => {
   };
 
   /**
-   * 第2个参数传 [initialState] 相当于 componentDidUpdate 钩子
+   * 第2个参数传 [] 相当于 componentDidUpdate 钩子
    */
   useEffect(() => {
     let ParamsInfo: object = {
