@@ -71,8 +71,8 @@ const CashFlow: React.FC<{}> = () => {
         SortResultByDate = result.sort((a: any, b: any) => a.SumDate.localeCompare(b.SumDate));
         // 2、处理数据:数据累加
         if (SortResultByDate && SortResultByDate.length > 0) {
-          SortResultByDate.forEach((x: { TotalAR: any; }) => {
-            CashFlowSourceValue.push(x.TotalAR);
+          SortResultByDate.forEach((x: { SumToday: any; }) => {
+            CashFlowSourceValue.push(x.SumToday);
           });
         }
         // * 从第1个值开始,对应的值等于:当前值 + 当前值的后一个值
@@ -106,7 +106,7 @@ const CashFlow: React.FC<{}> = () => {
       myChart = echarts.init(element as HTMLDivElement);
       option = {
         title: {
-          text: '日现金流走势',
+          text: '日业务现金走势',
         },
         tooltip: {
           trigger: 'axis',
@@ -144,7 +144,7 @@ const CashFlow: React.FC<{}> = () => {
         },
         yAxis: {
           type: 'value',
-          name: '收入: CNY(万)',
+          name: 'CNY(万)',
           nameTextStyle: {
             color: 'black',
             fontSize: 16,
