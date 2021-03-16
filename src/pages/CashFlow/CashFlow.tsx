@@ -248,7 +248,7 @@ const CashFlow: React.FC<{}> = () => {
         </Card>
       </Spin>
 
-      <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} />
+      <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} >搜索</Button>
       <Drawer
         placement={"right"}
         closable={false}
