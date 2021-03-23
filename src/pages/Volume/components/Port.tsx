@@ -269,7 +269,7 @@ const VolumePort: React.FC<{}> = () => {
             BizLines: [getselectBusinessesLine()],
             TransTypes: [getselectBizType1List_Radio()],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: getselectOceanTransportType() == 'null' ? [] : [getselectOceanTransportType()],
+            CargoTypes: (getselectOceanTransportType() == 'null' || getselectOceanTransportType() == null) ? [] : [getselectOceanTransportType()],
         };
         fetchData(ParamsInfo, top, domHeight);
     }, []);
@@ -392,7 +392,7 @@ const VolumePort: React.FC<{}> = () => {
             BizLines: [businessesLine],
             TransTypes: [bizType1List_Radio],
             TradeTypes: checkedList4,
-            CargoTypes: oceanTransportType == 'null' ? [] : [oceanTransportType],
+            CargoTypes: (oceanTransportType == 'null' || oceanTransportType == null) ? [] : [oceanTransportType],
         };
         fetchData(ParamsInfo, top, domHeight);
         //关闭 Drawer
@@ -570,33 +570,37 @@ const VolumePort: React.FC<{}> = () => {
                     </Row>
                 </Checkbox.Group>
             </div>
-            <div className={styles.searchArea}>
-                <Row className={styles.searchAreaLable}>
-                    <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
-                </Row>
-                <Row className={styles.searchAreaContent}>
-                    <form style={{ width: "100%" }}>
-                        <Controller
-                            defaultValue={parseInt(oceanTransportType)}
-                            name="oceanTransportType"
-                            control={control}
-                            render={() => (
-                                <Select
-                                    style={{ width: "100%" }}
-                                    value={parseInt(oceanTransportType)}
-                                    onChange={(e) => onSelect(e, 4)}
-                                >
-                                    {
-                                        OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map((x) => {
-                                            return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
-                                        }) : null
-                                    }
-                                </Select>
-                            )}
-                        />
-                    </form>
-                </Row>
-            </div>
+            {
+                oceanTransportType == 'null' || oceanTransportType == null ? null :
+                    <div className={styles.searchArea}>
+                        <Row className={styles.searchAreaLable}>
+                            <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
+                        </Row>
+                        <Row className={styles.searchAreaContent}>
+                            <form style={{ width: "100%" }}>
+                                <Controller
+                                    defaultValue={parseInt(oceanTransportType)}
+                                    name="oceanTransportType"
+                                    control={control}
+                                    render={() => (
+                                        <Select
+                                            style={{ width: "100%" }}
+                                            value={parseInt(oceanTransportType)}
+                                            onChange={(e) => onSelect(e, 4)}
+                                        >
+                                            {
+                                                OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map((x) => {
+                                                    return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                                                }) : null
+                                            }
+                                        </Select>
+                                    )}
+                                />
+                            </form>
+                        </Row>
+                    </div>
+            }
+
         </Drawer>
 
     </>

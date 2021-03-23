@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
-import { Card, Radio, Spin, Button, Drawer, Checkbox, Row, Col, Select,} from 'antd';
+import { Card, Radio, Spin, Button, Drawer, Checkbox, Row, Col, Select, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 import { useForm, Controller, } from 'react-hook-form';
@@ -105,7 +105,7 @@ const RankVolume: React.FC<{}> = () => {
     //     let selectOceanTransportType: any = getselectOceanTransportType();
     //     return selectOceanTransportType;
     // });
-  
+
     // BranchList
     const [branch, setBranch] = useState(() => {
         // 惰性赋值 any 类型,要不默认值不起作用
@@ -115,7 +115,7 @@ const RankVolume: React.FC<{}> = () => {
 
     /**
      *  多选
-     * */ 
+     * */
     // MonthList                    :1
     const [checkedList1, setCheckedList1] = useState(() => {
         let searchInfoMonthList: any = initialState?.searchInfo?.MonthList;
@@ -288,7 +288,7 @@ const RankVolume: React.FC<{}> = () => {
             Months: initialState?.searchInfo?.MonthList || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             TransTypes: [getselectBizType1List_Radio()],
             TradeTypes: initialState?.searchInfo?.BizType2List || [1, 2, 3, 4, 5, 6],
-            CargoTypes: getselectOceanTransportType() == 'null' ? [] : [getselectOceanTransportType()],
+            CargoTypes: (getselectOceanTransportType() == 'null' || getselectOceanTransportType() == null) ? [] : [getselectOceanTransportType()],
             BizLines: [getselectBusinessesLine()],
         };
         fetchData(ParamsInfo, top, domHeight, titleName);
@@ -338,7 +338,7 @@ const RankVolume: React.FC<{}> = () => {
                 //赋值运输类型
                 setBizType1List_Radio(GetBizType1List_RadioList(e)[0]?.Key || null);
                 //赋值运输类型显示值
-                setValue('bizType1List_Radio',GetBizType1List_RadioList(e)[0]?.Value || '');
+                setValue('bizType1List_Radio', GetBizType1List_RadioList(e)[0]?.Value || '');
 
                 /**
                  * 步骤2
@@ -348,7 +348,7 @@ const RankVolume: React.FC<{}> = () => {
                 //赋值货物类型
                 setOceanTransportType(GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Key || null);
                 //赋值货物类型显示值
-                setValue('oceanTransportType',GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Value || '');
+                setValue('oceanTransportType', GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Value || '');
 
                 break;
             case 3:
@@ -362,7 +362,7 @@ const RankVolume: React.FC<{}> = () => {
                 //赋值货物类型
                 setOceanTransportType(GetOceanTransportTypeList(businessesLine, e)[0]?.Key || null);
                 //赋值货物类型显示值
-                setValue('oceanTransportType',GetOceanTransportTypeList(businessesLine, e)[0]?.Value || '');
+                setValue('oceanTransportType', GetOceanTransportTypeList(businessesLine, e)[0]?.Value || '');
 
                 break;
             case 4:
@@ -434,7 +434,7 @@ const RankVolume: React.FC<{}> = () => {
             Months: checkedList1,
             TransTypes: [bizType1List_Radio],
             TradeTypes: checkedList4,
-            CargoTypes: oceanTransportType == 'null' ? [] : [oceanTransportType],
+            CargoTypes: (oceanTransportType == 'null' || oceanTransportType == null) ? [] : [oceanTransportType],
             BizLines: [businessesLine],
         };
         fetchData(ParamsInfo, top, domHeight, titleName);
@@ -464,160 +464,163 @@ const RankVolume: React.FC<{}> = () => {
 
         <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} >搜索</Button>
         <Drawer
-                placement={"right"}
-                closable={false}
-                onClose={onClose}
-                visible={DrawerVisible}
-                key={"right"}
-                width={300}
-                footer={
-                    <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
-                        确定
+            placement={"right"}
+            closable={false}
+            onClose={onClose}
+            visible={DrawerVisible}
+            key={"right"}
+            width={300}
+            footer={
+                <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
+                    确定
                     </Button>
-                }
-            >
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>公司</Col>
-                    </Row>
-                    <Row className={styles.searchAreaContent}>
-                        <Select
-                            style={{ width: "100%" }}
-                            defaultValue={parseInt(branch)}
-                            onChange={(e) => onSelect(e, 5)}
-                        >
-                            {
-                                BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
-                                    return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
-                                }) : null
-                            }
-                        </Select>
-                    </Row>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>年份</Col>
-                    </Row>
-                    <Row className={styles.searchAreaContent}>
-                        <Select
-                            style={{ width: "100%" }}
-                            defaultValue={parseInt(year)}
-                            onChange={(e) => onSelect(e, 1)}
-                        >
-                            {
-                                YearList && YearList.length > 0 ? YearList.map((x) => {
-                                    return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
-                                }) : null
-                            }
-                        </Select>
-                    </Row>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>月份</Col>
-                        <Checkbox indeterminate={indeterminate1} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll1}>
-                            全选
+            }
+        >
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>公司</Col>
+                </Row>
+                <Row className={styles.searchAreaContent}>
+                    <Select
+                        style={{ width: "100%" }}
+                        defaultValue={parseInt(branch)}
+                        onChange={(e) => onSelect(e, 5)}
+                    >
+                        {
+                            BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
+                                return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
+                            }) : null
+                        }
+                    </Select>
+                </Row>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>年份</Col>
+                </Row>
+                <Row className={styles.searchAreaContent}>
+                    <Select
+                        style={{ width: "100%" }}
+                        defaultValue={parseInt(year)}
+                        onChange={(e) => onSelect(e, 1)}
+                    >
+                        {
+                            YearList && YearList.length > 0 ? YearList.map((x) => {
+                                return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                            }) : null
+                        }
+                    </Select>
+                </Row>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>月份</Col>
+                    <Checkbox indeterminate={indeterminate1} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll1}>
+                        全选
                     </Checkbox>
-                    </Row>
-                    <Checkbox.Group value={checkedList1} onChange={(list) => onChange(1, list)}>
-                        <Row className={styles.searchAreaContent}>
-                            {
-                                MonthList && MonthList.length > 0 ? MonthList.map(x => {
-                                    return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                }) : null
-                            }
-                        </Row>
-                    </Checkbox.Group>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>业务线</Col>
-                    </Row>
+                </Row>
+                <Checkbox.Group value={checkedList1} onChange={(list) => onChange(1, list)}>
                     <Row className={styles.searchAreaContent}>
-                        <Select
-                            style={{ width: "100%" }}
-                            defaultValue={parseInt(businessesLine)}
-                            onChange={(e) => onSelect(e, 2)}
-                        >
-                            {
-                                BusinessesLineList && BusinessesLineList.length > 0 ? BusinessesLineList.map((x) => {
-                                    return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
-                                }) : null
-                            }
-                        </Select>
+                        {
+                            MonthList && MonthList.length > 0 ? MonthList.map(x => {
+                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                            }) : null
+                        }
                     </Row>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
-                    </Row>
-                    <Row className={styles.searchAreaContent}>
-                        <form style={{ width: "100%" }}>
-                            <Controller
-                                defaultValue={parseInt(bizType1List_Radio)}
-                                name="bizType1List_Radio"
-                                control={control}
-                                render={() => (
-                                    <Select
-                                        style={{ width: "100%" }}
-                                        value={parseInt(bizType1List_Radio)}
-                                        onChange={(e) => onSelect(e, 3)}
-                                    >
-                                        {
-                                            BizType1List_RadioList && BizType1List_RadioList.length > 0 ? BizType1List_RadioList.map((x) => {
-                                                return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
-                                            }) : null
-                                        }
-                                    </Select> 
-                                )}
-                            />
-                        </form>
-                    </Row>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
-                        <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(4, e)} checked={checkAll4}>
-                            全选
+                </Checkbox.Group>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>业务线</Col>
+                </Row>
+                <Row className={styles.searchAreaContent}>
+                    <Select
+                        style={{ width: "100%" }}
+                        defaultValue={parseInt(businessesLine)}
+                        onChange={(e) => onSelect(e, 2)}
+                    >
+                        {
+                            BusinessesLineList && BusinessesLineList.length > 0 ? BusinessesLineList.map((x) => {
+                                return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                            }) : null
+                        }
+                    </Select>
+                </Row>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
+                </Row>
+                <Row className={styles.searchAreaContent}>
+                    <form style={{ width: "100%" }}>
+                        <Controller
+                            defaultValue={parseInt(bizType1List_Radio)}
+                            name="bizType1List_Radio"
+                            control={control}
+                            render={() => (
+                                <Select
+                                    style={{ width: "100%" }}
+                                    value={parseInt(bizType1List_Radio)}
+                                    onChange={(e) => onSelect(e, 3)}
+                                >
+                                    {
+                                        BizType1List_RadioList && BizType1List_RadioList.length > 0 ? BizType1List_RadioList.map((x) => {
+                                            return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                                        }) : null
+                                    }
+                                </Select>
+                            )}
+                        />
+                    </form>
+                </Row>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
+                    <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(4, e)} checked={checkAll4}>
+                        全选
                     </Checkbox>
-                    </Row>
-                    <Checkbox.Group value={checkedList4} onChange={(list) => onChange(4, list)}>
-                        <Row className={styles.searchAreaContent}>
-                            {
-                                BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
-                                    return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                }) : null
-                            }
-                        </Row>
-                    </Checkbox.Group>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
-                    </Row>
+                </Row>
+                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(4, list)}>
                     <Row className={styles.searchAreaContent}>
-                        <form style={{ width: "100%" }}>
-                            <Controller
-                                defaultValue={parseInt(oceanTransportType)}
-                                name="oceanTransportType"
-                                control={control}
-                                render={() => (
-                                    <Select
-                                        style={{ width: "100%" }}
-                                        value={parseInt(oceanTransportType)}
-                                        onChange={(e) => onSelect(e, 4)}
-                                    >
-                                        {
-                                            OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map((x) => {
-                                                return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
-                                            }) : null
-                                        }
-                                    </Select> 
-                                )}
-                            />
-                        </form>
+                        {
+                            BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
+                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                            }) : null
+                        }
                     </Row>
-                </div>
+                </Checkbox.Group>
+            </div>
+            {
+                oceanTransportType == 'null' || oceanTransportType == null ? null :
+                    <div className={styles.searchArea}>
+                        <Row className={styles.searchAreaLable}>
+                            <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
+                        </Row>
+                        <Row className={styles.searchAreaContent}>
+                            <form style={{ width: "100%" }}>
+                                <Controller
+                                    defaultValue={parseInt(oceanTransportType)}
+                                    name="oceanTransportType"
+                                    control={control}
+                                    render={() => (
+                                        <Select
+                                            style={{ width: "100%" }}
+                                            value={parseInt(oceanTransportType)}
+                                            onChange={(e) => onSelect(e, 4)}
+                                        >
+                                            {
+                                                OceanTransportTypeList && OceanTransportTypeList.length > 0 ? OceanTransportTypeList.map((x) => {
+                                                    return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                                                }) : null
+                                            }
+                                        </Select>
+                                    )}
+                                />
+                            </form>
+                        </Row>
+                    </div>
+            }
         </Drawer>
 
     </>

@@ -262,6 +262,8 @@ export function GetBizType1List_RadioList(BusinessesLine: any) {
             break;
         case 4:
             BizType1List_RadioList = [
+                //香港船代的运输类型'水运'
+                { Key: 1, Value: "水运" },
                 { Key: 10, Value: "散货船" },
                 { Key: 11, Value: "总代" },
             ];
@@ -333,9 +335,13 @@ export function GetOceanTransportTypeList(BusinessesLine: any, BizType1: any,) {
                     { Key: 7, Value: "零担" },
                 ];
             } else if (parseInt(BizType1) == 6) {
-                OceanTransportTypeList = [];
+                OceanTransportTypeList = [
+
+                ];
             } else if (parseInt(BizType1) == 13) {
-                OceanTransportTypeList = [];
+                OceanTransportTypeList = [
+                    
+                ];
             } else {
                 OceanTransportTypeList = [
                     { Key: 1, Value: "整箱" },
@@ -356,7 +362,10 @@ export function GetOceanTransportTypeList(BusinessesLine: any, BizType1: any,) {
                     { Key: 3, Value: "散货" },
                 ];
             } else {
-                OceanTransportTypeList = [];
+                OceanTransportTypeList = [
+                    //总代添加'整箱'
+                    { Key: 1, Value: "整箱" },
+                ];
             }
         } else {
             if (parseInt(BizType1) == 1) {
