@@ -81,8 +81,8 @@ export const getMinValue = (list: Array<any>) => {
  */
 export const getLineStackSeriesData = (list: any, T: number) => {
     let LineStackSeriesData: any = [];
-    if(T == 1){
-        list.map((x: { VolMonth: any; BranchName: string;}) => {
+    if (T == 1) {
+        list.map((x: { VolMonth: any; BranchName: string; }) => {
             LineStackSeriesData.push({
                 name: x.BranchName,
                 type: 'line',
@@ -90,8 +90,8 @@ export const getLineStackSeriesData = (list: any, T: number) => {
                 data: x.VolMonth,
             });
         });
-    }else{
-        list.map((x: { VolMonth: any; BranchName: string;}) => {
+    } else {
+        list.map((x: { VolMonth: any; BranchName: string; }) => {
             LineStackSeriesData.push({
                 name: x.BranchName,
                 type: 'line',
@@ -110,12 +110,12 @@ export const getLineStackSeriesData = (list: any, T: number) => {
  */
 export const getLineStackLegendData = (list: any, T: number) => {
     let LineStackLegendData: any = [];
-    if(T == 1){
-        list.map((x: { BranchName: string;}) => {
+    if (T == 1) {
+        list.map((x: { BranchName: string; }) => {
             LineStackLegendData.push(x.BranchName);
         });
-    }else{
-        list.map((x: { BranchName: string;}) => {
+    } else {
+        list.map((x: { BranchName: string; }) => {
             LineStackLegendData.push(x.BranchName);
         });
     }
@@ -340,7 +340,7 @@ export function GetOceanTransportTypeList(BusinessesLine: any, BizType1: any,) {
                 ];
             } else if (parseInt(BizType1) == 13) {
                 OceanTransportTypeList = [
-                    
+
                 ];
             } else {
                 OceanTransportTypeList = [

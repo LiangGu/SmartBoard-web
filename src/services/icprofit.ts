@@ -6,10 +6,10 @@ import { request } from 'umi';
  * Date:2020-12-31
  */
 export async function getICProfitBranchData(params?: any) {
-  return request(`/api/Board/GetFeeByBranch`, {
-    method: 'POST',
-    data: params,
-  });
+    return request(`/api/Board/GetFeeByBranch`, {
+        method: 'POST',
+        data: params,
+    });
 }
 
 /**
@@ -18,8 +18,8 @@ export async function getICProfitBranchData(params?: any) {
  * Date:2020-12-10
  */
 export async function getICProfitMonthData(params?: any) {
-  return request(`/api/Board/GetFeeByMonth`, {
-    method: 'POST',
-    data: params,
-  });
+    return request(`/api/Board/GetFeeByMonth`, {
+        method: 'POST',
+        data: params,
+    });
 }

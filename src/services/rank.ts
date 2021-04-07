@@ -6,10 +6,10 @@ import { request } from 'umi';
  * Date:2020-12-14
  */
 export async function getRankIncomeData(params?: any) {
-  return request(`/api/Board/GetCustomerTopByAR`, {
-    method: 'POST',
-    data: params,
-  });
+    return request(`/api/Board/GetCustomerTopByAR`, {
+        method: 'POST',
+        data: params,
+    });
 }
 
 /**
@@ -18,8 +18,8 @@ export async function getRankIncomeData(params?: any) {
  * Date:2020-12-31
  */
 export async function getRankVolumeData(params?: any) {
-  return request(`/api/Board/GetCustomerTopByVol`, {
-    method: 'POST',
-    data: params,
-  });
+    return request(`/api/Board/GetCustomerTopByVol`, {
+        method: 'POST',
+        data: params,
+    });
 }

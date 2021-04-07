@@ -1,8 +1,8 @@
 import global from '../global.d';
 
-export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
+export function setSystemMes(sysMes: global.SessionSysSave | null | undefined) {
     //设置token到客户端,并且同时设置登录用户权限到客户端
-    if(sysMes){
+    if (sysMes) {
         let BRANCHLIST = JSON.stringify(sysMes.branchList);            //用于 session 存 JSON 数组写在  setSystemMes  中
         sessionStorage.setItem("USER_NAME", sysMes.userName);
         sessionStorage.setItem("USER_ID", sysMes.userID);
@@ -18,7 +18,7 @@ export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
         sessionStorage.setItem("SELECT_BIZTYPE1LIST_RADIO", sysMes.selectBizType1List_Radio);
         sessionStorage.setItem("SELECT_OCEAN_TRANSPORT_TYPE", sysMes.selectOceanTransportType);
         sessionStorage.setItem("BRANCHLIST", BRANCHLIST);
-    }else{
+    } else {
         sessionStorage.setItem("USER_NAME", '');
         sessionStorage.setItem("USER_ID", '');
         sessionStorage.setItem("BRANCH_ID", '');
@@ -37,12 +37,12 @@ export function setSystemMes(sysMes:global.SessionSysSave|null|undefined) {
 }
 
 //用于 session 存 JSON 数组
-function getList(sessionStorage: any, str: string){
+function getList(sessionStorage: any, str: string) {
     let string = sessionStorage.getItem(str), list = [];
     sessionStorage[str] = string;           //存入
     string = sessionStorage[str];           //读取
     //*退出登录会执行:setSystemMes(undefined) 所以在这边要判断下
-    if(string){
+    if (string) {
         list = JSON.parse(string);          //重新转换为对象
     }
     return list;
@@ -52,7 +52,7 @@ export function getBranchList() {
     return getList(sessionStorage, "BRANCHLIST");
 }
 
-export function getCurrentUser(){
+export function getCurrentUser() {
     return sessionStorage.getItem("");
 }
 

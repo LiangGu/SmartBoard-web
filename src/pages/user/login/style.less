@@ -1,54 +1,200 @@
 @import '~antd/es/style/themes/default.less';
 
-@Titletext:#4A96E2;
-@ColorWhite:#FFFFFF;
+@Titletext : #4A96E2;
+@ColorWhite: #FFFFFF;
 
 .MainDiv {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background-size: cover;
+    width           : 100%;
+    height          : 100%;
+    position        : absolute;
+    background-size : cover;
     background-color: #000000;
     background-image: url('https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg');
-    .LeftDiv{
-        width: 50%;
-        height: 100%;
-        float: left;
+
+    .LeftDiv {
+        width  : 50%;
+        height : 100%;
+        float  : left;
         padding: 12%;
-        .Logo{width: 200px;position: relative;left: 50%;transform: translateX(-100px);margin-bottom: 50px;display: block}
-        .TitleCN{text-align: center;color: @ColorWhite;font-size: 72px;margin: 0;};
-        .TitleEN{text-align: center;color: @ColorWhite;font-size: 40px;margin: 0;}
-        .LogoCN{width: 300px;position: relative;left: 50%;transform: translateX(-150px);margin-bottom: 20px;display: block}
-        .LogoEN{width: 300px;position: relative;left: 50%;transform: translateX(-150px);display: block}
+
+        .Logo {
+            width        : 200px;
+            position     : relative;
+            left         : 50%;
+            transform    : translateX(-100px);
+            margin-bottom: 50px;
+            display      : block
+        }
+
+        .TitleCN {
+            text-align: center;
+            color     : @ColorWhite;
+            font-size : 72px;
+            margin    : 0;
+        }
+
+        ;
+
+        .TitleEN {
+            text-align: center;
+            color     : @ColorWhite;
+            font-size : 40px;
+            margin    : 0;
+        }
+
+        .LogoCN {
+            width        : 300px;
+            position     : relative;
+            left         : 50%;
+            transform    : translateX(-150px);
+            margin-bottom: 20px;
+            display      : block
+        }
+
+        .LogoEN {
+            width    : 300px;
+            position : relative;
+            left     : 50%;
+            transform: translateX(-150px);
+            display  : block
+        }
     }
-    .RightDiv{
-        width: 50%;
-        height: 100%;
-        float: right;
+
+    .RightDiv {
+        width  : 50%;
+        height : 100%;
+        float  : right;
         padding: 12%;
-        .AutoLogin{color: @ColorWhite};
-        .LoginBtn{border-radius: 8px;height: 80px;font-size: 20px;color:@ColorWhite ;border: 0;width: 360px;position: relative;left: 50%;transform: translateX(-180px);background: linear-gradient(to left,#0D46BF, #378DEC); /* 标准的语法 */};
-        .MainTitle{text-align: center;color: #000000;font-size: 40px;margin: 0;padding-bottom: 40px;position: relative;z-index: 999};
-        .InputT{border-radius: 8px 8px 0 0;background-color: @ColorWhite;font-size: 20px;width: 360px;position: relative;left: 50%;transform: translateX(-180px);border-bottom: 1px solid #DDDDDD}
-        .InputB{border-radius: 0 0 8px 8px;background-color: @ColorWhite;font-size: 20px;width: 360px;position: relative;left: 50%;transform: translateX(-180px)}
-        .HR{margin: 0;border: 0;background: #DDDDDD;height: 1px}
+
+        .AutoLogin {
+            color: @ColorWhite
+        }
+
+        ;
+
+        .LoginBtn {
+            border-radius: 8px;
+            height       : 80px;
+            font-size    : 20px;
+            color        : @ColorWhite ;
+            border       : 0;
+            width        : 360px;
+            position     : relative;
+            left         : 50%;
+            transform    : translateX(-180px);
+            background   : linear-gradient(to left, #0D46BF, #378DEC);
+            /* 标准的语法 */
+        }
+
+        ;
+
+        .MainTitle {
+            text-align    : center;
+            color         : #000000;
+            font-size     : 40px;
+            margin        : 0;
+            padding-bottom: 40px;
+            position      : relative;
+            z-index       : 999
+        }
+
+        ;
+
+        .InputT {
+            border-radius   : 8px 8px 0 0;
+            background-color: @ColorWhite;
+            font-size       : 20px;
+            width           : 360px;
+            position        : relative;
+            left            : 50%;
+            transform       : translateX(-180px);
+            border-bottom   : 1px solid #DDDDDD
+        }
+
+        .InputB {
+            border-radius   : 0 0 8px 8px;
+            background-color: @ColorWhite;
+            font-size       : 20px;
+            width           : 360px;
+            position        : relative;
+            left            : 50%;
+            transform       : translateX(-180px)
+        }
+
+        .HR {
+            margin    : 0;
+            border    : 0;
+            background: #DDDDDD;
+            height    : 1px
+        }
     }
-    .Filter{width: 50%;height: 100%;position: absolute;left: 50%;background-color: @ColorWhite;top:0;opacity: 0.8}
+
+    .Filter {
+        width           : 50%;
+        height          : 100%;
+        position        : absolute;
+        left            : 50%;
+        background-color: @ColorWhite;
+        top             : 0;
+        opacity         : 0.8
+    }
+
     /*将此全局样式放在 MainDiv 中,要不然会覆盖其它样式*/
     :global {
-        .ant-input{border-radius:25px;border: 0;padding: 0;background-color: #FFFFFF};
-        .ant-input-affix-wrapper .ant-input:not(:first-child){padding-left: 52px;}
-        .ant-input-affix-wrapper-lg{padding: unset;}
-        .ant-input-affix-wrapper{border: unset;}
-        .ant-input:focus{outline: none;box-shadow:0 0 0 0;}
-        .ant-input-lg{height: 80px;padding: 0}
-        .index__login___1MW8J .ant-form-item{margin-bottom: 0};
-        .index__login___1MW8J .index__submit___3bWpy{margin-top: 20px}
+        .ant-input {
+            border-radius   : 25px;
+            border          : 0;
+            padding         : 0;
+            background-color: #FFFFFF
+        }
+
+        ;
+
+        .ant-input-affix-wrapper .ant-input:not(:first-child) {
+            padding-left: 52px;
+        }
+
+        .ant-input-affix-wrapper-lg {
+            padding: unset;
+        }
+
+        .ant-input-affix-wrapper {
+            border: unset;
+        }
+
+        .ant-input:focus {
+            outline   : none;
+            box-shadow: 0 0 0 0;
+        }
+
+        .ant-input-lg {
+            height : 80px;
+            padding: 0
+        }
+
+        .index__login___1MW8J .ant-form-item {
+            margin-bottom: 0
+        }
+
+        ;
+
+        .index__login___1MW8J .index__submit___3bWpy {
+            margin-top: 20px
+        }
+
         //去掉 chrome input黄色背景色
-        input:-webkit-autofill { box-shadow: 0 0 0px 1000px #ffffff inset !important; }
+        input:-webkit-autofill {
+            box-shadow: 0 0 0px 1000px #ffffff inset !important;
+        }
+
         //去掉Input下margin
-        .ant-form-item{margin-bottom: 0}
+        .ant-form-item {
+            margin-bottom: 0
+        }
+
         //账号密码输入框文字颜色
-        .ant-input-affix-wrapper > input.ant-input{color: #000;}
+        .ant-input-affix-wrapper>input.ant-input {
+            color: #000;
+        }
     }
 }

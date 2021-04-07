@@ -3,82 +3,116 @@
 html,
 body,
 #root {
-  height: 100%;
-  font-size: 16px;
+    height   : 100%;
+    font-size: 16px;
 }
 
-.colorWeak {filter: invert(80%);}
+.colorWeak {
+    filter: invert(80%);
+}
 
 .ant-layout {
-  min-height: 100vh;
+    min-height: 100vh;
 }
 
-canvas {display: block;}
+canvas {
+    display: block;
+}
 
-body {text-rendering: optimizeLegibility;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+body {
+    text-rendering         : optimizeLegibility;
+    -webkit-font-smoothing : antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
 
 ul,
-ol {list-style: none;}
+ol {
+    list-style: none;
+}
 
 @media (max-width: @screen-xs) {
-  .ant-table {width: 100%;overflow-x: auto;
-    &-thead > tr,
-    &-tbody > tr {
-      > th,
-      > td {white-space: pre;
-        > span {display: block;}
-      }
+    .ant-table {
+        width     : 100%;
+        overflow-x: auto;
+
+        &-thead>tr,
+        &-tbody>tr {
+
+            >th,
+            >td {
+                white-space: pre;
+
+                >span {
+                    display: block;
+                }
+            }
+        }
     }
-  }
 }
 
 // 兼容IE11
-@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
-  body .ant-design-pro > .ant-layout {
-    min-height: 100vh;
-  }
+@media screen and(-ms-high-contrast: active),
+(-ms-high-contrast: none) {
+    body .ant-design-pro>.ant-layout {
+        min-height: 100vh;
+    }
 }
+
 // 主菜单按钮颜色-点击
-.ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected{
-  background: #C23531;
+.ant-menu.ant-menu-dark .ant-menu-item-selected,
+.ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+    background: #C23531;
 }
+
 // 主菜单按钮颜色-悬浮
-.ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover{
-  background: #a16c6a;
+.ant-menu-dark.ant-menu-horizontal>.ant-menu-item:hover {
+    background: #a16c6a;
 }
+
 // 去掉顶部面包屑
-.ant-page-header{display: none;}
+.ant-page-header {
+    display: none;
+}
+
 // Card title 字体
-.ant-card-head-title{
-  font-size: 16px !important;
-  font-weight: bold !important;
+.ant-card-head-title {
+    font-size  : 16px !important;
+    font-weight: bold !important;
 }
+
 // Menu 字体
-.ant-menu-item{
-  font-size: 16px !important;
+.ant-menu-item {
+    font-size: 16px !important;
 }
+
 // Tab 字体
-.ant-tabs-tab{
-  font-size: 16px !important;
+.ant-tabs-tab {
+    font-size: 16px !important;
 }
+
 // Select 字体
-.ant-select{
-  font-size: 16px !important;
+.ant-select {
+    font-size: 16px !important;
 }
+
 // 加载中动画样式
-.ant-spin-nested-loading > div > .ant-spin{
-  max-height: unset !important;
+.ant-spin-nested-loading>div>.ant-spin {
+    max-height: unset !important;
 }
-.ant-spin-container::after{
-  background-color: rgba(0, 0, 0, .5);
+
+.ant-spin-container::after {
+    background-color: rgba(0, 0, 0, .5);
 }
-.ant-spin-nested-loading > div > .ant-spin .ant-spin-text{
-  font-size: 16px !important;
+
+.ant-spin-nested-loading>div>.ant-spin .ant-spin-text {
+    font-size: 16px !important;
 }
+
 // 搜索条件组件
-.ant-checkbox-wrapper{
-  font-size: 16px !important;
+.ant-checkbox-wrapper {
+    font-size: 16px !important;
 }
-.ant-radio-button-wrapper{
-  font-size: 16px !important;
+
+.ant-radio-button-wrapper {
+    font-size: 16px !important;
 }

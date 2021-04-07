@@ -4,26 +4,26 @@
  * so there is no configuration of the production environment
  */
 export default {
-  dev: {
-    '/api/': {
-      // target: 'http://192.168.1.106:52663/',
-      target: 'http://localhost:52663/',
-      changeOrigin: true,
-      pathRewrite: { '^': '' },
+    dev: {
+        '/api/': {
+            // target: 'http://192.168.1.106:52663/',
+            target: 'http://localhost:52663/',
+            changeOrigin: true,
+            pathRewrite: { '^': '' },
+        },
     },
-  },
-  test: {
-    '/api/': {
-      target: 'http://localhost:52663/',
-      changeOrigin: true,
-      pathRewrite: { '^': '' },
+    test: {
+        '/api/': {
+            target: 'http://localhost:52663/',
+            changeOrigin: true,
+            pathRewrite: { '^': '' },
+        },
     },
-  },
-  pre: {
-    '/api/': {
-      target: 'http://localhost:52663/',
-      changeOrigin: true,
-      pathRewrite: { '^': '' },
+    pre: {
+        '/api/': {
+            target: 'http://localhost:52663/',
+            changeOrigin: true,
+            pathRewrite: { '^': '' },
+        },
     },
-  },
 };

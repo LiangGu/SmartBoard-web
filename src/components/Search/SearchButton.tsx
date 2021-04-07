@@ -1,12 +1,12 @@
 import Global from '@/global.d';
 import React, { useState, useContext, } from 'react';
 import { useModel } from 'umi';
-import { Button, Drawer, Checkbox, Row, Col, Select,} from 'antd';
+import { Button, Drawer, Checkbox, Row, Col, Select, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import { useForm, Controller, } from 'react-hook-form';
 //引入自定义方法
-import { 
+import {
     getYearList,
     GetBizType1List_RadioList,
     GetOceanTransportTypeList,
@@ -55,7 +55,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
     });
     //根据业务线和运输类型动态获取获取类型
     const [OceanTransportTypeList, setOceanTransportTypeList,] = useState(() => {
-        return GetOceanTransportTypeList(getselectBusinessesLine(),getselectBizType1List_Radio());
+        return GetOceanTransportTypeList(getselectBusinessesLine(), getselectBizType1List_Radio());
     });
 
 
@@ -63,7 +63,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
 
     /**
      *  单选
-     * */ 
+     * */
     // YearList                     :1
     const [year, setYear] = useState(() => {
         // 惰性赋值 any 类型,要不默认值不起作用
@@ -92,10 +92,10 @@ const SearchButton: React.FC<{}> = ({ }) => {
         return selectOceanTransportType;
     });
 
-    
+
     /**
      *  多选
-     * */ 
+     * */
     // MonthList                    :1
     const [checkedList1, setCheckedList1] = useState(() => {
         let searchInfoMonthList: any = initialState?.searchInfo?.MonthList;
@@ -184,7 +184,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                 //赋值运输类型
                 setBizType1List_Radio(GetBizType1List_RadioList(e)[0]?.Key || null);
                 //赋值运输类型显示值
-                setValue('bizType1List_Radio',GetBizType1List_RadioList(e)[0]?.Value || '');
+                setValue('bizType1List_Radio', GetBizType1List_RadioList(e)[0]?.Value || '');
 
                 /**
                  * 步骤2
@@ -194,7 +194,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                 //赋值货物类型
                 setOceanTransportType(GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Key || null);
                 //赋值货物类型显示值
-                setValue('oceanTransportType',GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Value || '');
+                setValue('oceanTransportType', GetOceanTransportTypeList(e, GetBizType1List_RadioList(e)[0]?.Key)[0]?.Value || '');
 
                 break;
             case 3:
@@ -208,7 +208,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                 //赋值货物类型
                 setOceanTransportType(GetOceanTransportTypeList(businessesLine, e)[0]?.Key || null);
                 //赋值货物类型显示值
-                setValue('oceanTransportType',GetOceanTransportTypeList(businessesLine, e)[0]?.Value || '');
+                setValue('oceanTransportType', GetOceanTransportTypeList(businessesLine, e)[0]?.Value || '');
 
                 break;
             case 4:
@@ -500,7 +500,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                                             return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
                                                         }) : null
                                                     }
-                                                </Select> 
+                                                </Select>
                                             )}
                                         />
                                     </form>
@@ -559,7 +559,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
 
                 {/* 货物类型<单选> */}
                 {
-                    [1.1, 1.2, 1.3, 5.2,].includes(PropsState) && OceanTransportTypeList.length > 0?
+                    [1.1, 1.2, 1.3, 5.2,].includes(PropsState) && OceanTransportTypeList.length > 0 ?
                         <>
                             <div className={styles.searchArea}>
                                 <Row className={styles.searchAreaLable}>
@@ -582,7 +582,7 @@ const SearchButton: React.FC<{}> = ({ }) => {
                                                             return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
                                                         }) : null
                                                     }
-                                                </Select> 
+                                                </Select>
                                             )}
                                         />
                                     </form>

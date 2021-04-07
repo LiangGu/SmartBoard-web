@@ -7,5 +7,5 @@ import { stringify } from 'qs';
  * Date:2020-12-14
  */
 export async function getDebtChartData(params?: any) {
-  return request(`/api/Board/GetReceivable?${stringify(params)}`);
+    return request(`/api/Board/GetReceivable?${stringify(params)}`);
 }

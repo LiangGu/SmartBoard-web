@@ -6,12 +6,12 @@ import classNames from 'classnames';
 import styles from './index.less';
 
 interface LoginSubmitProps extends ButtonProps {
-  className?: string;
+    className?: string;
 }
 
 const LoginSubmit: React.FC<LoginSubmitProps> = ({ className, ...rest }) => {
-  const clsString = classNames(styles.submit, className);
-  return <Button  className={clsString} loading type="primary" htmlType="submit" {...rest} />;
+    const clsString = classNames(styles.submit, className);
+    return <Button className={clsString} loading type="primary" htmlType="submit" {...rest} />;
 };
 
 export default LoginSubmit;

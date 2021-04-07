@@ -1,7 +1,7 @@
 import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Radio, Spin, Button, Drawer, Checkbox, Row, Col, Select,} from 'antd';
+import { Card, Radio, Spin, Button, Drawer, Checkbox, Row, Col, Select, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //  引入 ECharts 主模块
@@ -69,7 +69,7 @@ const ICProfitBranch: React.FC<{}> = () => {
 
     /**
      *  多选
-     * */ 
+     * */
     // MonthList                    :1
     const [checkedList1, setCheckedList1] = useState(() => {
         let searchInfoMonthList: any = initialState?.searchInfo?.MonthList;

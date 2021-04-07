@@ -7,5 +7,5 @@ import { stringify } from 'qs';
  * Date:2020-12-14
  */
 export async function getCashFlowChartData(params?: any) {
-  return request(`/api/Board/GetCash?${stringify(params)}`);
+    return request(`/api/Board/GetCash?${stringify(params)}`);
 }

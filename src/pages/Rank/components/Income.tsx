@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from 'react';
 import { useModel } from 'umi';
-import { Card, Radio, Spin, Button, Drawer, Checkbox, Row, Col, Select,} from 'antd';
+import { Card, Radio, Spin, Button, Drawer, Checkbox, Row, Col, Select, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
@@ -69,7 +69,7 @@ const RankIncome: React.FC<{}> = () => {
 
     /**
      *  多选
-     * */ 
+     * */
     // MonthList                    :1
     const [checkedList1, setCheckedList1] = useState(() => {
         let searchInfoMonthList: any = initialState?.searchInfo?.MonthList;
@@ -438,139 +438,139 @@ const RankIncome: React.FC<{}> = () => {
 
         <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} >搜索</Button>
         <Drawer
-                placement={"right"}
-                closable={false}
-                onClose={onClose}
-                visible={DrawerVisible}
-                key={"right"}
-                width={300}
-                footer={
-                    <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
-                        确定
+            placement={"right"}
+            closable={false}
+            onClose={onClose}
+            visible={DrawerVisible}
+            key={"right"}
+            width={300}
+            footer={
+                <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
+                    确定
                     </Button>
-                }
-            >
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>公司</Col>
-                    </Row>
+            }
+        >
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>公司</Col>
+                </Row>
+                <Row className={styles.searchAreaContent}>
+                    <Select
+                        style={{ width: "100%" }}
+                        defaultValue={parseInt(branch)}
+                        onChange={(e) => onSelect(e, 5)}
+                    >
+                        {
+                            BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
+                                return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
+                            }) : null
+                        }
+                    </Select>
+                </Row>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>年份</Col>
+                </Row>
+                <Row className={styles.searchAreaContent}>
+                    <Select
+                        style={{ width: "100%" }}
+                        defaultValue={parseInt(year)}
+                        onChange={(e) => onSelect(e, 1)}
+                    >
+                        {
+                            YearList && YearList.length > 0 ? YearList.map((x) => {
+                                return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
+                            }) : null
+                        }
+                    </Select>
+                </Row>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>月份</Col>
+                    <Checkbox indeterminate={indeterminate1} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll1}>
+                        全选
+                    </Checkbox>
+                </Row>
+                <Checkbox.Group value={checkedList1} onChange={(list) => onChange(1, list)}>
                     <Row className={styles.searchAreaContent}>
-                        <Select
-                            style={{ width: "100%" }}
-                            defaultValue={parseInt(branch)}
-                            onChange={(e) => onSelect(e, 5)}
-                        >
-                            {
-                                BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
-                                    return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
-                                }) : null
-                            }
-                        </Select>
+                        {
+                            MonthList && MonthList.length > 0 ? MonthList.map(x => {
+                                return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                            }) : null
+                        }
                     </Row>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>年份</Col>
-                    </Row>
+                </Checkbox.Group>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>业务线</Col>
+                    <Checkbox indeterminate={indeterminate2} onChange={(e) => onCheckAllChange(2, e)} checked={checkAll2}>
+                        全选
+                    </Checkbox>
+                </Row>
+                <Checkbox.Group value={checkedList2} onChange={(list) => onChange(2, list)}>
                     <Row className={styles.searchAreaContent}>
-                        <Select
-                            style={{ width: "100%" }}
-                            defaultValue={parseInt(year)}
-                            onChange={(e) => onSelect(e, 1)}
-                        >
-                            {
-                                YearList && YearList.length > 0 ? YearList.map((x) => {
-                                    return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
-                                }) : null
-                            }
-                        </Select>
+                        {
+                            BusinessesLineList && BusinessesLineList.length > 0 ? BusinessesLineList.map(x => {
+                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                            }) : null
+                        }
                     </Row>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>月份</Col>
-                        <Checkbox indeterminate={indeterminate1} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll1}>
-                            全选
+                </Checkbox.Group>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
+                    <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll3}>
+                        全选
                     </Checkbox>
+                </Row>
+                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(3, list)}>
+                    <Row className={styles.searchAreaContent}>
+                        {
+                            BizType1List_MultiSelect && BizType1List_MultiSelect.length > 0 ? BizType1List_MultiSelect.map(x => {
+                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                            }) : null
+                        }
                     </Row>
-                    <Checkbox.Group value={checkedList1} onChange={(list) => onChange(1, list)}>
-                        <Row className={styles.searchAreaContent}>
-                            {
-                                MonthList && MonthList.length > 0 ? MonthList.map(x => {
-                                    return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                }) : null
-                            }
-                        </Row>
-                    </Checkbox.Group>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>业务线</Col>
-                        <Checkbox indeterminate={indeterminate2} onChange={(e) => onCheckAllChange(2, e)} checked={checkAll2}>
-                            全选
+                </Checkbox.Group>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
+                    <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(4, e)} checked={checkAll4}>
+                        全选
                     </Checkbox>
+                </Row>
+                <Checkbox.Group value={checkedList4} onChange={(list) => onChange(4, list)}>
+                    <Row className={styles.searchAreaContent}>
+                        {
+                            BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
+                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                            }) : null
+                        }
                     </Row>
-                    <Checkbox.Group value={checkedList2} onChange={(list) => onChange(2, list)}>
-                        <Row className={styles.searchAreaContent}>
-                            {
-                                BusinessesLineList && BusinessesLineList.length > 0 ? BusinessesLineList.map(x => {
-                                    return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                }) : null
-                            }
-                        </Row>
-                    </Checkbox.Group>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>运输类型</Col>
-                        <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll3}>
-                            全选
+                </Checkbox.Group>
+            </div>
+            <div className={styles.searchArea}>
+                <Row className={styles.searchAreaLable}>
+                    <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
+                    <Checkbox indeterminate={indeterminate5} onChange={(e) => onCheckAllChange(5, e)} checked={checkAll5}>
+                        全选
                     </Checkbox>
+                </Row>
+                <Checkbox.Group value={checkedList5} onChange={(list) => onChange(5, list)}>
+                    <Row className={styles.searchAreaContent}>
+                        {
+                            OceanTransportTypeList_MultiSelect && OceanTransportTypeList_MultiSelect.length > 0 ? OceanTransportTypeList_MultiSelect.map(x => {
+                                return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                            }) : null
+                        }
                     </Row>
-                    <Checkbox.Group value={checkedList3} onChange={(list) => onChange(3, list)}>
-                        <Row className={styles.searchAreaContent}>
-                            {
-                                BizType1List_MultiSelect && BizType1List_MultiSelect.length > 0 ? BizType1List_MultiSelect.map(x => {
-                                    return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                }) : null
-                            }
-                        </Row>
-                    </Checkbox.Group>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>贸易类型</Col>
-                        <Checkbox indeterminate={indeterminate4} onChange={(e) => onCheckAllChange(4, e)} checked={checkAll4}>
-                            全选
-                    </Checkbox>
-                    </Row>
-                    <Checkbox.Group value={checkedList4} onChange={(list) => onChange(4, list)}>
-                        <Row className={styles.searchAreaContent}>
-                            {
-                                BizType2List && BizType2List.length > 0 ? BizType2List.map(x => {
-                                    return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                }) : null
-                            }
-                        </Row>
-                    </Checkbox.Group>
-                </div>
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>货物类型</Col>
-                        <Checkbox indeterminate={indeterminate5} onChange={(e) => onCheckAllChange(5, e)} checked={checkAll5}>
-                            全选
-                    </Checkbox>
-                    </Row>
-                    <Checkbox.Group value={checkedList5} onChange={(list) => onChange(5, list)}>
-                        <Row className={styles.searchAreaContent}>
-                            {
-                                OceanTransportTypeList_MultiSelect && OceanTransportTypeList_MultiSelect.length > 0 ? OceanTransportTypeList_MultiSelect.map(x => {
-                                    return <Col span={12} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
-                                }) : null
-                            }
-                        </Row>
-                    </Checkbox.Group>
-                </div>
+                </Checkbox.Group>
+            </div>
         </Drawer>
 
     </>

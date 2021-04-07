@@ -1,25 +1,63 @@
 @import '~antd/es/style/themes/default.less';
 
 .login {
-  :global {
-    .ant-tabs {
-      .ant-tabs-nav-list {margin: auto;}
-      .ant-tabs-bar {margin-bottom: 24px;text-align: center;border-bottom: 0;}
+    :global {
+        .ant-tabs {
+            .ant-tabs-nav-list {
+                margin: auto;
+            }
+
+            .ant-tabs-bar {
+                margin-bottom: 24px;
+                text-align   : center;
+                border-bottom: 0;
+            }
+        }
+
+        .ant-input-prefix {
+            margin: unset !important;
+            width : 0 !important;
+        }
     }
-    .ant-input-prefix{margin: unset !important;width: 0 !important;}
-  }
 
-  .getCaptcha {display: block;width: 100%;}
+    .getCaptcha {
+        display: block;
+        width  : 100%;
+    }
 
-  .icon {
-    margin-left: 16px;color: rgba(0, 0, 0, 0.2);font-size: 24px;vertical-align: middle;cursor: pointer;transition: color 0.3s;
-    &:hover {color: @primary-color;}
-  }
-  .other {
-    margin-top: 24px;line-height: 22px;text-align: left;
-    .register {float: right;}
-  }
-  .prefixIcon {color: @disabled-color;font-size: @font-size-base;position: relative;left: 20px;z-index: 999;}
+    .icon {
+        margin-left   : 16px;
+        color         : rgba(0, 0, 0, 0.2);
+        font-size     : 24px;
+        vertical-align: middle;
+        cursor        : pointer;
+        transition    : color 0.3s;
 
-  .submit {width: 100%;margin-top: 24px;}
+        &:hover {
+            color: @primary-color;
+        }
+    }
+
+    .other {
+        margin-top : 24px;
+        line-height: 22px;
+        text-align : left;
+
+        .register {
+            float: right;
+        }
+    }
+
+    .prefixIcon {
+        color    : @disabled-color;
+        font-size: @font-size-base;
+        position : relative;
+        left     : 20px;
+        z-index  : 999;
+    }
+
+    .submit {
+        width     : 100%;
+        margin-top: 24px;
+    }
 }
