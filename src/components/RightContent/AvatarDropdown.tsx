@@ -3,13 +3,11 @@ import { LogoutOutlined, } from '@ant-design/icons';
 import { Menu, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import { outLogin } from '@/services/login';
-import { setSystemMes, getUserName, getBranchID, getselectBranchName, } from '@/utils/auths';
+import { setSystemMes, getUserName, getBranchID, } from '@/utils/auths';
 import { stringify } from 'querystring';
 import styles from './index.less';
 //引入组件
 import HeaderDropdown from '../HeaderDropdown';
-import ChooseBranch from '../RightContent/ChooseBranch';
-
 
 export interface GlobalHeaderRightProps {
     menu?: boolean;
@@ -78,9 +76,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
     const displayName: string | null = getUserName();
     const branchID: string | null = getBranchID();
-    const branchName: string | null = getselectBranchName();
 
-    if (!displayName || !branchID || !branchName) {
+    if (!displayName || !branchID ) {
         return loading;
     }
 
@@ -88,19 +85,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
             <Menu.Item key="logout">
                 <LogoutOutlined />
-        退出登录
-      </Menu.Item>
+                    退出登录
+                </Menu.Item>
         </Menu>
     );
     return (
         <div className={styles.right}>
-            {/* 总部人员登录可以选择公司 */}
-            {/* {
-          branchID == '1'?
-          <>
-            <ChooseBranch/>
-          </> : null
-        } */}
             <HeaderDropdown overlay={menuHeaderDropdown}>
                 <span className={`${styles.action} ${styles.account}`}>
                     <span className={`${styles.name} anticon`}>{displayName}</span>

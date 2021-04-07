@@ -259,27 +259,31 @@ const CashFlow: React.FC<{}> = () => {
                 footer={
                     <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
                         确定
-          </Button>
+                    </Button>
                 }
             >
-                <div className={styles.searchArea}>
-                    <Row className={styles.searchAreaLable}>
-                        <Col span={12} className={styles.searchAreaTitle}>公司</Col>
-                    </Row>
-                    <Row className={styles.searchAreaContent}>
-                        <Select
-                            style={{ width: "100%" }}
-                            defaultValue={parseInt(branch)}
-                            onChange={(e) => onSelect(e, 5)}
-                        >
-                            {
-                                BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
-                                    return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
-                                }) : null
-                            }
-                        </Select>
-                    </Row>
-                </div>
+                {
+                    branch == '0' ?
+                        <div className={styles.searchArea}>
+                            <Row className={styles.searchAreaLable}>
+                                <Col span={12} className={styles.searchAreaTitle}>公司</Col>
+                            </Row>
+                            <Row className={styles.searchAreaContent}>
+                                <Select
+                                    style={{ width: "100%" }}
+                                    defaultValue={parseInt(branch)}
+                                    onChange={(e) => onSelect(e, 5)}
+                                >
+                                    {
+                                        BranchList && BranchList.length > 0 ? BranchList.map((x: any) => {
+                                            return <Select.Option key={x.BranchID} value={x.BranchID}>{x.BranchName}</Select.Option>
+                                        }) : null
+                                    }
+                                </Select>
+                            </Row>
+                        </div> : null
+                }
+
                 <div className={styles.searchArea}>
                     <Row className={styles.searchAreaLable}>
                         <Col span={12} className={styles.searchAreaTitle}>年份</Col>

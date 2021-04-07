@@ -483,7 +483,11 @@ const Debt: React.FC<{}> = () => {
                 </Card>
             </Spin>
 
-            <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} >搜索</Button>
+            {
+                branch == '0' ?
+                    <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} >搜索</Button> : null
+            }
+
             <Drawer
                 placement={"right"}
                 closable={false}
