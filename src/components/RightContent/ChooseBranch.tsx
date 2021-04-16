@@ -1,6 +1,6 @@
 import Global from '@/global.d';
 import React, { useState, } from 'react';
-import { useModel } from 'umi';
+import { useModel, } from 'umi';
 import { Drawer, Button, Radio, Row, Col, } from 'antd';
 import styles from './index.less';
 import {

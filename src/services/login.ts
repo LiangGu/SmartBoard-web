@@ -36,3 +36,10 @@ export async function outLogin() {
 export async function getBranchList(params?: any) {
     return request(`/api/Board/GetStatisticBranchs?${stringify(params)}`);
 }
+
+/**
+ * 获取HR图表中：业务线和职能部门List
+ */
+export async function getHRListVO(params?: any) {
+    return request(`/api/Board/getFunctionalDepartments?${stringify(params)}`);
+}

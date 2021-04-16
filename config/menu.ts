@@ -42,8 +42,21 @@ export default {
             component: './Rank/Rank',
         },
         {
+            path: '/businessLine',
+            name: 'businessLine',
+            icon: 'FundOutlined',
+            component: './HR/BusinessLine/BusinessLine',
+        },
+        {
+            path: '/functional',
+            name: 'functional',
+            icon: 'SolutionOutlined',
+            component: './HR/Functional/Functional',
+        },
+        {
             path: '/',
-            redirect: './volume',
+            // redirect: './volume',
+            redirect: './businessLine',
         },
         {
             component: './404',

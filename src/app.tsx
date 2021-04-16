@@ -1,13 +1,13 @@
 import React from 'react';
 import { BasicLayoutProps, Settings as LayoutSettings, MenuDataItem, } from '@ant-design/pro-layout';
-import { notification } from 'antd';
+import { notification, } from 'antd';
 import { history, RequestConfig, } from 'umi';
 import RightContent from '@/components/RightContent';
-import { RequestOptionsInit, ResponseError } from 'umi-request';
+import { RequestOptionsInit, ResponseError, } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
 import menu from '../config/menu';
-import { extend } from '@/utils/utils';
-import { getToken, getUserID } from '@/utils/auths';
+import { extend, } from '@/utils/utils';
+import { getToken, getUserID, } from '@/utils/auths';
 import {
     SmileOutlined,
     HeartOutlined,
@@ -18,6 +18,8 @@ import {
     MoneyCollectOutlined,
     LineChartOutlined,
     TransactionOutlined,
+    FundOutlined,
+    SolutionOutlined,
 } from '@ant-design/icons';
 import logo from '@/assets/logo.svg'
 export async function getInitialState(): Promise<{
@@ -42,6 +44,8 @@ const IconMap = {
     MoneyCollectOutlined: <MoneyCollectOutlined />,
     LineChartOutlined: <LineChartOutlined />,
     TransactionOutlined: <TransactionOutlined />,
+    FundOutlined: <FundOutlined />,
+    SolutionOutlined: <SolutionOutlined />,
     //如何使用自定义的图标?
     // Home: <img src={require('../src/assets/menuIcon/home.svg')} style={{width: '1em', height: '1em',marginBottom: 5}}/>
 };

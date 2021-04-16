@@ -2,7 +2,7 @@ import Global from '@/global.d';
 import { Alert, message } from 'antd';
 import React, { useState } from 'react';
 import { useModel, history, History } from 'umi';
-import { LoginParamsType, login, getBranchList, } from '@/services/login';
+import { LoginParamsType, login, getBranchList, getHRListVO, } from '@/services/login';
 import LoginFrom from './components/Login';
 import styles from './style.less';
 import menu from '@/../config/menu';
@@ -55,8 +55,10 @@ const Login: React.FC<{}> = () => {
             resultOfLoginInfo = await login({ ...values });
             if (resultOfLoginInfo.Result == true && initialState) {
                 message.success('登录成功！');
-                //登录成功后再去后台取公司列表
+                //登录成功取公司列表
                 const resultOfBranchList = await getBranchList();
+                //登录成功取HR图表中：业务线和职能部门
+                const resultOfHRListVO = await getHRListVO({ type: 3 });
                 //当前登录用户信息
                 let currentUser: API.CurrentUser = resultOfLoginInfo.Content;
                 let menuData: MenuDataItem[] = menu.menuData;
@@ -77,6 +79,7 @@ const Login: React.FC<{}> = () => {
                 });
                 let sysSaveData: Global.SessionSysSave = {
                     branchList: resultOfBranchList,
+                    hrListVO: resultOfHRListVO,
                     userName: currentUser.DisplayName,
                     userID: currentUser.ID.toString(),
                     branchID: currentUser.BranchID.toString(),

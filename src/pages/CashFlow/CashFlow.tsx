@@ -1,5 +1,4 @@
 import React, { useState, useEffect, } from 'react';
-import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Spin, Row, Col, Button, Drawer, Select } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
@@ -25,7 +24,6 @@ import {
 } from '@/utils/auths';
 
 const CashFlow: React.FC<{}> = () => {
-    const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
 
