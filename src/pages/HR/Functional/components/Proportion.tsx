@@ -11,7 +11,6 @@ import 'echarts/lib/chart/bar';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import { HRBranchList, MonthList, } from '@/utils/baseData';
-import { getHRListVO, } from '@/utils/auths';
 import { getYearList, } from '@/utils/utils';
 //调用API
 import { getMonthChartData, } from '@/services/hr';
@@ -20,11 +19,6 @@ import { getMonthChartData, } from '@/services/hr';
 const Proportion: React.FC<{}> = () => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
-
-    //数据集
-    const [HRListOfType,] = useState(() => {
-        return getHRListVO().filter((x: { Type: number; }) => x.Type == 1);
-    });
 
     /**
      *  多选
@@ -71,7 +65,6 @@ const Proportion: React.FC<{}> = () => {
 
     let Chart_Proportion_Bar: any;
     let initChart = (ProportionData: any, TotalProportionData: any) => {
-        console.log(ProportionData, TotalProportionData)
         let Element_Proportion_Bar = document.getElementById('ProportionChart');
         let Option_Proportion_Bar: any;
         if (Element_Proportion_Bar) {
@@ -167,7 +160,6 @@ const Proportion: React.FC<{}> = () => {
             year: getYearList().map(x => x.Key),
             month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             company: HRBranchList.map(x => x.branchName),
-            type: HRListOfType.map((x: { ID: number; }) => x.ID),
         };
         fetchData(ParamsInfo);
     }, []);
