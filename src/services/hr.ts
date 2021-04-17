@@ -7,7 +7,10 @@ import { stringify } from 'qs';
  * Date:2020-04-16
  */
 export async function getMonthChartData(params?: any) {
-    return request(`/api/Board/getTotal?${stringify(params)}`);
+    return request(`/api/Board/getTotal`, {
+        method: 'POST',
+        data: params
+    });
 }
 
 /**

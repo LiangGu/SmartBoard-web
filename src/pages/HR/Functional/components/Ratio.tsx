@@ -44,7 +44,7 @@ const Ratio: React.FC<{}> = () => {
 
     // 业务线                   :3
     const [checkedList3, setCheckedList3] = useState(() => {
-        return HRListOfType.map((y: { Name: any; }) => y.Name);
+        return HRListOfType.map((x: { ID: number; }) => x.ID);
     });
     const [indeterminate3, setIndeterminate3] = useState(false);
     const [checkAll3, setCheckAll3] = useState(true);
@@ -195,7 +195,7 @@ const Ratio: React.FC<{}> = () => {
             year: getYearList().map(x => x.Key),
             month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             company: HRBranchList.map(x => x.branchName),
-            type: HRListOfType.map((y: { Name: any; }) => y.Name),
+            type: HRListOfType.map((x: { ID: number; }) => x.ID),
         };
         fetchData(ParamsInfo);
     }, []);
@@ -289,7 +289,7 @@ const Ratio: React.FC<{}> = () => {
                         <Row className={styles.searchAreaContent}>
                             {
                                 HRListOfType && HRListOfType.length > 0 ? HRListOfType.map((x: { ID: number; Name: string; }) => {
-                                    return <Col span={24} key={x.ID} style={{ marginBottom: 5, }}><Checkbox value={x.Name}>{x.Name}</Checkbox></Col>
+                                    return <Col span={24} key={x.ID} style={{ marginBottom: 5, }}><Checkbox value={x.ID}>{x.Name}</Checkbox></Col>
                                 }) : null
                             }
                         </Row>

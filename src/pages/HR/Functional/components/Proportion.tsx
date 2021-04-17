@@ -167,7 +167,7 @@ const Proportion: React.FC<{}> = () => {
             year: getYearList().map(x => x.Key),
             month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             company: HRBranchList.map(x => x.branchName),
-            type: HRListOfType.map((y: { Name: any; }) => y.Name),
+            type: HRListOfType.map((x: { ID: number; }) => x.ID),
         };
         fetchData(ParamsInfo);
     }, []);
