@@ -77,9 +77,6 @@ const Proportion: React.FC<{}> = () => {
         if (Element_Proportion_Bar) {
             Chart_Proportion_Bar = echarts.init(Element_Proportion_Bar as HTMLDivElement);
             Option_Proportion_Bar = {
-                title: {
-                    text: `累计同比`,
-                },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {

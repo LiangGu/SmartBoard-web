@@ -72,9 +72,6 @@ const YearOverYear: React.FC<{}> = () => {
         if (Element_YearOverYear_Bar) {
             Chart_YearOverYear_Bar = echarts.init(Element_YearOverYear_Bar as HTMLDivElement);
             Option_YearOverYear_Bar = {
-                title: {
-                    text: `累计同比`,
-                },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {

@@ -83,9 +83,6 @@ const Ratio: React.FC<{}> = () => {
         if (Element_RatioChart_Pie) {
             Chart_RatioChart_Pie = echarts.init(Element_RatioChart_Pie as HTMLDivElement);
             Option_RatioChart_Pie = {
-                title: {
-                    text: '人数比例',
-                },
                 tooltip: {
                     trigger: 'item',
                     formatter: '{b} : {c} ({d}%)',
