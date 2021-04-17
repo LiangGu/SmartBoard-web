@@ -55,8 +55,7 @@ export default {
         },
         {
             path: '/',
-            // redirect: './volume',
-            redirect: './businessLine',
+            redirect: './volume',
         },
         {
             component: './404',
