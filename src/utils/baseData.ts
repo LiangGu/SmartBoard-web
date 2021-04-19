@@ -91,26 +91,25 @@ export const OceanTransportTypeList_MultiSelect = [
 //     { Key: 24, Value: "空运事业部(深圳)" },
 // ]
 
-
 /**
- * 人力公司
- * 
+ * 人力资源公司数据
  */
 export const HRBranchList = [
-    { branchName: "中国外运(香港)物流有限公司" },
-    { branchName: "中外运(深圳)供应链管理有限公司" },
-    { branchName: "工程物流事业部(伟运)" },
-    { branchName: "大宗商品部" },
+    { branchName: "香港物流" },
+    { branchName: "(深圳)供应链" },
+    { branchName: "工程事业部" },
+    { branchName: "香港船务" },
+    { branchName: "上海伟运" },
+    { branchName: "泰国公司" },
+    { branchName: "马来西亚公司" },
+    { branchName: "香港仓储" },
+    { branchName: "印尼公司" },
+    { branchName: "越南公司" },
+    { branchName: "缅甸公司" },
+    { branchName: "菲律宾公司" },
+    { branchName: "柬埔寨公司" },
+    { branchName: "大宗商品" },
     { branchName: "电子商务部" },
-    { branchName: "供应链金融事业部" },
     { branchName: "空运事业部" },
-    { branchName: "中国外运(香港)船务有限公司" },
-    { branchName: "上海伟运国际物流有限公司" },
-    { branchName: "中国外运(泰国)物流有限公司" },
-    { branchName: "中国外运物流(马来西亚)有限公司" },
-    { branchName: "中国外运(印尼)有限公司" },
-    { branchName: "中国外运(柬埔寨)物流有限公司" },
-    { branchName: "中国外运(缅甸)物流有限公司" },
-    { branchName: "中越外运物流有限公司" },
-    { branchName: "中国外运(菲律宾)物流有限公司" },
+    { branchName: "供应链金融事业部" },
 ]

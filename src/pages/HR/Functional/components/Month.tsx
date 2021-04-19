@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Button, Drawer, Checkbox, } from 'antd';
+import { Card, Spin, Row, Col, Button, Drawer, Checkbox, Select, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
@@ -16,31 +16,35 @@ import { getYearList, } from '@/utils/utils';
 //调用API
 import { getMonthChartData, } from '@/services/hr';
 
+//日期
+const date = new Date()
+
 const Month: React.FC<{}> = () => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
 
     //数据集
+    const [YearList,] = useState(() => {
+        return getYearList();
+    });
+    const [MonthListVO,] = useState(MonthList);
     const [HRListOfType,] = useState(() => {
         return getHRListVO().filter((x: { Type: number; }) => x.Type == 1);
     });
 
     /**
+     *  单选
+     * */
+    // 年份
+    const [year, setYear] = useState(date.getFullYear());
+
+    // 月份
+    const [month, setMonth] = useState(date.getMonth() + 1);
+
+    /**
      *  多选
      * */
-    // 年份                    :1
-    const [checkedList1, setCheckedList1] = useState(() => {
-        return getYearList().map(x => x.Key);
-    });
-    const [indeterminate1, setIndeterminate1] = useState(false);
-    const [checkAll1, setCheckAll1] = useState(true);
-
-    // 月份                    :2
-    const [checkedList2, setCheckedList2] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-    const [indeterminate2, setIndeterminate2] = useState(false);
-    const [checkAll2, setCheckAll2] = useState(true);
-
-    // 业务线                   :3
+    // 业务线                   :1
     const [checkedList3, setCheckedList3] = useState(() => {
         return HRListOfType.map((x: { ID: number; }) => x.ID);
     });
@@ -140,8 +144,8 @@ const Month: React.FC<{}> = () => {
      */
     useEffect(() => {
         let ParamsInfo: object = {
-            year: getYearList().map(x => x.Key),
-            month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            year: [year],
+            month: [month],
             company: HRBranchList.map(x => x.branchName),
             type: HRListOfType.map((x: { ID: number; }) => x.ID),
         };
@@ -156,16 +160,6 @@ const Month: React.FC<{}> = () => {
     const onChange = (T: Number, list: any) => {
         switch (T) {
             case 1:
-                setCheckedList1(list);
-                setIndeterminate1(!!list.length && list.length < getYearList().length);
-                setCheckAll1(list.length === getYearList().length);
-                break;
-            case 2:
-                setCheckedList2(list);
-                setIndeterminate2(!!list.length && list.length < MonthList.length);
-                setCheckAll2(list.length === MonthList.length);
-                break;
-            case 3:
                 setCheckedList3(list);
                 setIndeterminate3(!!list.length && list.length < HRListOfType.length);
                 setCheckAll3(list.length === HRListOfType.length);
@@ -182,19 +176,26 @@ const Month: React.FC<{}> = () => {
     const onCheckAllChange = (T: Number, e: any) => {
         switch (T) {
             case 1:
-                setCheckedList1(e.target.checked ? getYearList().map(x => x.Key) : []);
-                setIndeterminate1(false);
-                setCheckAll1(e.target.checked);
-                break;
-            case 2:
-                setCheckedList2(e.target.checked ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] : []);
-                setIndeterminate2(false);
-                setCheckAll2(e.target.checked);
-                break;
-            case 3:
                 setCheckedList3(e.target.checked ? HRListOfType.map((y: { Name: any; }) => y.Name) : []);
                 setIndeterminate3(false);
                 setCheckAll3(e.target.checked);
+                break;
+            default: return;
+        }
+    }
+
+    /**
+     * 下拉选择
+     * @param T:1.年份 2.月份
+     * @param list 
+     */
+    const onSelect = (e: any, T: Number,) => {
+        switch (T) {
+            case 1:
+                setYear(e);
+                break;
+            case 2:
+                setMonth(e);
                 break;
             default: return;
         }
@@ -212,8 +213,8 @@ const Month: React.FC<{}> = () => {
      */
     const onSearch = () => {
         let ParamsInfo: object = {
-            year: checkedList1,
-            month: checkedList2,
+            year: [year],
+            month: [month],
             company: HRBranchList.map(x => x.branchName),       //前台不用添加公司的搜索条件，默认传过去
             type: checkedList3,
         };
@@ -247,45 +248,47 @@ const Month: React.FC<{}> = () => {
                 <div className={styles.searchArea}>
                     <Row className={styles.searchAreaLable}>
                         <Col span={12} className={styles.searchAreaTitle}>年份</Col>
-                        <Checkbox indeterminate={indeterminate1} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll1}>
-                            全选
-                    </Checkbox>
                     </Row>
-                    <Checkbox.Group value={checkedList1} onChange={(list) => onChange(1, list)}>
-                        <Row className={styles.searchAreaContent}>
+                    <Row className={styles.searchAreaContent}>
+                        <Select
+                            style={{ width: "100%" }}
+                            defaultValue={year}
+                            onChange={(e) => onSelect(e, 1)}
+                        >
                             {
-                                getYearList() && getYearList().length > 0 ? getYearList().map(x => {
-                                    return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                YearList && YearList.length > 0 ? YearList.map((x) => {
+                                    return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
                                 }) : null
                             }
-                        </Row>
-                    </Checkbox.Group>
+                        </Select>
+                    </Row>
                 </div>
                 <div className={styles.searchArea}>
                     <Row className={styles.searchAreaLable}>
                         <Col span={12} className={styles.searchAreaTitle}>月份</Col>
-                        <Checkbox indeterminate={indeterminate2} onChange={(e) => onCheckAllChange(2, e)} checked={checkAll2}>
-                            全选
-                    </Checkbox>
                     </Row>
-                    <Checkbox.Group value={checkedList2} onChange={(list) => onChange(2, list)}>
-                        <Row className={styles.searchAreaContent}>
+                    <Row className={styles.searchAreaContent}>
+                        <Select
+                            style={{ width: "100%" }}
+                            defaultValue={month}
+                            onChange={(e) => onSelect(e, 2)}
+                        >
                             {
-                                MonthList && MonthList.length > 0 ? MonthList.map(x => {
-                                    return <Col span={8} key={x.Key} style={{ marginBottom: 5, }}><Checkbox value={x.Key}>{x.Value}</Checkbox></Col>
+                                MonthListVO && MonthListVO.length > 0 ? MonthListVO.map((x) => {
+                                    return <Select.Option key={x.Key} value={x.Key}>{x.Value}</Select.Option>
                                 }) : null
                             }
-                        </Row>
-                    </Checkbox.Group>
+                        </Select>
+                    </Row>
                 </div>
                 <div className={styles.searchArea}>
                     <Row className={styles.searchAreaLable}>
                         <Col span={12} className={styles.searchAreaTitle}>业务</Col>
-                        <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll3}>
+                        <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll3}>
                             全选
                     </Checkbox>
                     </Row>
-                    <Checkbox.Group value={checkedList3} onChange={(list) => onChange(3, list)}>
+                    <Checkbox.Group value={checkedList3} onChange={(list) => onChange(1, list)}>
                         <Row className={styles.searchAreaContent}>
                             {
                                 HRListOfType && HRListOfType.length > 0 ? HRListOfType.map((x: { ID: number; Name: string; }) => {
