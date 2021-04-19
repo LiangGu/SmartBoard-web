@@ -24,7 +24,7 @@ const ICProfit: React.FC<{}> = () => {
                 onChange={onTabChange} tabBarGutter={20}
                 tabBarExtraContent={
                     <Switch
-                        checkedChildren='员工线'
+                        checkedChildren='业务线'
                         unCheckedChildren='职能线'
                         onChange={(e) => {
                             setIsStaff(e);
@@ -46,13 +46,13 @@ const ICProfit: React.FC<{}> = () => {
                         parentType={parentType}
                     />
                 </TabPane>
-                <TabPane tab="员工人数比例" key="3">
+                <TabPane tab="人数比例" key="3">
                     <Ratio
                         isStaff={isStaff}
                         parentType={parentType}
                     />
                 </TabPane>
-                <TabPane tab="员工人数占比" key="4">
+                <TabPane tab="人数占比" key="4">
                     <Proportion
                         isStaff={isStaff}
                         parentType={parentType}
