@@ -15,12 +15,19 @@ import { getYearList, } from '@/utils/utils';
 //调用API
 import { getMonthChartData, } from '@/services/hr';
 
+//父组件传过来的Props
+type Props = {
+    isStaff: boolean,
+    parentType: number,
+}
+
 //日期
 const date = new Date()
 
-const Proportion: React.FC<{}> = () => {
+const Proportion: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
+    const [type, setType] = useState(props.parentType);
 
     //数据集
     const [YearList,] = useState(() => {
@@ -38,7 +45,7 @@ const Proportion: React.FC<{}> = () => {
     const [month, setMonth] = useState(date.getMonth() + 1);
 
     //获取数据
-    let fetchData = async (ParamsInfo: any,) => {
+    let fetchData = async (ParamsInfo: any, SelectType: number) => {
         setloading(true);
         const result = await getMonthChartData(ParamsInfo);
         let ProportionData: any = [];       //人力数据
@@ -48,7 +55,7 @@ const Proportion: React.FC<{}> = () => {
         }
         if (result) {
             if (result.length > 0) {
-                ProportionData = result.filter((x: { Type: number; }) => x.Type == 2);
+                ProportionData = result.filter((x: { Type: number; }) => x.Type == SelectType);
                 let keysArr = [...new Set(result.map((item: { BranchName: any; }) => item.BranchName))];
                 keysArr.forEach(item => {
                     const arr = result.filter((x: { BranchName: string; }) => x.BranchName == item);
@@ -127,7 +134,7 @@ const Proportion: React.FC<{}> = () => {
                 series: [
                     {
                         type: 'bar',
-                        name: `业务员工`,
+                        name: `职能员工`,
                         label: {
                             show: true,
                             position: 'right',
@@ -154,17 +161,22 @@ const Proportion: React.FC<{}> = () => {
         }
     }
 
-    /**
-     * 第2个参数传 [] 相当于 componentDidUpdate 钩子
-     */
+    //当用户切换 Switch 时更新 type 和 HRListOfType 和 checkedList3
     useEffect(() => {
+        setType(props.isStaff ? 2 : 1);
+        let SelectType = 2;
+        if (props.isStaff) {
+            SelectType = 2;
+        } else {
+            SelectType = 1;
+        }
         let ParamsInfo: object = {
             year: [year],
             month: [month],
             company: HRBranchList.map(x => x.branchName),
         };
-        fetchData(ParamsInfo);
-    }, []);
+        fetchData(ParamsInfo, SelectType);
+    }, [props.isStaff]);
 
     /**
      * 下拉选择
@@ -199,7 +211,7 @@ const Proportion: React.FC<{}> = () => {
             month: [month],
             company: HRBranchList.map(x => x.branchName),       //前台不用添加公司的搜索条件，默认传过去
         };
-        fetchData(ParamsInfo);
+        fetchData(ParamsInfo, type);
         //关闭 Drawer
         setDrawerVisible(false);
     }

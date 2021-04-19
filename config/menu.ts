@@ -41,17 +41,23 @@ export default {
             icon: 'UserOutlined',
             component: './Rank/Rank',
         },
+        // {
+        //     path: '/businessLine',
+        //     name: 'businessLine',
+        //     icon: 'FundOutlined',
+        //     component: './HR/BusinessLine/BusinessLine',
+        // },
+        // {
+        //     path: '/functional',
+        //     name: 'functional',
+        //     icon: 'SolutionOutlined',
+        //     component: './HR/Functional/Functional',
+        // },
         {
-            path: '/businessLine',
-            name: 'businessLine',
-            icon: 'FundOutlined',
-            component: './HR/BusinessLine/BusinessLine',
-        },
-        {
-            path: '/functional',
-            name: 'functional',
+            path: '/staffNum',
+            name: 'staffNum',
             icon: 'SolutionOutlined',
-            component: './HR/Functional/Functional',
+            component: './HR/StaffNum/StaffNum',
         },
         {
             path: '/',

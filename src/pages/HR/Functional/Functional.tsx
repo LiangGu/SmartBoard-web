@@ -22,10 +22,10 @@ const ICProfit: React.FC<{}> = () => {
                 <TabPane tab="月份同比" key="2">
                     <YearOverYear />
                 </TabPane>
-                <TabPane tab="人员人数比例" key="3">
+                <TabPane tab="员工人数比例" key="3">
                     <Ratio />
                 </TabPane>
-                <TabPane tab="人员人数占比" key="4">
+                <TabPane tab="员工人数占比" key="4">
                     <Proportion />
                 </TabPane>
             </Tabs>

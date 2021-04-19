@@ -1,28 +1,38 @@
 import React, { useState, useEffect, } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Button, Drawer, Select, } from 'antd';
+import { Card, Spin, Row, Col, Button, Drawer, Checkbox, Select, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
-import 'echarts/lib/chart/bar';
+import 'echarts/lib/chart/pie';
 // 引入提示框和标题组件
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
 import { HRBranchList, MonthList, } from '@/utils/baseData';
+import { getHRListVO, } from '@/utils/auths';
 import { getYearList, } from '@/utils/utils';
 //调用API
 import { getMonthChartData, } from '@/services/hr';
 
+//父组件传过来的Props
+type Props = {
+    isStaff: boolean,
+    parentType: number,
+}
+
 //日期
 const date = new Date()
 
-const Proportion: React.FC<{}> = () => {
+const Ratio: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
+    const [type, setType] = useState(props.parentType);
 
     //数据集
+    const [HRListOfType, setHRListOfType] = useState(getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType));
     const [YearList,] = useState(() => {
         return getYearList();
     });
@@ -37,46 +47,51 @@ const Proportion: React.FC<{}> = () => {
     // 月份
     const [month, setMonth] = useState(date.getMonth() + 1);
 
+    /**
+     *  多选
+     * */
+    // 业务线                   :1
+    const [checkedList3, setCheckedList3] = useState(HRListOfType.map((x: { ID: number; }) => x.ID));
+    const [indeterminate3, setIndeterminate3] = useState(false);
+    const [checkAll3, setCheckAll3] = useState(true);
+
     //获取数据
-    let fetchData = async (ParamsInfo: any,) => {
+    let fetchData = async (ParamsInfo: any, SelectType: number) => {
         setloading(true);
         const result = await getMonthChartData(ParamsInfo);
-        let ProportionData: any = [];       //人力数据
-        let TotalProportionData: any = [];  //总数据
+        let RatioChartData: any = [];
         if (!result) {
             return;
         }
         if (result) {
             if (result.length > 0) {
-                ProportionData = result.filter((x: { Type: number; }) => x.Type == 2);
-                let keysArr = [...new Set(result.map((item: { BranchName: any; }) => item.BranchName))];
-                keysArr.forEach(item => {
-                    const arr = result.filter((x: { BranchName: string; }) => x.BranchName == item);
-                    const sum = arr.reduce((a: any, b: { Num: number; }) => a + b.Num, 0)
-                    TotalProportionData.push({
-                        BranchName: item,
-                        Num: sum,
-                    });
-                });
+                RatioChartData = result.filter((x: { Type: number; }) => x.Type == SelectType);
             }
             //将值传给初始化图表的函数
-            initChart(ProportionData, TotalProportionData);
+            initChart(RatioChartData);
             setloading(false);
         }
     }
 
-    let Chart_Proportion_Bar: any;
-    let initChart = (ProportionData: any, TotalProportionData: any) => {
-        let Element_Proportion_Bar = document.getElementById('ProportionChart');
-        let Option_Proportion_Bar: any;
-        if (Element_Proportion_Bar) {
-            Chart_Proportion_Bar = echarts.init(Element_Proportion_Bar as HTMLDivElement);
-            Option_Proportion_Bar = {
+    let Chart_RatioChart_Pie: any;
+    let initChart = (RatioChartData: any) => {
+        let Element_RatioChart_Pie = document.getElementById('RatioChart');
+        let Option_RatioChart_Pie: any;
+        let seriesData: any = [];
+        if (RatioChartData && RatioChartData.length > 0) {
+            RatioChartData.map((x: { BranchName: string; Num: number }) => {
+                seriesData.push({
+                    value: x.Num,
+                    name: x.BranchName,
+                });
+            });
+        }
+        if (Element_RatioChart_Pie) {
+            Chart_RatioChart_Pie = echarts.init(Element_RatioChart_Pie as HTMLDivElement);
+            Option_RatioChart_Pie = {
                 tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    trigger: 'item',
+                    formatter: '{b} : {c} ({d}%)',
                 },
                 toolbox: {
                     feature: {
@@ -93,78 +108,70 @@ const Proportion: React.FC<{}> = () => {
                     bottom: '10%',
                     containLabel: true,
                 },
-                xAxis: {
-                    type: 'value',
-                    axisLabel: {
-                        show: true,
-                        color: 'black',
-                        fontSize: 16,
-                    },
-                    boundaryGap: [0, 0.01],
-                },
                 legend: {
-                    bottom: 'bottom',
+                    right: 'right',
                     textStyle: {
                         color: 'black',
                         fontSize: 16,
                     },
-                },
-                yAxis: {
-                    type: 'category',
-                    name: `单位: 人`,
-                    scale: true,
-                    axisLabel: {
-                        show: true,
-                        color: 'black',
-                        fontSize: 16,
-                    },
-                    nameTextStyle: {
-                        color: 'black',
-                        fontSize: 16,
-                    },
-                    data: ProportionData.map((x: { BranchName: string; }) => x.BranchName),
+                    data: RatioChartData.map((x: { BranchName: string; }) => x.BranchName),
                 },
                 series: [
                     {
-                        type: 'bar',
-                        name: `业务员工`,
+                        type: 'pie',
+                        radius: '70%',
+                        center: ['50%', '50%'],
+                        data: seriesData,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                            }
+                        },
                         label: {
                             show: true,
-                            position: 'right',
-                            color: 'black',
                             fontSize: 16,
                         },
-                        data: ProportionData.map((x: { Num: number; }) => x.Num),
-                    },
-                    {
-                        type: 'bar',
-                        name: `整体职工`,
-                        label: {
-                            show: true,
-                            position: 'right',
-                            color: 'black',
-                            fontSize: 16,
-                        },
-                        data: TotalProportionData.map((x: { Num: number; }) => x.Num),
                     },
                 ]
             };
-            Chart_Proportion_Bar.setOption(Option_Proportion_Bar, true);
-            window.addEventListener('resize', () => { Chart_Proportion_Bar.resize() });
+            Chart_RatioChart_Pie.setOption(Option_RatioChart_Pie, true);
+            window.addEventListener('resize', () => { Chart_RatioChart_Pie.resize() });
         }
     }
 
     /**
-     * 第2个参数传 [] 相当于 componentDidUpdate 钩子
+     * 单选
+     * @param T
+     * @param list 
      */
-    useEffect(() => {
-        let ParamsInfo: object = {
-            year: [year],
-            month: [month],
-            company: HRBranchList.map(x => x.branchName),
-        };
-        fetchData(ParamsInfo);
-    }, []);
+    const onChange = (T: Number, list: any) => {
+        switch (T) {
+            case 1:
+                setCheckedList3(list);
+                setIndeterminate3(!!list.length && list.length < HRListOfType.length);
+                setCheckAll3(list.length === HRListOfType.length);
+                break;
+            default: return;
+        }
+    }
+
+    /**
+     * 全选
+     * @param T 
+     * @param e 
+     */
+    const onCheckAllChange = (T: Number, e: any) => {
+        switch (T) {
+            case 1:
+                setCheckedList3(e.target.checked ? HRListOfType.map((x: { ID: number; }) => x.ID) : []);
+                setIndeterminate3(false);
+                setCheckAll3(e.target.checked);
+                break;
+            default: return;
+        }
+    }
 
     /**
      * 下拉选择
@@ -183,6 +190,28 @@ const Proportion: React.FC<{}> = () => {
         }
     }
 
+    //当用户切换 Switch 时更新 type 和 HRListOfType 和 checkedList3
+    useEffect(() => {
+        setType(props.isStaff ? 2 : 1);
+        let HRListOfTypeList = [];
+        let SelectType = 2;
+        if (props.isStaff) {
+            HRListOfTypeList = getHRListVO().filter((x: { Type: number; }) => x.Type == 2);
+        } else {
+            HRListOfTypeList = getHRListVO().filter((x: { Type: number; }) => x.Type == 1);
+            SelectType = 1;
+        }
+        setHRListOfType(HRListOfTypeList);
+        setCheckedList3(HRListOfTypeList.map((x: { ID: number; }) => x.ID));
+        let ParamsInfo: object = {
+            year: [year],
+            month: [month],
+            company: HRBranchList.map(x => x.branchName),
+            type: HRListOfTypeList.map((x: { ID: number; }) => x.ID),
+        };
+        fetchData(ParamsInfo, SelectType);
+    }, [props.isStaff]);
+
     /**
      * 关闭 Drawer
      */
@@ -198,8 +227,9 @@ const Proportion: React.FC<{}> = () => {
             year: [year],
             month: [month],
             company: HRBranchList.map(x => x.branchName),       //前台不用添加公司的搜索条件，默认传过去
+            type: checkedList3,
         };
-        fetchData(ParamsInfo);
+        fetchData(ParamsInfo, type);
         //关闭 Drawer
         setDrawerVisible(false);
     }
@@ -208,7 +238,7 @@ const Proportion: React.FC<{}> = () => {
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card>
-                    <div id="ProportionChart" style={{ width: '100%', height: 800 }}></div>
+                    <div id="RatioChart" style={{ width: '100%', height: 800 }}></div>
                 </Card>
             </Spin>
 
@@ -262,10 +292,27 @@ const Proportion: React.FC<{}> = () => {
                         </Select>
                     </Row>
                 </div>
+                <div className={styles.searchArea}>
+                    <Row className={styles.searchAreaLable}>
+                        <Col span={12} className={styles.searchAreaTitle}>业务</Col>
+                        <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll3}>
+                            全选
+                    </Checkbox>
+                    </Row>
+                    <Checkbox.Group value={checkedList3} onChange={(list) => onChange(1, list)}>
+                        <Row className={styles.searchAreaContent}>
+                            {
+                                HRListOfType && HRListOfType.length > 0 ? HRListOfType.map((x: { ID: number; Name: string; }) => {
+                                    return <Col span={24} key={x.ID} style={{ marginBottom: 5, }}><Checkbox value={x.ID}>{x.Name}</Checkbox></Col>
+                                }) : null
+                            }
+                        </Row>
+                    </Checkbox.Group>
+                </div>
             </Drawer>
 
         </PageContainer>
     );
 }
 
-export default Proportion;
+export default Ratio;

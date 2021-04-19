@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Button, Drawer, Checkbox, Select, } from 'antd';
+import { Card, Spin, Row, Col, Button, Drawer, Select, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
@@ -127,7 +127,7 @@ const Proportion: React.FC<{}> = () => {
                 series: [
                     {
                         type: 'bar',
-                        name: `职能人员`,
+                        name: `职能员工`,
                         label: {
                             show: true,
                             position: 'right',
