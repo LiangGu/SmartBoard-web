@@ -50,17 +50,19 @@ const Proportion: React.FC<Props> = (props) => {
     let fetchData = async (ParamsInfo: any, SelectType: number) => {
         setloading(true);
         const result = await getMonthChartData(ParamsInfo);
-        let ProportionData: any = [];       //人力数据
+        let ProportionData: any = [];       //人力、职能数据
         let TotalProportionData: any = [];  //总数据
         if (!result) {
             return;
         }
         if (result) {
             if (result.length > 0) {
-                ProportionData = result.filter((x: { Type: number; }) => x.Type == SelectType);
-                let keysArr = [...new Set(result.map((item: { BranchName: any; }) => item.BranchName))];
+                //*后台返回的数据相同名称的会有不相邻的问题（注：后期手动添加过数据），所以需要在这边处理一下
+                let correctData: any = result.sort((a: any, b: any) => b.BranchName.localeCompare(a.BranchName, 'zh'));
+                ProportionData = correctData.filter((x: { Type: number; }) => x.Type == SelectType);
+                let keysArr = [...new Set(correctData.map((item: { BranchName: any; }) => item.BranchName))];
                 keysArr.forEach(item => {
-                    const arr = result.filter((x: { BranchName: string; }) => x.BranchName == item);
+                    const arr = correctData.filter((x: { BranchName: string; }) => x.BranchName == item);
                     const sum = arr.reduce((a: any, b: { Num: number; }) => a + b.Num, 0)
                     TotalProportionData.push({
                         BranchName: item,
