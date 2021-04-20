@@ -34,28 +34,32 @@ const ICProfit: React.FC<{}> = () => {
                     />
                 }
             >
-                <TabPane tab="月份" key="1">
+                <TabPane tab="每月人数" key="1">
                     <Month
                         isStaff={isStaff}
                         parentType={parentType}
+                        currentT={currentT}
                     />
                 </TabPane>
-                <TabPane tab="月份同比" key="2">
+                <TabPane tab="每月人数环比" key="2">
                     <YearOverYear
                         isStaff={isStaff}
                         parentType={parentType}
+                        currentT={currentT}
                     />
                 </TabPane>
-                <TabPane tab="人数比例" key="3">
+                <TabPane tab="各公司人数占比" key="3">
                     <Ratio
                         isStaff={isStaff}
                         parentType={parentType}
+                        currentT={currentT}
                     />
                 </TabPane>
-                <TabPane tab="人数占比" key="4">
+                <TabPane tab="职能/业务线人数占比" key="4">
                     <Proportion
                         isStaff={isStaff}
                         parentType={parentType}
+                        currentT={currentT}
                     />
                 </TabPane>
             </Tabs>

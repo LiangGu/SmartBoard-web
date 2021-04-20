@@ -21,6 +21,7 @@ import { getMonthChartData, } from '@/services/hr';
 type Props = {
     isStaff: boolean,
     parentType: number,
+    currentT: string,
 }
 
 //日期
@@ -30,6 +31,7 @@ const Ratio: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
     const [type, setType] = useState(props.parentType);
+    const [currentT, setCurrentT] = useState(props.currentT);
 
     //数据集
     const [HRListOfType, setHRListOfType] = useState(getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType));
@@ -45,7 +47,7 @@ const Ratio: React.FC<Props> = (props) => {
     const [year, setYear] = useState(date.getFullYear());
 
     // 月份
-    const [month, setMonth] = useState(date.getMonth() + 1);
+    const [month, setMonth] = useState(date.getMonth());
 
     /**
      *  多选
@@ -131,6 +133,7 @@ const Ratio: React.FC<Props> = (props) => {
                         },
                         label: {
                             show: true,
+                            formatter: '{b} : {c} ({d}%)',
                             fontSize: 16,
                         },
                     },
@@ -209,8 +212,10 @@ const Ratio: React.FC<Props> = (props) => {
             company: HRBranchList.map(x => x.branchName),
             type: HRListOfTypeList.map((x: { ID: number; }) => x.ID),
         };
-        fetchData(ParamsInfo, SelectType);
-    }, [props.isStaff]);
+        if (currentT == props.currentT) {
+            fetchData(ParamsInfo, SelectType);
+        }
+    }, [props.isStaff, props.currentT]);
 
     /**
      * 关闭 Drawer

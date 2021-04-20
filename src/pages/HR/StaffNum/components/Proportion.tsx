@@ -19,6 +19,7 @@ import { getMonthChartData, } from '@/services/hr';
 type Props = {
     isStaff: boolean,
     parentType: number,
+    currentT: string,
 }
 
 //日期
@@ -28,6 +29,7 @@ const Proportion: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
     const [type, setType] = useState(props.parentType);
+    const [currentT, setCurrentT] = useState(props.currentT);
 
     //数据集
     const [YearList,] = useState(() => {
@@ -42,7 +44,7 @@ const Proportion: React.FC<Props> = (props) => {
     const [year, setYear] = useState(date.getFullYear());
 
     // 月份
-    const [month, setMonth] = useState(date.getMonth() + 1);
+    const [month, setMonth] = useState(date.getMonth());
 
     //获取数据
     let fetchData = async (ParamsInfo: any, SelectType: number) => {
@@ -67,13 +69,13 @@ const Proportion: React.FC<Props> = (props) => {
                 });
             }
             //将值传给初始化图表的函数
-            initChart(ProportionData, TotalProportionData);
+            initChart(ProportionData, TotalProportionData, SelectType);
             setloading(false);
         }
     }
 
     let Chart_Proportion_Bar: any;
-    let initChart = (ProportionData: any, TotalProportionData: any) => {
+    let initChart = (ProportionData: any, TotalProportionData: any, SelectType: number) => {
         let Element_Proportion_Bar = document.getElementById('ProportionChart');
         let Option_Proportion_Bar: any;
         if (Element_Proportion_Bar) {
@@ -129,12 +131,13 @@ const Proportion: React.FC<Props> = (props) => {
                         color: 'black',
                         fontSize: 16,
                     },
-                    data: ProportionData.map((x: { BranchName: string; }) => x.BranchName),
+                    //* 要用 TotalProportionData 去 map 名称，因为有的公司没有职能或业务人员
+                    data: TotalProportionData.map((x: { BranchName: string; }) => x.BranchName),
                 },
                 series: [
                     {
                         type: 'bar',
-                        name: `职能员工`,
+                        name: `${SelectType == 1 ? '职能人数' : '业务人数'}`,
                         label: {
                             show: true,
                             position: 'right',
@@ -175,8 +178,10 @@ const Proportion: React.FC<Props> = (props) => {
             month: [month],
             company: HRBranchList.map(x => x.branchName),
         };
-        fetchData(ParamsInfo, SelectType);
-    }, [props.isStaff]);
+        if (currentT == props.currentT) {
+            fetchData(ParamsInfo, SelectType);
+        }
+    }, [props.isStaff, props.currentT]);
 
     /**
      * 下拉选择
