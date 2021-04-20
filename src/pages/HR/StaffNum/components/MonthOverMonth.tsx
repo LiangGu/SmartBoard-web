@@ -1,37 +1,41 @@
 import React, { useState, useEffect, } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Button, Drawer, Checkbox, Select, } from 'antd';
+import { Card, Spin, Row, Col, Button, Drawer, Select, Checkbox, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
-import 'echarts/lib/chart/pie';
+import 'echarts/lib/chart/bar';
 // 引入提示框和标题组件
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-import { HRBranchList, MonthList, } from '@/utils/baseData';
+import { MonthList, } from '@/utils/baseData';
 import { getHRListVO, } from '@/utils/auths';
 import { getYearList, } from '@/utils/utils';
 //调用API
-import { getMonthChartData, } from '@/services/hr';
+import { getMonthChartDataOfYearOverYear, } from '@/services/hr';
+
+//父组件传过来的Props
+type Props = {
+    parentType: number,
+    currentT: string,
+}
 
 //日期
-const date = new Date()
+const date = new Date();
 
-const Ratio: React.FC<{}> = () => {
+const MonthOverMonth: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
+    const [currentT,] = useState(props.currentT);
 
     //数据集
-    const [HRListOfType,] = useState(() => {
-        return getHRListVO().filter((x: { Type: number; }) => x.Type == 2);
-    });
     const [YearList,] = useState(() => {
         return getYearList();
     });
     const [MonthListVO,] = useState(MonthList);
+    const [HRListOfType, setHRListOfType] = useState(getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType));
 
     /**
      *  单选
@@ -40,55 +44,42 @@ const Ratio: React.FC<{}> = () => {
     const [year, setYear] = useState(date.getFullYear());
 
     // 月份
-    const [month, setMonth] = useState(date.getMonth() + 1);
+    const [month, setMonth] = useState(date.getMonth());
 
     /**
      *  多选
      * */
-    // 业务线                   :1
-    const [checkedList3, setCheckedList3] = useState(() => {
-        return HRListOfType.map((x: { ID: number; }) => x.ID);
-    });
+    // 业务线                   :3
+    const [checkedList3, setCheckedList3] = useState(HRListOfType.map((x: { ID: number; }) => x.ID));
     const [indeterminate3, setIndeterminate3] = useState(false);
     const [checkAll3, setCheckAll3] = useState(true);
 
     //获取数据
-    let fetchData = async (ParamsInfo: any,) => {
+    let fetchData = async (ParamsInfo: any, SelectType: number) => {
         setloading(true);
-        const result = await getMonthChartData(ParamsInfo);
-        let RatioChartData: any = [];
+        const result = await getMonthChartDataOfYearOverYear(ParamsInfo);
         if (!result) {
             return;
         }
         if (result) {
-            if (result.length > 0) {
-                RatioChartData = result.filter((x: { Type: number; }) => x.Type == 2);
-            }
             //将值传给初始化图表的函数
-            initChart(RatioChartData);
+            initChart(result);
             setloading(false);
         }
     }
 
-    let Chart_RatioChart_Pie: any;
-    let initChart = (RatioChartData: any) => {
-        let Element_RatioChart_Pie = document.getElementById('RatioChart');
-        let Option_RatioChart_Pie: any;
-        let seriesData: any = [];
-        if (RatioChartData && RatioChartData.length > 0) {
-            RatioChartData.map((x: { BranchName: string; Num: number }) => {
-                seriesData.push({
-                    value: x.Num,
-                    name: x.BranchName,
-                });
-            });
-        }
-        if (Element_RatioChart_Pie) {
-            Chart_RatioChart_Pie = echarts.init(Element_RatioChart_Pie as HTMLDivElement);
-            Option_RatioChart_Pie = {
+    let Chart_MonthOverMonthr_Bar: any;
+    let initChart = (result: any) => {
+        let Element_MonthOverMonthr_Bar = document.getElementById('MonthOverMonthChart');
+        let Option_MonthOverMonthr_Bar: any;
+        if (Element_MonthOverMonthr_Bar) {
+            Chart_MonthOverMonthr_Bar = echarts.init(Element_MonthOverMonthr_Bar as HTMLDivElement);
+            Option_MonthOverMonthr_Bar = {
                 tooltip: {
-                    trigger: 'item',
-                    formatter: '{b} : {c} ({d}%)',
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow',
+                    },
                 },
                 toolbox: {
                     feature: {
@@ -105,51 +96,97 @@ const Ratio: React.FC<{}> = () => {
                     bottom: '10%',
                     containLabel: true,
                 },
+                xAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        show: true,
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    boundaryGap: [0, 0.01],
+                },
                 legend: {
-                    right: 'right',
+                    bottom: 'bottom',
                     textStyle: {
                         color: 'black',
                         fontSize: 16,
                     },
-                    data: RatioChartData.map((x: { BranchName: string; }) => x.BranchName),
+                },
+                yAxis: {
+                    type: 'category',
+                    name: `单位: 人`,
+                    scale: true,
+                    axisLabel: {
+                        show: true,
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    nameTextStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    data: result.hrDivisionDtos.map((x: { BranchName: string; }) => x.BranchName),
                 },
                 series: [
                     {
-                        type: 'pie',
-                        radius: '70%',
-                        center: ['50%', '50%'],
-                        data: seriesData,
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)',
-                            }
-                        },
+                        type: 'bar',
+                        name: `${result.hrDivisionDtos.length > 0 ? `${result.hrDivisionDtos[0].Year}年 - ${result.hrDivisionDtos[0].Month}月` : `环比无数据，请添加数据!`} `,
                         label: {
                             show: true,
+                            position: 'right',
+                            color: 'black',
                             fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return '';
+                                }
+                            }
                         },
+                        data: result.hrDivisionDtos.map((x: { Num: number; }) => x.Num),
+                    },
+                    {
+                        type: 'bar',
+                        name: `${result.hrDivisionDtosOYO.length > 0 ? `${result.hrDivisionDtosOYO[0].Year}年 - ${result.hrDivisionDtosOYO[0].Month}月` : `环比无数据，请添加数据!`} `,
+                        label: {
+                            show: true,
+                            position: 'right',
+                            color: 'black',
+                            fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return '';
+                                }
+                            }
+                        },
+                        data: result.hrDivisionDtosOYO.map((x: { Num: number; }) => x.Num),
                     },
                 ]
             };
-            Chart_RatioChart_Pie.setOption(Option_RatioChart_Pie, true);
-            window.addEventListener('resize', () => { Chart_RatioChart_Pie.resize() });
+            Chart_MonthOverMonthr_Bar.setOption(Option_MonthOverMonthr_Bar, true);
+            window.addEventListener('resize', () => { Chart_MonthOverMonthr_Bar.resize() });
         }
     }
 
-    /**
-     * 第2个参数传 [] 相当于 componentDidUpdate 钩子
-     */
+    //当用户切换 Switch 时更新 HRListOfType 和 checkedList3
     useEffect(() => {
+        let HRListOfTypeList = props.parentType > 0 ? getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType) : getHRListVO();
+        setHRListOfType(HRListOfTypeList);
+        setCheckedList3(HRListOfTypeList.map((x: { ID: number; }) => x.ID));
         let ParamsInfo: object = {
-            year: [year],
-            month: [month],
-            company: HRBranchList.map(x => x.branchName),
-            type: HRListOfType.map((x: { ID: number; }) => x.ID),
+            year: year,
+            month: month,
+            type: HRListOfTypeList.map((x: { ID: number; }) => x.ID),
+            isLine: props.parentType,
+            chainRatio: true,
         };
-        fetchData(ParamsInfo);
-    }, []);
+        if (currentT == props.currentT) {
+            fetchData(ParamsInfo, props.parentType);
+        }
+    }, [props.parentType, props.currentT]);
 
     /**
      * 单选
@@ -158,7 +195,7 @@ const Ratio: React.FC<{}> = () => {
      */
     const onChange = (T: Number, list: any) => {
         switch (T) {
-            case 1:
+            case 3:
                 setCheckedList3(list);
                 setIndeterminate3(!!list.length && list.length < HRListOfType.length);
                 setCheckAll3(list.length === HRListOfType.length);
@@ -174,15 +211,14 @@ const Ratio: React.FC<{}> = () => {
      */
     const onCheckAllChange = (T: Number, e: any) => {
         switch (T) {
-            case 1:
-                setCheckedList3(e.target.checked ? HRListOfType.map((y: { Name: any; }) => y.Name) : []);
+            case 3:
+                setCheckedList3(e.target.checked ? HRListOfType.map((x: { ID: number; }) => x.ID) : []);
                 setIndeterminate3(false);
                 setCheckAll3(e.target.checked);
                 break;
             default: return;
         }
     }
-
 
     /**
      * 下拉选择
@@ -213,12 +249,13 @@ const Ratio: React.FC<{}> = () => {
      */
     const onSearch = () => {
         let ParamsInfo: object = {
-            year: [year],
-            month: [month],
-            company: HRBranchList.map(x => x.branchName),       //前台不用添加公司的搜索条件，默认传过去
+            year: year,
+            month: month,
             type: checkedList3,
+            isLine: props.parentType,
+            chainRatio: true,
         };
-        fetchData(ParamsInfo);
+        fetchData(ParamsInfo, props.parentType);
         //关闭 Drawer
         setDrawerVisible(false);
     }
@@ -227,7 +264,7 @@ const Ratio: React.FC<{}> = () => {
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card>
-                    <div id="RatioChart" style={{ width: '100%', height: 800 }}></div>
+                    <div id="MonthOverMonthChart" style={{ width: '100%', height: 800 }}></div>
                 </Card>
             </Spin>
 
@@ -245,6 +282,7 @@ const Ratio: React.FC<{}> = () => {
                     </Button>
                 }
             >
+
                 <div className={styles.searchArea}>
                     <Row className={styles.searchAreaLable}>
                         <Col span={12} className={styles.searchAreaTitle}>年份</Col>
@@ -284,11 +322,11 @@ const Ratio: React.FC<{}> = () => {
                 <div className={styles.searchArea}>
                     <Row className={styles.searchAreaLable}>
                         <Col span={12} className={styles.searchAreaTitle}>业务</Col>
-                        <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll3}>
+                        <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll3}>
                             全选
                     </Checkbox>
                     </Row>
-                    <Checkbox.Group value={checkedList3} onChange={(list) => onChange(1, list)}>
+                    <Checkbox.Group value={checkedList3} onChange={(list) => onChange(3, list)}>
                         <Row className={styles.searchAreaContent}>
                             {
                                 HRListOfType && HRListOfType.length > 0 ? HRListOfType.map((x: { ID: number; Name: string; }) => {
@@ -304,4 +342,4 @@ const Ratio: React.FC<{}> = () => {
     );
 }
 
-export default Ratio;
+export default MonthOverMonth;

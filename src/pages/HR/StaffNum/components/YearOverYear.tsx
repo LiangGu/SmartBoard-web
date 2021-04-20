@@ -18,7 +18,6 @@ import { getMonthChartDataOfYearOverYear, } from '@/services/hr';
 
 //父组件传过来的Props
 type Props = {
-    isStaff: boolean,
     parentType: number,
     currentT: string,
 }
@@ -29,8 +28,7 @@ const date = new Date();
 const YearOverYear: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
-    const [type, setType] = useState(props.parentType);
-    const [currentT, setCurrentT] = useState(props.currentT);
+    const [currentT,] = useState(props.currentT);
 
     //数据集
     const [YearList,] = useState(() => {
@@ -132,23 +130,37 @@ const YearOverYear: React.FC<Props> = (props) => {
                 series: [
                     {
                         type: 'bar',
-                        name: `${year}年`,
+                        name: `${result.hrDivisionDtos.length > 0 ? `${result.hrDivisionDtos[0].Year}年 - ${result.hrDivisionDtos[0].Month}月` : `同比无数据，请添加数据!`} `,
                         label: {
                             show: true,
                             position: 'right',
                             color: 'black',
                             fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return '';
+                                }
+                            }
                         },
                         data: result.hrDivisionDtos.map((x: { Num: number; }) => x.Num),
                     },
                     {
                         type: 'bar',
-                        name: `${year - 1}年`,
+                        name: `${result.hrDivisionDtosOYO.length > 0 ? `${result.hrDivisionDtosOYO[0].Year}年 - ${result.hrDivisionDtosOYO[0].Month}月` : `同比无数据，请添加数据!`} `,
                         label: {
                             show: true,
                             position: 'right',
                             color: 'black',
                             fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return '';
+                                }
+                            }
                         },
                         data: result.hrDivisionDtosOYO.map((x: { Num: number; }) => x.Num),
                     },
@@ -159,29 +171,22 @@ const YearOverYear: React.FC<Props> = (props) => {
         }
     }
 
-    //当用户切换 Switch 时更新 type 和 HRListOfType 和 checkedList3
+    //当用户切换 Switch 时更新 HRListOfType 和 checkedList3
     useEffect(() => {
-        setType(props.isStaff ? 2 : 1);
-        let HRListOfTypeList = [];
-        let SelectType = 2;
-        if (props.isStaff) {
-            HRListOfTypeList = getHRListVO().filter((x: { Type: number; }) => x.Type == 2);
-        } else {
-            HRListOfTypeList = getHRListVO().filter((x: { Type: number; }) => x.Type == 1);
-            SelectType = 1;
-        }
+        let HRListOfTypeList = props.parentType > 0 ? getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType) : getHRListVO();
         setHRListOfType(HRListOfTypeList);
         setCheckedList3(HRListOfTypeList.map((x: { ID: number; }) => x.ID));
         let ParamsInfo: object = {
             year: year,
             month: month,
             type: HRListOfTypeList.map((x: { ID: number; }) => x.ID),
-            isLine: SelectType,
+            isLine: props.parentType,
+            chainRatio: false,
         };
         if (currentT == props.currentT) {
-            fetchData(ParamsInfo, SelectType);
+            fetchData(ParamsInfo, props.parentType);
         }
-    }, [props.isStaff, props.currentT]);
+    }, [props.parentType, props.currentT]);
 
     /**
      * 单选
@@ -247,9 +252,10 @@ const YearOverYear: React.FC<Props> = (props) => {
             year: year,
             month: month,
             type: checkedList3,
-            isLine: type,
+            isLine: props.parentType,
+            chainRatio: false,
         };
-        fetchData(ParamsInfo, type);
+        fetchData(ParamsInfo, props.parentType);
         //关闭 Drawer
         setDrawerVisible(false);
     }

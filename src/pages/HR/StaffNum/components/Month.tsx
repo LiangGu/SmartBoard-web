@@ -12,13 +12,12 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import { HRBranchList, MonthList, } from '@/utils/baseData';
 import { getHRListVO, } from '@/utils/auths';
-import { getYearList, } from '@/utils/utils';
+import { getYearList, FilterZeroOfArraay, } from '@/utils/utils';
 //调用API
 import { getMonthChartData, } from '@/services/hr';
 
 //父组件传过来的Props
 type Props = {
-    isStaff: boolean,
     parentType: number,
     currentT: string,
 }
@@ -29,8 +28,7 @@ const date = new Date()
 const Month: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
-    const [type, setType] = useState(props.parentType);
-    const [currentT, setCurrentT] = useState(props.currentT);
+    const [currentT,] = useState(props.currentT);
 
     //数据集
     const [YearList,] = useState(() => {
@@ -66,10 +64,23 @@ const Month: React.FC<Props> = (props) => {
         }
         if (result) {
             if (result.length > 0) {
-                MonthChartData = result.filter((x: { Type: number; }) => x.Type == SelectType);
+                if (SelectType > 0) {
+                    MonthChartData = result.filter((x: { Type: number; }) => x.Type == SelectType);
+                } else {
+                    let keysArr = [...new Set(result.map((item: { BranchName: any; }) => item.BranchName))];
+                    //全部：加总处理
+                    keysArr.forEach(item => {
+                        const arr = result.filter((x: { BranchName: string; }) => x.BranchName == item);
+                        const sum = arr.reduce((a: any, b: { Num: number; }) => a + b.Num, 0)
+                        MonthChartData.push({
+                            BranchName: item,
+                            Num: sum,
+                        });
+                    });
+                }
             }
             //将值传给初始化图表的函数
-            initChart(MonthChartData);
+            initChart(FilterZeroOfArraay(MonthChartData, 0, 'Num'));
             setloading(false);
         }
     }
@@ -144,17 +155,9 @@ const Month: React.FC<Props> = (props) => {
         }
     }
 
-    //当用户切换 Switch 时更新 type 和 HRListOfType 和 checkedList3
+    //当用户切换 Switch 时更新 HRListOfType 和 checkedList3
     useEffect(() => {
-        setType(props.isStaff ? 2 : 1);
-        let HRListOfTypeList = [];
-        let SelectType = 2;
-        if (props.isStaff) {
-            HRListOfTypeList = getHRListVO().filter((x: { Type: number; }) => x.Type == 2);
-        } else {
-            HRListOfTypeList = getHRListVO().filter((x: { Type: number; }) => x.Type == 1);
-            SelectType = 1;
-        }
+        let HRListOfTypeList = props.parentType > 0 ? getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType) : getHRListVO();
         setHRListOfType(HRListOfTypeList);
         setCheckedList3(HRListOfTypeList.map((x: { ID: number; }) => x.ID));
         let ParamsInfo: object = {
@@ -164,9 +167,9 @@ const Month: React.FC<Props> = (props) => {
             type: HRListOfTypeList.map((x: { ID: number; }) => x.ID),
         };
         if (currentT == props.currentT) {
-            fetchData(ParamsInfo, SelectType);
+            fetchData(ParamsInfo, props.parentType);
         }
-    }, [props.isStaff, props.currentT]);
+    }, [props.parentType, props.currentT]);
 
     /**
      * 单选
@@ -234,7 +237,7 @@ const Month: React.FC<Props> = (props) => {
             company: HRBranchList.map(x => x.branchName),       //前台不用添加公司的搜索条件，默认传过去
             type: checkedList3,
         };
-        fetchData(ParamsInfo, type);
+        fetchData(ParamsInfo, props.parentType);
         //关闭 Drawer
         setDrawerVisible(false);
     }

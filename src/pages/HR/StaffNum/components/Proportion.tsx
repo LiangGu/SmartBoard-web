@@ -17,7 +17,6 @@ import { getMonthChartData, } from '@/services/hr';
 
 //父组件传过来的Props
 type Props = {
-    isStaff: boolean,
     parentType: number,
     currentT: string,
 }
@@ -28,8 +27,7 @@ const date = new Date()
 const Proportion: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
-    const [type, setType] = useState(props.parentType);
-    const [currentT, setCurrentT] = useState(props.currentT);
+    const [currentT,] = useState(props.currentT);
 
     //数据集
     const [YearList,] = useState(() => {
@@ -60,6 +58,7 @@ const Proportion: React.FC<Props> = (props) => {
                 //*后台返回的数据相同名称的会有不相邻的问题（注：后期手动添加过数据），所以需要在这边处理一下
                 let correctData: any = result.sort((a: any, b: any) => b.BranchName.localeCompare(a.BranchName, 'zh'));
                 ProportionData = correctData.filter((x: { Type: number; }) => x.Type == SelectType);
+                // 全部：加总处理
                 let keysArr = [...new Set(correctData.map((item: { BranchName: any; }) => item.BranchName))];
                 keysArr.forEach(item => {
                     const arr = correctData.filter((x: { BranchName: string; }) => x.BranchName == item);
@@ -139,23 +138,37 @@ const Proportion: React.FC<Props> = (props) => {
                 series: [
                     {
                         type: 'bar',
-                        name: `${SelectType == 1 ? '职能人数' : '业务人数'}`,
+                        name: `${SelectType == 1 ? '职能人数' : SelectType == 2 ? '业务人数' : '全部人数'}`,
                         label: {
                             show: true,
                             position: 'right',
                             color: 'black',
                             fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return '';
+                                }
+                            }
                         },
                         data: ProportionData.map((x: { Num: number; }) => x.Num),
                     },
                     {
                         type: 'bar',
-                        name: `整体职工`,
+                        name: `${SelectType > 0 ? '整体职工' : '全部人数'}`,
                         label: {
                             show: true,
                             position: 'right',
                             color: 'black',
                             fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return '';
+                                }
+                            }
                         },
                         data: TotalProportionData.map((x: { Num: number; }) => x.Num),
                     },
@@ -166,24 +179,16 @@ const Proportion: React.FC<Props> = (props) => {
         }
     }
 
-    //当用户切换 Switch 时更新 type 和 HRListOfType 和 checkedList3
     useEffect(() => {
-        setType(props.isStaff ? 2 : 1);
-        let SelectType = 2;
-        if (props.isStaff) {
-            SelectType = 2;
-        } else {
-            SelectType = 1;
-        }
         let ParamsInfo: object = {
             year: [year],
             month: [month],
             company: HRBranchList.map(x => x.branchName),
         };
         if (currentT == props.currentT) {
-            fetchData(ParamsInfo, SelectType);
+            fetchData(ParamsInfo, props.parentType);
         }
-    }, [props.isStaff, props.currentT]);
+    }, [props.parentType, props.currentT]);
 
     /**
      * 下拉选择
@@ -218,7 +223,7 @@ const Proportion: React.FC<Props> = (props) => {
             month: [month],
             company: HRBranchList.map(x => x.branchName),       //前台不用添加公司的搜索条件，默认传过去
         };
-        fetchData(ParamsInfo, type);
+        fetchData(ParamsInfo, props.parentType);
         //关闭 Drawer
         setDrawerVisible(false);
     }
