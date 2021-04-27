@@ -484,7 +484,7 @@ const Debt: React.FC<{}> = () => {
             </Spin>
 
             {
-                branch == '0' ?
+                getselectBranchID() == '0' ?
                     <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} >搜索</Button> : null
             }
 

@@ -406,7 +406,7 @@ const ICProfitMonth: React.FC<{}> = () => {
                 }
             >
                 {
-                    branch == '0' ?
+                    getselectBranchID() == '0' ?
                         <div className={styles.searchArea}>
                             <Row className={styles.searchAreaLable}>
                                 <Col span={12} className={styles.searchAreaTitle}>公司</Col>
