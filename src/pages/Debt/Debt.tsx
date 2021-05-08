@@ -1,7 +1,6 @@
 import React, { useState, useEffect, } from 'react';
-import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Radio, Button, Drawer, Checkbox, Select } from 'antd';
+import { Card, Spin, Row, Col, Radio, Button, Drawer, Select } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
@@ -28,7 +27,6 @@ import {
 } from '@/utils/auths';
 
 const Debt: React.FC<{}> = () => {
-    const { initialState, } = useModel('@@initialState');
     const [loading, setloading] = useState(false);
     const [type, setType] = useState('总金额');
     const [result, setResult] = useState([]);

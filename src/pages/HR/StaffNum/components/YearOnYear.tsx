@@ -25,7 +25,7 @@ type Props = {
 //日期
 const date = new Date();
 
-const MonthOverMonth: React.FC<Props> = (props) => {
+const YearOnYear: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
     const [currentT,] = useState(props.currentT);
@@ -54,8 +54,8 @@ const MonthOverMonth: React.FC<Props> = (props) => {
     const [indeterminate3, setIndeterminate3] = useState(false);
     const [checkAll3, setCheckAll3] = useState(true);
 
-    //获取数据
-    let fetchData = async (ParamsInfo: any, SelectType: number) => {
+    //获取数据(每月人数环比)
+    let fetchDataMonthOverMonth = async (ParamsInfo: any, SelectType: number) => {
         setloading(true);
         const result = await getMonthChartDataOfYearOverYear(ParamsInfo);
         if (!result) {
@@ -63,18 +63,36 @@ const MonthOverMonth: React.FC<Props> = (props) => {
         }
         if (result) {
             //将值传给初始化图表的函数
-            initChart(result);
+            initChart_MonthOverMonth(result);
             setloading(false);
         }
     }
 
+    //获取数据(每月人数同比)
+    let fetchDataYearOverYear = async (ParamsInfo: any, SelectType: number) => {
+        setloading(true);
+        const result = await getMonthChartDataOfYearOverYear(ParamsInfo);
+        if (!result) {
+            return;
+        }
+        if (result) {
+            //将值传给初始化图表的函数
+            initChart_YearOverYear(result);
+            setloading(false);
+        }
+    }
+
+    //每月人数环比
     let Chart_MonthOverMonthr_Bar: any;
-    let initChart = (result: any) => {
+    let initChart_MonthOverMonth = (result: any) => {
         let Element_MonthOverMonthr_Bar = document.getElementById('MonthOverMonthChart');
         let Option_MonthOverMonthr_Bar: any;
         if (Element_MonthOverMonthr_Bar) {
             Chart_MonthOverMonthr_Bar = echarts.init(Element_MonthOverMonthr_Bar as HTMLDivElement);
             Option_MonthOverMonthr_Bar = {
+                title: {
+                    subtext: '每月人数环比',
+                },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -171,6 +189,121 @@ const MonthOverMonth: React.FC<Props> = (props) => {
         }
     }
 
+    //每月人数同比
+    let Chart_YearOverYear_Bar: any;
+    let initChart_YearOverYear = (result: any) => {
+        let Element_YearOverYear_Bar = document.getElementById('YearOverYearChart');
+        let Option_YearOverYear_Bar: any;
+        if (Element_YearOverYear_Bar) {
+            Chart_YearOverYear_Bar = echarts.init(Element_YearOverYear_Bar as HTMLDivElement);
+            Option_YearOverYear_Bar = {
+                title: {
+                    subtext: '每月人数同比',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow',
+                    },
+                },
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true },
+                    },
+                },
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
+                    containLabel: true,
+                },
+                xAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        show: true,
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    boundaryGap: [0, 0.01],
+                },
+                legend: {
+                    bottom: 'bottom',
+                    textStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                },
+                yAxis: {
+                    type: 'category',
+                    name: `单位: 人`,
+                    scale: true,
+                    axisLabel: {
+                        show: true,
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    nameTextStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    data: result.hrDivisionDtos.map((x: { BranchName: string; }) => x.BranchName),
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        name: `${result.hrDivisionDtos.length > 0 ? `${result.hrDivisionDtos[0].Year}年 - ${result.hrDivisionDtos[0].Month}月` : `同比无数据，请添加数据!`} `,
+                        label: {
+                            show: true,
+                            position: 'right',
+                            color: 'black',
+                            fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return '';
+                                }
+                            }
+                        },
+                        data: result.hrDivisionDtos.map((x: { Num: number; }) => x.Num),
+                    },
+                    {
+                        type: 'bar',
+                        name: `${result.hrDivisionDtosOYO.length > 0 ? `${result.hrDivisionDtosOYO[0].Year}年 - ${result.hrDivisionDtosOYO[0].Month}月` : `同比无数据，请添加数据!`} `,
+                        label: {
+                            show: true,
+                            position: 'right',
+                            color: 'black',
+                            fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return '';
+                                }
+                            }
+                        },
+                        data: result.hrDivisionDtosOYO.map((x: { Num: number; }) => x.Num),
+                    },
+                ]
+            };
+            Chart_YearOverYear_Bar.setOption(Option_YearOverYear_Bar, true);
+            window.addEventListener('resize', () => { Chart_YearOverYear_Bar.resize() });
+        }
+    }
+
+
+
+
+
+
+
+
+
     //当用户切换 Switch 时更新 HRListOfType 和 checkedList3
     useEffect(() => {
         let HRListOfTypeList = props.parentType > 0 ? getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType) : getHRListVO();
@@ -184,7 +317,8 @@ const MonthOverMonth: React.FC<Props> = (props) => {
             chainRatio: true,
         };
         if (currentT == props.currentT) {
-            fetchData(ParamsInfo, props.parentType);
+            fetchDataMonthOverMonth(Object.assign({}, ParamsInfo, { chainRatio: true, }), props.parentType);
+            fetchDataYearOverYear(Object.assign({}, ParamsInfo, { chainRatio: false, }), props.parentType);
         }
     }, [props.parentType, props.currentT]);
 
@@ -253,9 +387,9 @@ const MonthOverMonth: React.FC<Props> = (props) => {
             month: month,
             type: checkedList3,
             isLine: props.parentType,
-            chainRatio: true,
         };
-        fetchData(ParamsInfo, props.parentType);
+        fetchDataMonthOverMonth(Object.assign({}, ParamsInfo, { chainRatio: true, }), props.parentType);
+        fetchDataYearOverYear(Object.assign({}, ParamsInfo, { chainRatio: false, }), props.parentType);
         //关闭 Drawer
         setDrawerVisible(false);
     }
@@ -264,7 +398,15 @@ const MonthOverMonth: React.FC<Props> = (props) => {
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card>
-                    <div id="MonthOverMonthChart" style={{ width: '100%', height: 800 }}></div>
+                    <Row>
+                        <Col span={12}>
+                            <div id="MonthOverMonthChart" style={{ width: '100%', height: 800 }}></div>
+                        </Col>
+                        <Col span={12}>
+                            <div id="YearOverYearChart" style={{ width: '100%', height: 800 }}></div>
+                        </Col>
+                    </Row>
+
                 </Card>
             </Spin>
 
@@ -342,4 +484,4 @@ const MonthOverMonth: React.FC<Props> = (props) => {
     );
 }
 
-export default MonthOverMonth;
+export default YearOnYear;

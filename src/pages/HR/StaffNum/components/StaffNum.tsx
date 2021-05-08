@@ -7,12 +7,14 @@ import styles from '@/components/Search/index.less';
 import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
 import 'echarts/lib/chart/bar';
+import 'echarts/lib/chart/pie';
 // 引入提示框和标题组件
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
 import { HRBranchList, MonthList, } from '@/utils/baseData';
 import { getHRListVO, } from '@/utils/auths';
-import { getYearList, FilterZeroOfArraay, } from '@/utils/utils';
+import { getYearList, FilterZeroOfArraay, sortObjectArr, } from '@/utils/utils';
 //调用API
 import { getMonthChartData, } from '@/services/hr';
 
@@ -25,7 +27,7 @@ type Props = {
 //日期
 const date = new Date()
 
-const Month: React.FC<Props> = (props) => {
+const StaffNum: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
     const [currentT,] = useState(props.currentT);
@@ -80,7 +82,7 @@ const Month: React.FC<Props> = (props) => {
                 }
             }
             //将值传给初始化图表的函数
-            initChart(FilterZeroOfArraay(ChartData, 0, 'Num'));
+            initChart(FilterZeroOfArraay(ChartData.sort(sortObjectArr('Num', 2)), 0, 'Num'));
             setloading(false);
         }
     }
@@ -130,8 +132,6 @@ const Month: React.FC<Props> = (props) => {
                 },
                 series: [
                     {
-                        //开启实时排序
-                        realtimeSort: true,
                         type: 'bar',
                         name: '人数',
                         color: '#C23531',
@@ -140,16 +140,10 @@ const Month: React.FC<Props> = (props) => {
                             position: 'right',
                             color: 'black',
                             fontSize: 16,
-                            valueAnimation: true,
                         },
                         data: ChartData.map((x: { Num: number; }) => x.Num),
                     },
                 ],
-                //动画特效
-                animationDuration: 0,
-                animationDurationUpdate: 500,
-                animationEasing: 'linear',
-                animationEasingUpdate: 'linear',
             };
             Chart_MonthChart_Bar.setOption(Option_MonthChart_Bar, true);
             window.addEventListener('resize', () => { Chart_MonthChart_Bar.resize() });
@@ -397,4 +391,4 @@ const Month: React.FC<Props> = (props) => {
     );
 }
 
-export default Month;
+export default StaffNum;

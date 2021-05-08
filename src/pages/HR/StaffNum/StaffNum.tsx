@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Tabs, Select, } from 'antd';
-import Month from './components/Month';
-import YearOverYear from './components/YearOverYear';
-import MonthOverMonth from './components/MonthOverMonth';
+import StaffNum from './components/StaffNum';
+import YearOnYear from './components/YearOnYear';
 import Proportion from './components/Proportion';
 
 const { TabPane } = Tabs;
@@ -23,39 +22,34 @@ const ICProfit: React.FC<{}> = () => {
                 defaultActiveKey={currentT}
                 onChange={onTabChange} tabBarGutter={20}
                 tabBarExtraContent={
-                    <Select defaultValue={'0'} style={{ width: 120 }} onChange={(e) => { setParentType(Number(e)) }}>
-                        <Option value="0">全部</Option>
-                        <Option value="1">职能线</Option>
-                        <Option value="2">业务线</Option>
-                    </Select>
+                    currentT == '1' ? null :
+                        <Select defaultValue={'0'} style={{ width: 120 }} onChange={(e) => { setParentType(Number(e)) }}>
+                            <Option value="0">全部</Option>
+                            <Option value="1">职能线</Option>
+                            <Option value="2">业务线</Option>
+                        </Select>
                 }
             >
-                <TabPane tab="每月人数" key="1">
-                    <Month
+                <TabPane tab="人员数量" key="1">
+                    <StaffNum
                         parentType={parentType}
                         currentT={currentT}
                     />
                 </TabPane>
-                <TabPane tab="每月人数环比" key="2">
-                    <MonthOverMonth
+                <TabPane tab="人员变动" key="2">
+                    <YearOnYear
                         parentType={parentType}
                         currentT={currentT}
                     />
                 </TabPane>
-                <TabPane tab="每月人数同比" key="3">
-                    <YearOverYear
-                        parentType={parentType}
-                        currentT={currentT}
-                    />
-                </TabPane>
-                <TabPane tab="职能/业务线人数占比" key="4">
+                <TabPane tab="人员分类" key="3">
                     <Proportion
                         parentType={parentType}
                         currentT={currentT}
                     />
                 </TabPane>
             </Tabs>
-        </PageContainer>
+        </PageContainer >
     );
 };
 
