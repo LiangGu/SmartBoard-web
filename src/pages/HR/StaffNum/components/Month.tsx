@@ -58,21 +58,21 @@ const Month: React.FC<Props> = (props) => {
     let fetchData = async (ParamsInfo: any, SelectType: number) => {
         setloading(true);
         const result = await getMonthChartData(ParamsInfo);
-        let MonthChartData: any = [];
+        let ChartData: any = [];
         if (!result) {
             return;
         }
         if (result) {
             if (result.length > 0) {
                 if (SelectType > 0) {
-                    MonthChartData = result.filter((x: { Type: number; }) => x.Type == SelectType);
+                    ChartData = result.filter((x: { Type: number; }) => x.Type == SelectType);
                 } else {
                     let keysArr = [...new Set(result.map((item: { BranchName: any; }) => item.BranchName))];
                     //全部：加总处理
                     keysArr.forEach(item => {
                         const arr = result.filter((x: { BranchName: string; }) => x.BranchName == item);
-                        const sum = arr.reduce((a: any, b: { Num: number; }) => a + b.Num, 0)
-                        MonthChartData.push({
+                        const sum = arr.reduce((a: any, b: { Num: number; }) => a + b.Num, 0);
+                        ChartData.push({
                             BranchName: item,
                             Num: sum,
                         });
@@ -80,15 +80,20 @@ const Month: React.FC<Props> = (props) => {
                 }
             }
             //将值传给初始化图表的函数
-            initChart(FilterZeroOfArraay(MonthChartData, 0, 'Num'));
+            initChart(FilterZeroOfArraay(ChartData, 0, 'Num'));
             setloading(false);
         }
     }
 
     let Chart_MonthChart_Bar: any;
-    let initChart = (MonthChartData: any) => {
+    let Chart_RatioChart_Pie: any;
+    let initChart = (ChartData: any) => {
         let Element_MonthChart_Bar = document.getElementById('MonthChart');
+        let Element_RatioChart_Pie = document.getElementById('RatioChart');
         let Option_MonthChart_Bar: any;
+        let Option_RatioChart_Pie: any;
+
+        //柱状图
         if (Element_MonthChart_Bar) {
             Chart_MonthChart_Bar = echarts.init(Element_MonthChart_Bar as HTMLDivElement);
             Option_MonthChart_Bar = {
@@ -114,44 +119,106 @@ const Month: React.FC<Props> = (props) => {
                     containLabel: true,
                 },
                 xAxis: {
-                    axisLabel: {
-                        show: true,
-                        color: 'black',
-                        fontSize: 16,
-                        interval: 0,
-                        rotate: 40,
-                    },
-                    data: MonthChartData.map((x: { BranchName: string; }) => x.BranchName),
+                    type: 'value',
+                    boundaryGap: [0, 0.01]
                 },
                 yAxis: {
-                    name: '单位: 人',
-                    nameTextStyle: {
-                        color: 'black',
-                        fontSize: 16,
-                    },
-                    axisLabel: {
-                        show: true,
-                        color: 'black',
-                        fontSize: 16,
-                    },
+                    type: 'category',
+                    //反向排序
+                    inverse: true,
+                    data: ChartData.map((x: { BranchName: string; }) => x.BranchName),
                 },
                 series: [
                     {
+                        //开启实时排序
+                        realtimeSort: true,
                         type: 'bar',
                         name: '人数',
                         color: '#C23531',
                         label: {
                             show: true,
-                            position: 'top',
+                            position: 'right',
                             color: 'black',
                             fontSize: 16,
+                            valueAnimation: true,
                         },
-                        data: MonthChartData.map((x: { Num: number; }) => x.Num),
+                        data: ChartData.map((x: { Num: number; }) => x.Num),
                     },
-                ]
+                ],
+                //动画特效
+                animationDuration: 0,
+                animationDurationUpdate: 500,
+                animationEasing: 'linear',
+                animationEasingUpdate: 'linear',
             };
             Chart_MonthChart_Bar.setOption(Option_MonthChart_Bar, true);
             window.addEventListener('resize', () => { Chart_MonthChart_Bar.resize() });
+        }
+
+        let seriesData: any = [];
+        if (ChartData && ChartData.length > 0) {
+            ChartData.map((x: { BranchName: string; Num: number }) => {
+                seriesData.push({
+                    //*饼图数据为0时不显示
+                    value: x.Num == 0 ? null : x.Num,
+                    name: x.BranchName,
+                });
+            });
+        }
+        //饼图
+        if (Element_RatioChart_Pie) {
+            Chart_RatioChart_Pie = echarts.init(Element_RatioChart_Pie as HTMLDivElement);
+            Option_RatioChart_Pie = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b} : {c} ({d}%)',
+                },
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true },
+                    },
+                },
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
+                    containLabel: true,
+                },
+                legend: {
+                    bottom: 'bottom',
+                    textStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    data: ChartData.map((x: { BranchName: string; }) => x.BranchName),
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: '70%',
+                        center: ['50%', '50%'],
+                        data: seriesData,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                            }
+                        },
+                        label: {
+                            show: true,
+                            formatter: '{b} : {c} ({d}%)',
+                            fontSize: 16,
+                        },
+                    },
+                ]
+            };
+            Chart_RatioChart_Pie.setOption(Option_RatioChart_Pie, true);
+            window.addEventListener('resize', () => { Chart_RatioChart_Pie.resize() });
         }
     }
 
@@ -246,7 +313,14 @@ const Month: React.FC<Props> = (props) => {
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
                 <Card>
-                    <div id="MonthChart" style={{ width: '100%', height: 800 }}></div>
+                    <Row>
+                        <Col span={12}>
+                            <div id="MonthChart" style={{ width: '100%', height: 800 }}></div>
+                        </Col>
+                        <Col span={12}>
+                            <div id="RatioChart" style={{ width: '100%', height: 800 }}></div>
+                        </Col>
+                    </Row>
                 </Card>
             </Spin>
 

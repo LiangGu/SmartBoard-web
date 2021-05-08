@@ -4,7 +4,6 @@ import { Tabs, Select, } from 'antd';
 import Month from './components/Month';
 import YearOverYear from './components/YearOverYear';
 import MonthOverMonth from './components/MonthOverMonth';
-import Ratio from './components/Ratio';
 import Proportion from './components/Proportion';
 
 const { TabPane } = Tabs;
@@ -49,13 +48,7 @@ const ICProfit: React.FC<{}> = () => {
                         currentT={currentT}
                     />
                 </TabPane>
-                <TabPane tab="各公司人数占比" key="4">
-                    <Ratio
-                        parentType={parentType}
-                        currentT={currentT}
-                    />
-                </TabPane>
-                <TabPane tab="职能/业务线人数占比" key="5">
+                <TabPane tab="职能/业务线人数占比" key="4">
                     <Proportion
                         parentType={parentType}
                         currentT={currentT}
