@@ -13,7 +13,7 @@ import 'echarts/lib/component/tooltip';
 import { HRBranchList, MonthList, } from '@/utils/baseData';
 import { getYearList, } from '@/utils/utils';
 //调用API
-import { getMonthChartData, } from '@/services/hr';
+import { getChartDataOfBar, } from '@/services/hr';
 
 //父组件传过来的Props
 type Props = {
@@ -47,7 +47,7 @@ const Proportion: React.FC<Props> = (props) => {
     //获取数据
     let fetchData = async (ParamsInfo: any, SelectType: number) => {
         setloading(true);
-        const result = await getMonthChartData(ParamsInfo);
+        const result = await getChartDataOfBar(ParamsInfo);
         let ProportionData: any = [];       //人力、职能数据
         let TotalProportionData: any = [];  //总数据
         if (!result) {

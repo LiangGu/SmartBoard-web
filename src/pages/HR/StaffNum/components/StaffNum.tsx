@@ -8,6 +8,7 @@ import echarts from 'echarts/lib/echarts';
 // 引入需要用到的图表
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/pie';
+import 'echarts/lib/chart/sunburst';
 // 引入提示框和标题组件
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
@@ -16,7 +17,7 @@ import { HRBranchList, MonthList, } from '@/utils/baseData';
 import { getHRListVO, } from '@/utils/auths';
 import { getYearList, sortObjectArr, } from '@/utils/utils';
 //调用API
-import { getMonthChartData, getBarChartModalData, } from '@/services/hr';
+import { getChartDataOfBar, getChartDataOfPie, getBarChartModalData, } from '@/services/hr';
 
 //父组件传过来的Props
 type Props = {
@@ -58,10 +59,10 @@ const StaffNum: React.FC<Props> = (props) => {
     const [indeterminate3, setIndeterminate3] = useState(false);
     const [checkAll3, setCheckAll3] = useState(true);
 
-    //获取数据(柱状图和饼图)
-    let fetchData = async (ParamsInfo: any,) => {
+    //获取数据(柱状图)
+    let fetchDataBar = async (ParamsInfo: any,) => {
         setloading(true);
-        const result = await getMonthChartData(ParamsInfo);
+        const result = await getChartDataOfBar(ParamsInfo);
         let ChartData: any = [];
         if (!result) {
             return;
@@ -85,7 +86,18 @@ const StaffNum: React.FC<Props> = (props) => {
                 });
             }
             //将值传给初始化图表的函数
-            initChart(ChartData.sort(sortObjectArr('total', 1)));
+            initBarChart(ChartData.sort(sortObjectArr('total', 1)));
+            setloading(false);
+        }
+    }
+
+    //获取数据(饼图)
+    let fetchDataPie = async (ParamsInfo: any,) => {
+        setloading(true);
+        const result = await getChartDataOfPie(ParamsInfo);
+        if (result) {
+            //将值传给初始化图表的函数
+            initPieChart(result);
             setloading(false);
         }
     }
@@ -95,21 +107,19 @@ const StaffNum: React.FC<Props> = (props) => {
         setModalTitle(recod.name);
         setloading(true);
         const result = await getBarChartModalData({ BranchName: recod.name, year: year, month: month });
-        showModal();
-        //将值传给初始化图表的函数
-        initModalChart(result.sort(sortObjectArr('Num', 1)));
-        setloading(false);
+        if (result) {
+            setModalVisible(true);
+            //将值传给初始化图表的函数
+            initModalChart(result.sort(sortObjectArr('Num', 1)));
+            setloading(false);
+        }
     }
 
+    //柱状图
     let Chart_MonthChart_Bar: any;
-    let Chart_RatioChart_Pie: any;
-    let initChart = (ChartData: any) => {
+    let initBarChart = (ChartData: any) => {
         let Element_MonthChart_Bar = document.getElementById('MonthChart');
-        let Element_RatioChart_Pie = document.getElementById('RatioChart');
         let Option_MonthChart_Bar: any;
-        let Option_RatioChart_Pie: any;
-
-        //柱状图
         if (Element_MonthChart_Bar) {
             Chart_MonthChart_Bar = echarts.init(Element_MonthChart_Bar as HTMLDivElement);
             Option_MonthChart_Bar = {
@@ -120,7 +130,7 @@ const StaffNum: React.FC<Props> = (props) => {
                     },
                 },
                 legend: {
-                    data: ['总人数', '管理层人数', '职能线人数', '业务线人数',]
+                    data: ['管理层人数', '职能线人数', '业务线人数',]
                 },
                 grid: {
                     left: '5%',
@@ -139,18 +149,19 @@ const StaffNum: React.FC<Props> = (props) => {
                 },
                 series: [
                     {
-                        name: '总人数',
-                        type: 'bar',
-                        stack: 'total',
-                        label: { show: true, },
-                        emphasis: { focus: 'series', },
-                        data: ChartData.map((x: { total: number; }) => x.total),
-                    },
-                    {
                         name: '管理层人数',
                         type: 'bar',
                         stack: 'total',
-                        label: { show: true, },
+                        label: {
+                            show: true,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return ' ';
+                                }
+                            },
+                        },
                         emphasis: { focus: 'series', },
                         data: ChartData.map((x: { type3: number; }) => x.type3),
                     },
@@ -158,7 +169,16 @@ const StaffNum: React.FC<Props> = (props) => {
                         name: '职能线人数',
                         type: 'bar',
                         stack: 'total',
-                        label: { show: true, },
+                        label: {
+                            show: true,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return ' ';
+                                }
+                            },
+                        },
                         emphasis: { focus: 'series', },
                         data: ChartData.map((x: { type1: number; }) => x.type1),
                     },
@@ -166,7 +186,16 @@ const StaffNum: React.FC<Props> = (props) => {
                         name: '业务线人数',
                         type: 'bar',
                         stack: 'total',
-                        label: { show: true, },
+                        label: {
+                            show: true,
+                            formatter: function (params: any) {
+                                if (params.value > 0) {
+                                    return params.value;
+                                } else {
+                                    return ' ';
+                                }
+                            },
+                        },
                         emphasis: { focus: 'series', },
                         data: ChartData.map((x: { type2: number; }) => x.type2),
                     },
@@ -180,68 +209,69 @@ const StaffNum: React.FC<Props> = (props) => {
             });
             window.addEventListener('resize', () => { Chart_MonthChart_Bar.resize() });
         }
+    }
+
+    //饼图
+    let Chart_RatioChart_Pie: any;
+    let initPieChart = (result: any) => {
+        let Element_RatioChart_Pie = document.getElementById('RatioChart');
+        let Option_RatioChart_Pie: any;
 
         let seriesData: any = [];
-        if (ChartData && ChartData.length > 0) {
-            ChartData.map((x: { BranchName: string; total: number }) => {
+        if (result && result.length > 0) {
+            result.map((x: { Name: string; Num: number; childrenDtos: any; }) => {
                 seriesData.push({
-                    //*饼图数据为0时不显示
-                    value: x.total == 0 ? null : x.total,
-                    name: x.BranchName,
+                    name: x.Name,
+                    value: x.Num,
+                    children: x.childrenDtos,
                 });
             });
         }
-        //饼图
+
         if (Element_RatioChart_Pie) {
             Chart_RatioChart_Pie = echarts.init(Element_RatioChart_Pie as HTMLDivElement);
             Option_RatioChart_Pie = {
-                tooltip: {
-                    trigger: 'item',
-                    formatter: '{b} : {c} ({d}%)',
-                },
-                toolbox: {
-                    feature: {
-                        dataView: { show: true, readOnly: false },
-                        magicType: { show: true, type: ['line', 'bar'] },
-                        restore: { show: true },
-                        saveAsImage: { show: true },
+                series: {
+                    type: 'sunburst',
+                    data: seriesData,
+                    radius: [0, '95%'],
+                    sort: null,
+                    emphasis: {
+                        focus: 'ancestor'
                     },
-                },
-                grid: {
-                    left: '5%',
-                    right: '5%',
-                    top: '10%',
-                    bottom: '10%',
-                    containLabel: true,
-                },
-                legend: {
-                    bottom: 'bottom',
-                    textStyle: {
-                        color: 'black',
-                        fontSize: 16,
+                    label: {
+                        show: true,
+                        formatter: '{b} : {c}',
+                        fontSize: 12,
                     },
-                    data: ChartData.map((x: { BranchName: string; }) => x.BranchName),
-                },
-                series: [
-                    {
-                        type: 'pie',
-                        radius: '70%',
-                        center: ['50%', '50%'],
-                        data: seriesData,
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)',
-                            }
+                    levels: [{}, {
+                        r0: '15%',
+                        r: '35%',
+                        itemStyle: {
+                            borderWidth: 2
                         },
                         label: {
-                            show: true,
-                            formatter: '{b} : {c} ({d}%)',
-                            fontSize: 16,
+                            rotate: 'tangential'
                         },
-                    },
-                ]
+                    }, {
+                        r0: '35%',
+                        r: '70%',
+                        label: {
+                            align: 'right'
+                        },
+                    }, {
+                        r0: '70%',
+                        r: '72%',
+                        label: {
+                            position: 'outside',
+                            padding: 3,
+                            silent: false
+                        },
+                        itemStyle: {
+                            borderWidth: 3
+                        },
+                    }]
+                }
             };
             Chart_RatioChart_Pie.setOption(Option_RatioChart_Pie, true);
             window.addEventListener('resize', () => { Chart_RatioChart_Pie.resize() });
@@ -333,7 +363,8 @@ const StaffNum: React.FC<Props> = (props) => {
             type: HRListOfTypeList.map((x: { ID: number; }) => x.ID),
         };
         if (currentT == props.currentT) {
-            fetchData(ParamsInfo);
+            fetchDataBar(ParamsInfo);
+            fetchDataPie({ year: year, month: month });
         }
     }, [props.currentT]);
 
@@ -403,29 +434,11 @@ const StaffNum: React.FC<Props> = (props) => {
             company: HRBranchList.map(x => x.branchName),       //前台不用添加公司的搜索条件，默认传过去
             type: checkedList3,
         };
-        fetchData(ParamsInfo,);
+        fetchDataBar(ParamsInfo);
+        fetchDataPie({ year: year, month: month });
         //关闭 Drawer
         setDrawerVisible(false);
     }
-
-
-
-
-
-
-    const showModal = () => {
-        setModalVisible(true);
-    };
-
-    const handleOk = () => {
-        setModalVisible(false);
-    };
-
-    const handleCancel = () => {
-        setModalVisible(false);
-    };
-
-
 
     return (
         <PageContainer>
@@ -475,8 +488,7 @@ const StaffNum: React.FC<Props> = (props) => {
                 title={ModalTitle}
                 width={1100}
                 visible={ModalVisible}
-                onOk={handleOk}
-                onCancel={handleCancel}
+                onCancel={() => { setModalVisible(false) }}
                 footer={false}
             >
                 <div id="ModalRatioChart" style={{ width: '100%', height: 500 }}></div>
@@ -551,7 +563,7 @@ const StaffNum: React.FC<Props> = (props) => {
                 </div>
             </Drawer>
 
-        </PageContainer>
+        </PageContainer >
     );
 }
 
