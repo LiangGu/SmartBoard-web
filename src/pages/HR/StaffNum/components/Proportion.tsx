@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Button, Drawer, Select, } from 'antd';
+import { Card, Spin, Row, Col, Button, Drawer, Select, Form, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
@@ -138,7 +138,7 @@ const Proportion: React.FC<Props> = (props) => {
                 series: [
                     {
                         type: 'bar',
-                        name: `${SelectType == 1 ? '职能人数' : SelectType == 2 ? '业务人数' : '全部人数'}`,
+                        name: `${SelectType == 1 ? '职能人数' : SelectType == 2 ? '业务人数' : SelectType == 3 ? '管理层人数' : '全部人数'}`,
                         label: {
                             show: true,
                             position: 'right',
@@ -231,8 +231,24 @@ const Proportion: React.FC<Props> = (props) => {
     return (
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
+                <Card className='search-info' title='搜索条件内容'>
+                    <Row gutter={24}>
+                        <Col span={4}>
+                            <Form.Item label="年份">
+                                {year}年
+                            </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                            <Form.Item label="月份">
+                                {month}月
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Card>
                 <Card>
-                    <div id="ProportionChart" style={{ width: '100%', height: 800 }}></div>
+                    <Row gutter={24}>
+                        <div id="ProportionChart" style={{ width: '100%', height: 800 }}></div>
+                    </Row>
                 </Card>
             </Spin>
 

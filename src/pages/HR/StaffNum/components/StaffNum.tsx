@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Button, Drawer, Checkbox, Select, } from 'antd';
+import { Card, Spin, Row, Col, Button, Drawer, Checkbox, Select, Form, Modal, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
@@ -14,9 +14,9 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 import { HRBranchList, MonthList, } from '@/utils/baseData';
 import { getHRListVO, } from '@/utils/auths';
-import { getYearList, FilterZeroOfArraay, sortObjectArr, } from '@/utils/utils';
+import { getYearList, sortObjectArr, } from '@/utils/utils';
 //调用API
-import { getMonthChartData, } from '@/services/hr';
+import { getMonthChartData, getBarChartModalData, } from '@/services/hr';
 
 //父组件传过来的Props
 type Props = {
@@ -30,6 +30,8 @@ const date = new Date()
 const StaffNum: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
+    const [ModalVisible, setModalVisible] = useState(false);
+    const [ModalTitle, setModalTitle] = useState('');
     const [currentT,] = useState(props.currentT);
 
     //数据集
@@ -37,7 +39,7 @@ const StaffNum: React.FC<Props> = (props) => {
         return getYearList();
     });
     const [MonthListVO,] = useState(MonthList);
-    const [HRListOfType, setHRListOfType] = useState(getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType));
+    const [HRListOfType, setHRListOfType] = useState(getHRListVO());
 
     /**
      *  单选
@@ -56,8 +58,8 @@ const StaffNum: React.FC<Props> = (props) => {
     const [indeterminate3, setIndeterminate3] = useState(false);
     const [checkAll3, setCheckAll3] = useState(true);
 
-    //获取数据
-    let fetchData = async (ParamsInfo: any, SelectType: number) => {
+    //获取数据(柱状图和饼图)
+    let fetchData = async (ParamsInfo: any,) => {
         setloading(true);
         const result = await getMonthChartData(ParamsInfo);
         let ChartData: any = [];
@@ -66,25 +68,37 @@ const StaffNum: React.FC<Props> = (props) => {
         }
         if (result) {
             if (result.length > 0) {
-                if (SelectType > 0) {
-                    ChartData = result.filter((x: { Type: number; }) => x.Type == SelectType);
-                } else {
-                    let keysArr = [...new Set(result.map((item: { BranchName: any; }) => item.BranchName))];
-                    //全部：加总处理
-                    keysArr.forEach(item => {
-                        const arr = result.filter((x: { BranchName: string; }) => x.BranchName == item);
-                        const sum = arr.reduce((a: any, b: { Num: number; }) => a + b.Num, 0);
-                        ChartData.push({
-                            BranchName: item,
-                            Num: sum,
-                        });
+                let keysArr = [...new Set(result.map((item: { BranchName: any; }) => item.BranchName))];
+                keysArr.forEach(item => {
+                    const arr = result.filter((x: { BranchName: string; }) => x.BranchName == item);
+                    const total = arr.reduce((a: any, b: { Num: number; }) => a + b.Num, 0);    //全部：加总处理
+                    const type1 = arr.filter((x: { Type: number; }) => x.Type == 1).length > 0 ? arr.filter((x: { Type: number; }) => x.Type == 1)[0].Num : 0;  //职能线
+                    const type2 = arr.filter((x: { Type: number; }) => x.Type == 2).length > 0 ? arr.filter((x: { Type: number; }) => x.Type == 2)[0].Num : 0;  //业务线
+                    const type3 = arr.filter((x: { Type: number; }) => x.Type == 3).length > 0 ? arr.filter((x: { Type: number; }) => x.Type == 3)[0].Num : 0;  //管理层
+                    ChartData.push({
+                        BranchName: item,
+                        total: total,
+                        type1: type1,
+                        type2: type2,
+                        type3: type3,
                     });
-                }
+                });
             }
             //将值传给初始化图表的函数
-            initChart(FilterZeroOfArraay(ChartData.sort(sortObjectArr('Num', 2)), 0, 'Num'));
+            initChart(ChartData.sort(sortObjectArr('total', 1)));
             setloading(false);
         }
+    }
+
+    //获取 Modal 的数据
+    let fetchModalData = async (recod: any,) => {
+        setModalTitle(recod.name);
+        setloading(true);
+        const result = await getBarChartModalData({ BranchName: recod.name, year: year, month: month });
+        showModal();
+        //将值传给初始化图表的函数
+        initModalChart(result.sort(sortObjectArr('Num', 1)));
+        setloading(false);
     }
 
     let Chart_MonthChart_Bar: any;
@@ -105,56 +119,74 @@ const StaffNum: React.FC<Props> = (props) => {
                         type: 'shadow',
                     },
                 },
-                toolbox: {
-                    feature: {
-                        dataView: { show: true, readOnly: false },
-                        magicType: { show: true, type: ['line', 'bar'] },
-                        restore: { show: true },
-                        saveAsImage: { show: true },
-                    },
+                legend: {
+                    data: ['总人数', '管理层人数', '职能线人数', '业务线人数',]
                 },
                 grid: {
                     left: '5%',
                     right: '5%',
                     top: '10%',
-                    bottom: '10%',
+                    bottom: '10%',                    //反向排序
+                    inverse: true,
                     containLabel: true,
                 },
                 xAxis: {
-                    type: 'value',
-                    boundaryGap: [0, 0.01]
+                    type: 'value'
                 },
                 yAxis: {
                     type: 'category',
-                    //反向排序
-                    inverse: true,
                     data: ChartData.map((x: { BranchName: string; }) => x.BranchName),
                 },
                 series: [
                     {
+                        name: '总人数',
                         type: 'bar',
-                        name: '人数',
-                        color: '#C23531',
-                        label: {
-                            show: true,
-                            position: 'right',
-                            color: 'black',
-                            fontSize: 16,
-                        },
-                        data: ChartData.map((x: { Num: number; }) => x.Num),
+                        stack: 'total',
+                        label: { show: true, },
+                        emphasis: { focus: 'series', },
+                        data: ChartData.map((x: { total: number; }) => x.total),
+                    },
+                    {
+                        name: '管理层人数',
+                        type: 'bar',
+                        stack: 'total',
+                        label: { show: true, },
+                        emphasis: { focus: 'series', },
+                        data: ChartData.map((x: { type3: number; }) => x.type3),
+                    },
+                    {
+                        name: '职能线人数',
+                        type: 'bar',
+                        stack: 'total',
+                        label: { show: true, },
+                        emphasis: { focus: 'series', },
+                        data: ChartData.map((x: { type1: number; }) => x.type1),
+                    },
+                    {
+                        name: '业务线人数',
+                        type: 'bar',
+                        stack: 'total',
+                        label: { show: true, },
+                        emphasis: { focus: 'series', },
+                        data: ChartData.map((x: { type2: number; }) => x.type2),
                     },
                 ],
             };
             Chart_MonthChart_Bar.setOption(Option_MonthChart_Bar, true);
+            //柱状图点击
+            Chart_MonthChart_Bar.off('click');
+            Chart_MonthChart_Bar.on('click', function (recod: any) {
+                fetchModalData(recod)
+            });
             window.addEventListener('resize', () => { Chart_MonthChart_Bar.resize() });
         }
 
         let seriesData: any = [];
         if (ChartData && ChartData.length > 0) {
-            ChartData.map((x: { BranchName: string; Num: number }) => {
+            ChartData.map((x: { BranchName: string; total: number }) => {
                 seriesData.push({
                     //*饼图数据为0时不显示
-                    value: x.Num == 0 ? null : x.Num,
+                    value: x.total == 0 ? null : x.total,
                     name: x.BranchName,
                 });
             });
@@ -216,9 +248,82 @@ const StaffNum: React.FC<Props> = (props) => {
         }
     }
 
+    //Modal 中的饼图
+    let Chart_ModalRatioChart_Pie: any;
+    let initModalChart = (result: any) => {
+        let Element_ModalRatioChart_Pie = document.getElementById('ModalRatioChart');
+        let Option_ModalRatioChart_Pie: any;
+
+        let seriesData: any = [];
+        if (result && result.length > 0) {
+            result.map((x: { Name: string; Num: number }) => {
+                seriesData.push({
+                    //*饼图数据为0时不显示
+                    value: x.Num == 0 ? null : x.Num,
+                    name: x.Name,
+                });
+            });
+        }
+        //Modal 中的饼图
+        if (Element_ModalRatioChart_Pie) {
+            Chart_ModalRatioChart_Pie = echarts.init(Element_ModalRatioChart_Pie as HTMLDivElement);
+            Option_ModalRatioChart_Pie = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b} : {c} ({d}%)',
+                },
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true },
+                    },
+                },
+                grid: {
+                    left: '5%',
+                    right: '5%',
+                    top: '10%',
+                    bottom: '10%',
+                    containLabel: true,
+                },
+                legend: {
+                    bottom: 'bottom',
+                    textStyle: {
+                        color: 'black',
+                        fontSize: 16,
+                    },
+                    data: result.map((x: { Name: string; }) => x.Name),
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: '70%',
+                        center: ['50%', '50%'],
+                        data: seriesData,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                            }
+                        },
+                        label: {
+                            show: true,
+                            formatter: '{b} : {c} ({d}%)',
+                            fontSize: 16,
+                        },
+                    },
+                ]
+            };
+            Chart_ModalRatioChart_Pie.setOption(Option_ModalRatioChart_Pie, true);
+            window.addEventListener('resize', () => { Chart_ModalRatioChart_Pie.resize() });
+        }
+    }
+
     //当用户切换 Switch 时更新 HRListOfType 和 checkedList3
     useEffect(() => {
-        let HRListOfTypeList = props.parentType > 0 ? getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType) : getHRListVO();
+        let HRListOfTypeList = getHRListVO();
         setHRListOfType(HRListOfTypeList);
         setCheckedList3(HRListOfTypeList.map((x: { ID: number; }) => x.ID));
         let ParamsInfo: object = {
@@ -228,9 +333,9 @@ const StaffNum: React.FC<Props> = (props) => {
             type: HRListOfTypeList.map((x: { ID: number; }) => x.ID),
         };
         if (currentT == props.currentT) {
-            fetchData(ParamsInfo, props.parentType);
+            fetchData(ParamsInfo);
         }
-    }, [props.parentType, props.currentT]);
+    }, [props.currentT]);
 
     /**
      * 单选
@@ -298,16 +403,64 @@ const StaffNum: React.FC<Props> = (props) => {
             company: HRBranchList.map(x => x.branchName),       //前台不用添加公司的搜索条件，默认传过去
             type: checkedList3,
         };
-        fetchData(ParamsInfo, props.parentType);
+        fetchData(ParamsInfo,);
         //关闭 Drawer
         setDrawerVisible(false);
     }
 
+
+
+
+
+
+    const showModal = () => {
+        setModalVisible(true);
+    };
+
+    const handleOk = () => {
+        setModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setModalVisible(false);
+    };
+
+
+
     return (
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
+                <Card className='search-info' title='搜索条件内容'>
+                    <Row gutter={24}>
+                        <Col span={4}>
+                            <Form.Item label="年份">
+                                {year}年
+                            </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                            <Form.Item label="月份">
+                                {month}月
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={24}>
+                        <Col span={24}>
+                            <Form.Item label="业务">
+                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(1, list)}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            HRListOfType && HRListOfType.length > 0 ? HRListOfType.map((x: { ID: number; Name: string; }) => {
+                                                return <Checkbox key={x.ID} value={x.ID} disabled={true}>{x.Name}</Checkbox>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Checkbox.Group>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Card>
                 <Card>
-                    <Row>
+                    <Row gutter={24}>
                         <Col span={12}>
                             <div id="MonthChart" style={{ width: '100%', height: 800 }}></div>
                         </Col>
@@ -317,6 +470,17 @@ const StaffNum: React.FC<Props> = (props) => {
                     </Row>
                 </Card>
             </Spin>
+
+            <Modal
+                title={ModalTitle}
+                width={1100}
+                visible={ModalVisible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={false}
+            >
+                <div id="ModalRatioChart" style={{ width: '100%', height: 500 }}></div>
+            </Modal>
 
             <Button type="primary" icon={<SearchOutlined />} className={styles.searchBtn} onClick={() => setDrawerVisible(true)} >搜索</Button>
             <Drawer

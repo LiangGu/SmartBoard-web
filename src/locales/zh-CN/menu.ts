@@ -8,5 +8,5 @@ export default {
     'menu.cashflow': '业务收支现金',
     'menu.debt': '应收账款',
     'menu.rank': '客户排名',
-    'menu.staffNum': '员工数量',
+    'menu.staffNum': '员工分析',
 };

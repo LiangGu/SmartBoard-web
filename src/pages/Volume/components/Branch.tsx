@@ -201,7 +201,7 @@ const VolumeBranch: React.FC<{}> = () => {
             Chart_Pie = echarts.init(Element_Pie as HTMLDivElement);
             Option_Pie = {
                 title: {
-                    text: `累计${titleName}占比(${getselectYear()})`,
+                    text: `累计${titleName}占比(${ParamsInfo.Year})`,
                     subtext: `单位: ${yAxisName}`,
                 },
                 tooltip: {

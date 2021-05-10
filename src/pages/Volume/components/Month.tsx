@@ -369,7 +369,7 @@ const VolumeMonth: React.FC<{}> = () => {
             footer={
                 <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
                     确定
-                    </Button>
+                </Button>
             }
         >
             {

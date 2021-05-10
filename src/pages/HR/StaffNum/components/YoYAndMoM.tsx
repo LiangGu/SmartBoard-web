@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Spin, Row, Col, Button, Drawer, Select, Checkbox, } from 'antd';
+import { Card, Spin, Row, Col, Button, Drawer, Select, Checkbox, Form, } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '@/components/Search/index.less';
 //引入 ECharts 主模块
@@ -25,7 +25,7 @@ type Props = {
 //日期
 const date = new Date();
 
-const YearOnYear: React.FC<Props> = (props) => {
+const YoYAndMoM: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
     const [currentT,] = useState(props.currentT);
@@ -296,14 +296,6 @@ const YearOnYear: React.FC<Props> = (props) => {
         }
     }
 
-
-
-
-
-
-
-
-
     //当用户切换 Switch 时更新 HRListOfType 和 checkedList3
     useEffect(() => {
         let HRListOfTypeList = props.parentType > 0 ? getHRListVO().filter((x: { Type: number; }) => x.Type == props.parentType) : getHRListVO();
@@ -397,8 +389,37 @@ const YearOnYear: React.FC<Props> = (props) => {
     return (
         <PageContainer>
             <Spin tip="数据正在加载中,请稍等..." spinning={loading}>
+                <Card className='search-info' title='搜索条件内容'>
+                    <Row gutter={24}>
+                        <Col span={4}>
+                            <Form.Item label="年份">
+                                {year}年
+                            </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                            <Form.Item label="月份">
+                                {month}月
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={24}>
+                        <Col span={24}>
+                            <Form.Item label="业务">
+                                <Checkbox.Group value={checkedList3} onChange={(list) => onChange(1, list)}>
+                                    <Row className={styles.searchAreaContent}>
+                                        {
+                                            HRListOfType && HRListOfType.length > 0 ? HRListOfType.map((x: { ID: number; Name: string; }) => {
+                                                return <Checkbox key={x.ID} value={x.ID} disabled={true}>{x.Name}</Checkbox>
+                                            }) : null
+                                        }
+                                    </Row>
+                                </Checkbox.Group>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Card>
                 <Card>
-                    <Row>
+                    <Row gutter={24}>
                         <Col span={12}>
                             <div id="MonthOverMonthChart" style={{ width: '100%', height: 800 }}></div>
                         </Col>
@@ -406,7 +427,6 @@ const YearOnYear: React.FC<Props> = (props) => {
                             <div id="YearOverYearChart" style={{ width: '100%', height: 800 }}></div>
                         </Col>
                     </Row>
-
                 </Card>
             </Spin>
 
@@ -484,4 +504,4 @@ const YearOnYear: React.FC<Props> = (props) => {
     );
 }
 
-export default YearOnYear;
+export default YoYAndMoM;
