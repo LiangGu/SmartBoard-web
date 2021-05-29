@@ -4,6 +4,19 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(
 export const isUrl = (path: string): boolean => reg.test(path);
 
 /**
+ * 数值加上千分符号，返回字符串
+ * @param amountStr
+ * @returns {string}
+ */
+export function FormatNumToMoney(amount: any) {
+    if (amount) {
+        return String(amount).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,");
+    } else {
+        return amount;
+    }
+}
+
+/**
  * 获取类型
  * @param a 
  */

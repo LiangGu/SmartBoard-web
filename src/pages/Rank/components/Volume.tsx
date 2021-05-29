@@ -192,14 +192,10 @@ const RankVolume: React.FC<{}> = () => {
         if (element) {
             myChart = echarts.init(element as HTMLDivElement);
             option = {
-                title: {
-                    text: `前${top}客户${titleName}排名`,
-                },
+                title: { text: `前${top}客户${titleName}排名`, },
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    axisPointer: { type: 'shadow', },
                 },
                 toolbox: {
                     feature: {
@@ -261,11 +257,7 @@ const RankVolume: React.FC<{}> = () => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ' '; }
                             },
                         },
                         data: transIntOfArraay(RankTopTotalARList),

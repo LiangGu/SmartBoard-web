@@ -103,16 +103,12 @@ const CashFlow: React.FC<{}> = () => {
         if (element) {
             myChart = echarts.init(element as HTMLDivElement);
             option = {
-                title: {
-                    text: '日业务现金走势',
-                },
+                title: { text: '日业务现金走势', },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
                         type: 'cross',
-                        label: {
-                            backgroundColor: '#C23531',
-                        },
+                        label: { backgroundColor: '#C23531', },
                     },
                 },
                 toolbox: {

@@ -155,14 +155,10 @@ const VolumeMonth: React.FC<{}> = () => {
         if (Element_RT) {
             Chart_RT = echarts.init(Element_RT as HTMLDivElement);
             Option_RT = {
-                title: {
-                    text: `月度${titleName}货量`,
-                },
+                title: { text: `月度${titleName}货量`, },
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'line',
-                    },
+                    axisPointer: { type: 'line', },
                 },
                 legend: {
                     bottom: 'bottom',

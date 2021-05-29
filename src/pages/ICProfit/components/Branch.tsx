@@ -188,14 +188,10 @@ const ICProfitBranch: React.FC<{}> = () => {
         if (element) {
             myChart = echarts.init(element as HTMLDivElement);
             option = {
-                title: {
-                    text: '公司收支毛利',
-                },
+                title: { text: '公司收支毛利', },
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    axisPointer: { type: 'shadow', },
                 },
                 toolbox: {
                     feature: {
@@ -219,9 +215,7 @@ const ICProfitBranch: React.FC<{}> = () => {
                         fontSize: 16,
                     },
                     data: ['收入', '支出', '毛利'],
-                    selected: {
-                        '支出': false,
-                    },
+                    selected: { '支出': false, },
                 },
                 xAxis: [
                     {
@@ -253,18 +247,14 @@ const ICProfitBranch: React.FC<{}> = () => {
                     {
                         name: '毛利',
                         type: 'bar',
-                        color: '#FF7C00',
+                        color: '#ffaa06',
                         label: {
                             show: true,
                             position: 'right',
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ' '; }
                             },
                         },
                         data: transIntOfArraay(ProfitList),
@@ -280,11 +270,7 @@ const ICProfitBranch: React.FC<{}> = () => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ' '; }
                             },
                         },
                         data: transIntOfArraay(TotalARList),

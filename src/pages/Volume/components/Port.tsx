@@ -182,14 +182,10 @@ const VolumePort: React.FC<{}> = () => {
         if (element) {
             myChart = echarts.init(element as HTMLDivElement);
             option = {
-                title: {
-                    text: `前${top}港口${titleName}排名`,
-                },
+                title: { text: `前${top}港口${titleName}排名`, },
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    axisPointer: { type: 'shadow', },
                 },
                 toolbox: {
                     feature: {
@@ -241,11 +237,7 @@ const VolumePort: React.FC<{}> = () => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ' '; }
                             },
                         },
                         data: transIntOfArraay(PortTopTotalVolumeList),
@@ -452,7 +444,7 @@ const VolumePort: React.FC<{}> = () => {
             footer={
                 <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
                     确定
-                    </Button>
+                </Button>
             }
         >
             {

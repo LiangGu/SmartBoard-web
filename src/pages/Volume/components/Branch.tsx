@@ -258,14 +258,10 @@ const VolumeBranch: React.FC<{}> = () => {
         if (Element_Bar) {
             Chart_Bar = echarts.init(Element_Bar as HTMLDivElement);
             Option_Bar = {
-                title: {
-                    text: `累计${titleName}同比`,
-                },
+                title: { text: `累计${titleName}`, },
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    axisPointer: { type: 'shadow', },
                 },
                 toolbox: {
                     feature: {
@@ -297,7 +293,7 @@ const VolumeBranch: React.FC<{}> = () => {
                         color: 'black',
                         fontSize: 16,
                     },
-                    data: [`${ParamsInfo.Year - 1}`, `${ParamsInfo.Year}`],
+                    data: [`${ParamsInfo.Year}`, `${ParamsInfo.Year - 1}`,],
                 },
                 yAxis: {
                     type: 'category',
@@ -317,24 +313,8 @@ const VolumeBranch: React.FC<{}> = () => {
                 series: [
                     {
                         type: 'bar',
-                        name: `${ParamsInfo.Year - 1}`,
-                        label: {
-                            show: true,
-                            position: 'right',
-                            color: 'black',
-                            fontSize: 16,
-                            formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
-                            },
-                        },
-                        data: transIntOfArraay(BarSeriesData_LastYear),
-                    },
-                    {
-                        type: 'bar',
+                        color: '#5470c6',
+                        barWidth: 30,
                         name: `${ParamsInfo.Year}`,
                         label: {
                             show: true,
@@ -342,14 +322,26 @@ const VolumeBranch: React.FC<{}> = () => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ' '; }
                             },
                         },
                         data: transIntOfArraay(BarSeriesData_SelectYear),
+                    },
+                    {
+                        type: 'bar',
+                        color: '#bdc8e8',
+                        barWidth: 20,
+                        name: `${ParamsInfo.Year - 1}`,
+                        label: {
+                            show: true,
+                            position: 'right',
+                            color: 'black',
+                            fontSize: 16,
+                            formatter: function (params: any) {
+                                if (params.value > 0) { return params.value; } else { return ' '; }
+                            },
+                        },
+                        data: transIntOfArraay(BarSeriesData_LastYear),
                     },
                 ]
             };

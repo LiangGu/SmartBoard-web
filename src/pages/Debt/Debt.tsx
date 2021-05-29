@@ -20,6 +20,7 @@ import {
     sortObjectArr,
     transIntOfArraay,
     FilterZeroOfArraay,
+    FormatNumToMoney,
 } from '@/utils/utils';
 import {
     getBranchList,
@@ -178,14 +179,10 @@ const Debt: React.FC<{}> = () => {
         if (Element_Crosswise_Bar) {
             Chart_Crosswise_Bar = echarts.init(Element_Crosswise_Bar as HTMLDivElement);
             Option_Crosswise_Bar = {
-                title: {
-                    text: '应收账款',
-                },
+                title: { text: '应收账款', },
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    axisPointer: { type: 'shadow', },
                 },
                 toolbox: {
                     feature: {
@@ -232,12 +229,12 @@ const Debt: React.FC<{}> = () => {
                             position: 'top',
                             color: 'black',
                             fontSize: 16,
+                            fontWeight: 'bold',
+                            fontFamily: 'KRomantic',
                             formatter: function (params: any) {
                                 if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                    return FormatNumToMoney(params.value);
+                                } else { return ' '; }
                             },
                         },
                         data: transIntOfArraay(DebtList),
@@ -299,6 +296,11 @@ const Debt: React.FC<{}> = () => {
                         label: {
                             show: true,
                             fontSize: 16,
+                            fontWeight: 'bold',
+                            fontFamily: 'KRomantic',
+                            formatter: function (params: any) {
+                                if (params.value > 0) { return FormatNumToMoney(params.value); } else { return ' '; }
+                            },
                         },
                     },
                 ]
@@ -379,12 +381,10 @@ const Debt: React.FC<{}> = () => {
                             position: 'right',
                             color: 'black',
                             fontSize: 16,
+                            fontWeight: 'bold',
+                            fontFamily: 'KRomantic',
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                if (params.value > 0) { return FormatNumToMoney(params.value); } else { return ' '; }
                             },
                         },
                         data: transIntOfArraay(seriesData),
@@ -494,7 +494,7 @@ const Debt: React.FC<{}> = () => {
                 key={"right"}
                 width={300}
                 footer={
-                    <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset' }} onClick={onSearch}>
+                    <Button type="primary" icon={<SearchOutlined />} style={{ width: "100%", fontSize: 16, height: 'unset', }} onClick={onSearch}>
                         确定
                     </Button>
                 }

@@ -125,9 +125,7 @@ const StaffNum: React.FC<Props> = (props) => {
             Option_MonthChart_Bar = {
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    axisPointer: { type: 'shadow', },
                 },
                 legend: {
                     data: ['管理层人数', '职能线人数', '业务线人数',]
@@ -140,9 +138,7 @@ const StaffNum: React.FC<Props> = (props) => {
                     inverse: true,
                     containLabel: true,
                 },
-                xAxis: {
-                    type: 'value'
-                },
+                xAxis: { type: 'value', },
                 yAxis: {
                     type: 'category',
                     data: ChartData.map((x: { BranchName: string; }) => x.BranchName),
@@ -155,11 +151,7 @@ const StaffNum: React.FC<Props> = (props) => {
                         label: {
                             show: true,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ' '; }
                             },
                         },
                         emphasis: { focus: 'series', },
@@ -172,11 +164,7 @@ const StaffNum: React.FC<Props> = (props) => {
                         label: {
                             show: true,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ' '; }
                             },
                         },
                         emphasis: { focus: 'series', },
@@ -189,11 +177,7 @@ const StaffNum: React.FC<Props> = (props) => {
                         label: {
                             show: true,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return ' ';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ' '; }
                             },
                         },
                         emphasis: { focus: 'series', },
@@ -236,9 +220,7 @@ const StaffNum: React.FC<Props> = (props) => {
                     data: seriesData,
                     radius: [0, '95%'],
                     sort: null,
-                    emphasis: {
-                        focus: 'ancestor'
-                    },
+                    emphasis: { focus: 'ancestor' },
                     label: {
                         show: true,
                         formatter: '{b} : {c}',
@@ -247,18 +229,12 @@ const StaffNum: React.FC<Props> = (props) => {
                     levels: [{}, {
                         r0: '15%',
                         r: '35%',
-                        itemStyle: {
-                            borderWidth: 2
-                        },
-                        label: {
-                            rotate: 'tangential'
-                        },
+                        itemStyle: { borderWidth: 2 },
+                        label: { rotate: 'tangential' },
                     }, {
                         r0: '35%',
                         r: '70%',
-                        label: {
-                            align: 'right'
-                        },
+                        label: { align: 'right' },
                     }, {
                         r0: '70%',
                         r: '72%',
@@ -267,9 +243,7 @@ const StaffNum: React.FC<Props> = (props) => {
                             padding: 3,
                             silent: false
                         },
-                        itemStyle: {
-                            borderWidth: 3
-                        },
+                        itemStyle: { borderWidth: 3 },
                     }]
                 }
             };

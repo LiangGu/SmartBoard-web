@@ -90,14 +90,10 @@ const YoYAndMoM: React.FC<Props> = (props) => {
         if (Element_MonthOverMonthr_Bar) {
             Chart_MonthOverMonthr_Bar = echarts.init(Element_MonthOverMonthr_Bar as HTMLDivElement);
             Option_MonthOverMonthr_Bar = {
-                title: {
-                    subtext: '每月人数环比',
-                },
+                title: { subtext: '每月人数环比', },
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    axisPointer: { type: 'shadow', },
                 },
                 toolbox: {
                     feature: {
@@ -155,11 +151,7 @@ const YoYAndMoM: React.FC<Props> = (props) => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return '';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ''; }
                             }
                         },
                         data: result.hrDivisionDtos.map((x: { Num: number; }) => x.Num),
@@ -173,11 +165,7 @@ const YoYAndMoM: React.FC<Props> = (props) => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return '';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ''; }
                             }
                         },
                         data: result.hrDivisionDtosOYO.map((x: { Num: number; }) => x.Num),
@@ -197,14 +185,10 @@ const YoYAndMoM: React.FC<Props> = (props) => {
         if (Element_YearOverYear_Bar) {
             Chart_YearOverYear_Bar = echarts.init(Element_YearOverYear_Bar as HTMLDivElement);
             Option_YearOverYear_Bar = {
-                title: {
-                    subtext: '每月人数同比',
-                },
+                title: { subtext: '每月人数同比', },
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    axisPointer: { type: 'shadow', },
                 },
                 toolbox: {
                     feature: {
@@ -262,11 +246,7 @@ const YoYAndMoM: React.FC<Props> = (props) => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return '';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ''; }
                             }
                         },
                         data: result.hrDivisionDtos.map((x: { Num: number; }) => x.Num),
@@ -280,11 +260,7 @@ const YoYAndMoM: React.FC<Props> = (props) => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return '';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ''; }
                             }
                         },
                         data: result.hrDivisionDtosOYO.map((x: { Num: number; }) => x.Num),

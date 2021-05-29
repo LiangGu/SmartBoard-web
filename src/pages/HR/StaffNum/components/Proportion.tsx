@@ -84,9 +84,7 @@ const Proportion: React.FC<Props> = (props) => {
             Option_Proportion_Bar = {
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                    },
+                    axisPointer: { type: 'shadow', },
                 },
                 toolbox: {
                     feature: {
@@ -145,11 +143,7 @@ const Proportion: React.FC<Props> = (props) => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return '';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ''; }
                             }
                         },
                         data: ProportionData.map((x: { Num: number; }) => x.Num),
@@ -163,11 +157,7 @@ const Proportion: React.FC<Props> = (props) => {
                             color: 'black',
                             fontSize: 16,
                             formatter: function (params: any) {
-                                if (params.value > 0) {
-                                    return params.value;
-                                } else {
-                                    return '';
-                                }
+                                if (params.value > 0) { return params.value; } else { return ''; }
                             }
                         },
                         data: TotalProportionData.map((x: { Num: number; }) => x.Num),
