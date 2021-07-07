@@ -113,4 +113,5 @@ export const HRBranchList = [
     { branchName: '空运事业部' },
     { branchName: '供应链金融事业部' },
     { branchName: '上海共享中心' },
+    { branchName: '澳大利亚' },
 ];
