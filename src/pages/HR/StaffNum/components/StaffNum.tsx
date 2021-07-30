@@ -15,7 +15,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 import { HRBranchList, MonthList, } from '@/utils/baseData';
 import { getHRListVO, } from '@/utils/auths';
-import { getYearList, sortObjectArr, } from '@/utils/utils';
+import { getYearList, sortObjectArr, sumArray, } from '@/utils/utils';
 //调用API
 import { getChartDataOfBar, getChartDataOfPie, getBarChartModalData, } from '@/services/hr';
 
@@ -34,6 +34,7 @@ const StaffNum: React.FC<Props> = (props) => {
     const [ModalVisible, setModalVisible] = useState(false);
     const [ModalTitle, setModalTitle] = useState('');
     const [currentT,] = useState(props.currentT);
+    const [totalPeople, setTotalPeople] = useState<any>('');
 
     //数据集
     const [YearList,] = useState(() => {
@@ -85,6 +86,9 @@ const StaffNum: React.FC<Props> = (props) => {
                     });
                 });
             }
+            // 计算总人数
+            let totalPeople = sumArray(Array.from(result, (x: { Num: number }) => x.Num));
+            setTotalPeople(totalPeople);
             //将值传给初始化图表的函数
             initBarChart(ChartData.sort(sortObjectArr('total', 1)));
             setloading(false);
@@ -122,6 +126,20 @@ const StaffNum: React.FC<Props> = (props) => {
         let Option_MonthChart_Bar: any;
         if (Element_MonthChart_Bar) {
             Chart_MonthChart_Bar = echarts.init(Element_MonthChart_Bar as HTMLDivElement);
+            //总计
+            let ChartData_Type1 = ChartData.map((x: { type1: number; }) => x.type1);
+            let ChartData_Type2 = ChartData.map((x: { type2: number; }) => x.type2);
+            let ChartData_Type3 = ChartData.map((x: { type3: number; }) => x.type3);
+            var total_data = function () {
+                var datas = [];
+                for (var i = 0; i < ChartData_Type1.length; i++) {
+
+                    datas.push(ChartData_Type1[i] + ChartData_Type2[i] + ChartData_Type3[i]);
+                }
+                return datas;
+            }();
+
+
             Option_MonthChart_Bar = {
                 tooltip: {
                     trigger: 'axis',
@@ -155,7 +173,7 @@ const StaffNum: React.FC<Props> = (props) => {
                             },
                         },
                         emphasis: { focus: 'series', },
-                        data: ChartData.map((x: { type3: number; }) => x.type3),
+                        data: ChartData_Type3,
                     },
                     {
                         name: '职能线人数',
@@ -168,7 +186,7 @@ const StaffNum: React.FC<Props> = (props) => {
                             },
                         },
                         emphasis: { focus: 'series', },
-                        data: ChartData.map((x: { type1: number; }) => x.type1),
+                        data: ChartData_Type1,
                     },
                     {
                         name: '业务线人数',
@@ -181,12 +199,33 @@ const StaffNum: React.FC<Props> = (props) => {
                             },
                         },
                         emphasis: { focus: 'series', },
-                        data: ChartData.map((x: { type2: number; }) => x.type2),
+                        data: ChartData_Type2,
                     },
-                ],
+                    // 总人数
+                    {
+                        name: '总人数',
+                        type: 'line',
+                        stack: '',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'right',
+                                formatter: '总人数: {c}',
+                                textStyle: { color: '#C23531' }
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                show: false,
+                                color: 'rgba(0, 0, 0, 0)'
+                            }
+                        },
+                        data: total_data,
+                    }
+                ]
             };
             Chart_MonthChart_Bar.setOption(Option_MonthChart_Bar, true);
-            //柱状图点击
+            // 柱状图点击
             Chart_MonthChart_Bar.off('click');
             Chart_MonthChart_Bar.on('click', function (recod: any) {
                 fetchModalData(recod)
@@ -429,6 +468,12 @@ const StaffNum: React.FC<Props> = (props) => {
                                 {month}月
                             </Form.Item>
                         </Col>
+                        {/* 添加一个总人数的显示 */}
+                        <Col span={4}>
+                            <Form.Item label="总人数" style={{ color: "#C23531", }}>
+                                {totalPeople}
+                            </Form.Item>
+                        </Col>
                     </Row>
                     <Row gutter={24}>
                         <Col span={24}>
@@ -523,7 +568,7 @@ const StaffNum: React.FC<Props> = (props) => {
                         <Col span={12} className={styles.searchAreaTitle}>业务</Col>
                         <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(1, e)} checked={checkAll3}>
                             全选
-                    </Checkbox>
+                        </Checkbox>
                     </Row>
                     <Checkbox.Group value={checkedList3} onChange={(list) => onChange(1, list)}>
                         <Row className={styles.searchAreaContent}>

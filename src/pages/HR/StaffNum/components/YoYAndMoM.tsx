@@ -12,7 +12,7 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import { MonthList, } from '@/utils/baseData';
 import { getHRListVO, } from '@/utils/auths';
-import { getYearList, } from '@/utils/utils';
+import { getYearList, sumArray, reverseObjArray, } from '@/utils/utils';
 //调用API
 import { getMonthChartDataOfYearOverYear, } from '@/services/hr';
 
@@ -29,6 +29,7 @@ const YoYAndMoM: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
     const [currentT,] = useState(props.currentT);
+    const [totalPeople, setTotalPeople] = useState<any>('');
 
     //数据集
     const [YearList,] = useState(() => {
@@ -61,9 +62,14 @@ const YoYAndMoM: React.FC<Props> = (props) => {
         if (!result) {
             return;
         }
+        // 翻转对象数组（后台返回的数据长度不同，比如新添加了公司）
         if (result) {
+            let reverseResult = {
+                hrDivisionDtos: reverseObjArray(result.hrDivisionDtos,),
+                hrDivisionDtosOYO: reverseObjArray(result.hrDivisionDtosOYO,),
+            }
             //将值传给初始化图表的函数
-            initChart_MonthOverMonth(result);
+            initChart_MonthOverMonth(reverseResult);
             setloading(false);
         }
     }
@@ -75,6 +81,9 @@ const YoYAndMoM: React.FC<Props> = (props) => {
         if (!result) {
             return;
         }
+        // 计算总人数
+        let totalPeople = sumArray(Array.from(result.hrDivisionDtos, (x: { Num: number }) => x.Num));
+        setTotalPeople(totalPeople);
         if (result) {
             //将值传给初始化图表的函数
             initChart_YearOverYear(result);
@@ -377,6 +386,12 @@ const YoYAndMoM: React.FC<Props> = (props) => {
                                 {month}月
                             </Form.Item>
                         </Col>
+                        {/* 添加一个总人数的显示 */}
+                        <Col span={4}>
+                            <Form.Item label="总人数" style={{ color: "#C23531", }}>
+                                {totalPeople}
+                            </Form.Item>
+                        </Col>
                     </Row>
                     <Row gutter={24}>
                         <Col span={24}>
@@ -462,7 +477,7 @@ const YoYAndMoM: React.FC<Props> = (props) => {
                         <Col span={12} className={styles.searchAreaTitle}>业务</Col>
                         <Checkbox indeterminate={indeterminate3} onChange={(e) => onCheckAllChange(3, e)} checked={checkAll3}>
                             全选
-                    </Checkbox>
+                        </Checkbox>
                     </Row>
                     <Checkbox.Group value={checkedList3} onChange={(list) => onChange(3, list)}>
                         <Row className={styles.searchAreaContent}>

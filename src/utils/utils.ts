@@ -244,6 +244,17 @@ export const getYearList = () => {
 }
 
 /**
+ * 翻转对象数组
+ */
+export const reverseObjArray = (array: any) => {
+    let newArr = [];
+    for (let i = array.length - 1; i >= 0; i--) {
+        newArr[newArr.length] = array[i];
+    }
+    return newArr;
+}
+
+/**
  * 根据业务线动态获取运输类型数据
  */
 export function GetBizType1List_RadioList(BusinessesLine: any) {

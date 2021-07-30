@@ -11,7 +11,7 @@ import 'echarts/lib/chart/bar';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import { HRBranchList, MonthList, } from '@/utils/baseData';
-import { getYearList, } from '@/utils/utils';
+import { getYearList, sumArray, } from '@/utils/utils';
 //调用API
 import { getChartDataOfBar, } from '@/services/hr';
 
@@ -28,6 +28,7 @@ const Proportion: React.FC<Props> = (props) => {
     const [loading, setloading] = useState(false);
     const [DrawerVisible, setDrawerVisible] = useState(false);
     const [currentT,] = useState(props.currentT);
+    const [totalPeople, setTotalPeople] = useState<any>('');
 
     //数据集
     const [YearList,] = useState(() => {
@@ -69,6 +70,9 @@ const Proportion: React.FC<Props> = (props) => {
                     });
                 });
             }
+            // 计算总人数
+            let totalPeople = sumArray(Array.from(result, (x: { Num: number }) => x.Num));
+            setTotalPeople(totalPeople);
             //将值传给初始化图表的函数
             initChart(ProportionData, TotalProportionData, SelectType);
             setloading(false);
@@ -231,6 +235,12 @@ const Proportion: React.FC<Props> = (props) => {
                         <Col span={4}>
                             <Form.Item label="月份">
                                 {month}月
+                            </Form.Item>
+                        </Col>
+                        {/* 添加一个总人数的显示 */}
+                        <Col span={4}>
+                            <Form.Item label="总人数" style={{ color: "#C23531", }}>
+                                {totalPeople}
                             </Form.Item>
                         </Col>
                     </Row>
